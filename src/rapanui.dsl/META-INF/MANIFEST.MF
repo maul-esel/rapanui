@@ -30,6 +30,4 @@ Export-Package: rapanui.dsl,
  rapanui.dsl.parser.antlr,
  rapanui.dsl.parser.antlr.internal,
  rapanui.dsl.validation,
- rapanui.dsl.scoping,
- rapanui.dsl.generator,
- rapanui.dsl.formatting
+ rapanui.dsl.scoping

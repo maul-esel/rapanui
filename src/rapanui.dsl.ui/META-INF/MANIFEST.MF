@@ -18,8 +18,6 @@ Require-Bundle: rapanui.dsl;visibility:=reexport,
  org.eclipse.compare
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: rapanui.dsl.ui.quickfix,
- rapanui.dsl.ui.contentassist,
- rapanui.dsl.ui.internal,
+Export-Package: rapanui.dsl.ui.internal,
  rapanui.dsl.ui.contentassist.antlr
 Bundle-Activator: rapanui.dsl.ui.internal.MoaiActivator
