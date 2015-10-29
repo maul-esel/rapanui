@@ -1,5 +1,16 @@
 *.jar
 *.class
 *.pdf
-*.metadata
+
+.metadata
+.settings
+.project
+.classpath
+.launch
 runtime-EclipseXtext
+
+bin
+xtend-gen
+src-gen
+xcore-gen
+*.xml_gen

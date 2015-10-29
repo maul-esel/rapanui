@@ -1,0 +1,62 @@
+@GenModel(modelDirectory="rapanui.dsl/xcore-gen")
+
+package rapanui.dsl.moai
+
+class RuleSystem {
+	contains Rule[] rules
+}
+
+class Rule {
+	String name
+	contains Formula[] premises
+	contains Formula[] conclusions
+}
+class Definition extends Rule {
+	// TODO: override conclusions (?)
+	String target
+}
+
+abstract class Formula {
+}
+class Equation extends Formula {
+	contains Term left
+	contains Term right
+}
+class Inclusion extends Formula {
+	contains Term left
+	contains Term right
+}
+class DefinitionReference extends Formula {
+	contains Term target
+	refers Definition definition
+}
+
+abstract class Term {
+}
+class VariableReference extends Term {
+	String variable
+}
+class ConstantReference extends Term {
+	String constant
+}
+class UnaryOperation extends Term {
+	contains Term operand
+	POSTFIX_UNARY_OPERATOR operator
+}
+class BinaryOperation extends Term {
+	contains Term left
+	contains Term right
+	BINARY_OPERATOR operator
+}
+
+enum POSTFIX_UNARY_OPERATOR {
+	CONVERSE
+	KLEENE
+	PLUS
+}
+enum BINARY_OPERATOR {
+	INTERSECTION
+	UNION
+	MINUS
+	COMPOSITION
+}

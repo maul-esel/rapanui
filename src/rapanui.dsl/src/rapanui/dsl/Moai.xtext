@@ -1,0 +1,76 @@
+grammar rapanui.dsl.Moai
+
+import "http://www.eclipse.org/emf/2002/Ecore" as ecore
+import "rapanui.dsl.moai"
+
+RuleSystem hidden(WS):
+	EOL* (rules+=Rule EOL*)+
+;
+
+Rule:
+	Definition|Theorem|Axiom
+;
+Definition:
+	'define' target=VARIABLE 'as' name=RULE_NAME EOL
+		'iff' premises+=Formula EOL
+		('and' premises+=Formula EOL)*
+;
+Theorem returns Rule:
+	'theorem' name=RULE_NAME EOL
+		'if' premises+=Formula EOL
+		('and' premises+=Formula EOL)*
+		'then' conclusions+=Formula EOL
+		('and' conclusions+=Formula EOL)*
+;
+Axiom returns Rule:
+	'axiom' name=RULE_NAME EOL
+		'always' conclusions+=Formula EOL
+		('and' conclusions+=Formula EOL)*
+;
+
+Formula hidden(WS):
+	=>Equation | =>Inclusion | DefinitionReference
+;
+Equation:
+	left=Term '=' right=Term
+;
+Inclusion:
+	left=Term '⊆' right=Term
+;
+DefinitionReference:
+	target=Term 'is' definition=[Definition|RULE_NAME]
+;
+
+Term hidden(WS):
+	BinaryOperation
+;
+VariableReference:
+	variable=VARIABLE
+;
+ConstantReference:
+	constant=CONSTANT
+;
+SimpleTerm returns Term hidden(WS):
+	VariableReference
+	| ConstantReference
+	| '(' Term ')'
+;
+UnaryOperation returns Term hidden():
+	SimpleTerm ({UnaryOperation.operand=current} operator=POSTFIX_UNARY_OPERATOR)?
+;
+BinaryOperation returns Term hidden(WS):
+	UnaryOperation ({BinaryOperation.left=current} operator=BINARY_OPERATOR right=Term)?
+;
+
+enum POSTFIX_UNARY_OPERATOR:
+	CONVERSE = '˘' | KLEENE = '*' | PLUS = '⁺'
+;
+enum BINARY_OPERATOR:
+	INTERSECTION = '∩' | UNION = '∪' | MINUS = '\\' | COMPOSITION = ';'
+;
+
+terminal RULE_NAME: '"' -> '"';
+terminal CONSTANT: 'I'|'Π'|'∅';
+terminal VARIABLE: 'A'..'H'|'J'..'Z';
+terminal EOL: '\r'?'\n';
+terminal WS: ' ';
