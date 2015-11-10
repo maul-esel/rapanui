@@ -38,7 +38,7 @@ Inclusion:
 	left=Term '⊆' right=Term
 ;
 DefinitionReference:
-	target=Term 'is' definition=[Definition|RULE_NAME]
+	target=Term 'is' definitionName=RULE_NAME // references are resolved manually
 ;
 
 Term hidden(WS):
