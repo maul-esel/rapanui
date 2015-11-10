@@ -4,8 +4,6 @@
 
 .metadata
 .settings
-.project
-.classpath
 .launch
 runtime-EclipseXtext
 
