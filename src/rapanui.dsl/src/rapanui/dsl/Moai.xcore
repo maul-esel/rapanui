@@ -4,6 +4,7 @@ package rapanui.dsl.moai
 
 class RuleSystem {
 	contains Rule[] rules
+	contains Definition[] definitions
 }
 
 class Rule {
@@ -11,8 +12,9 @@ class Rule {
 	contains Formula[] premises
 	contains Formula[] conclusions
 }
-class Definition extends Rule {
-	// TODO: override conclusions (?)
+class Definition {
+	String name
+	contains Formula[] premises
 	String target
 }
 
