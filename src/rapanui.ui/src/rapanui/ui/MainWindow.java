@@ -36,6 +36,7 @@ class MainWindow extends JFrame {
 			JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel());
 			tab.setOpaque(false);
 			tab.getViewport().setOpaque(false);
+			tab.setViewportBorder(BorderFactory.createEmptyBorder(20,20,20,20));
 			proofTabs.add(Integer.toString(i), tab);
 		}
 		

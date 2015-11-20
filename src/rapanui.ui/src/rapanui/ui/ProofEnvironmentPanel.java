@@ -24,7 +24,6 @@ class ProofEnvironmentPanel extends JPanel implements ActionListener {
 	}
 
 	private void initializeContent() {
-		setBorder(new EmptyBorder(20,20,20,20));
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
