@@ -1,10 +1,17 @@
 package rapanui.ui;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
-class ProofEnvironmentPanel extends JPanel {
+class ProofEnvironmentPanel extends JPanel implements ActionListener {
+	private final static String CREATE_FORMULA_PREMISE = "create formula premise";
+	private final static String CREATE_DEF_REF_PREMISE = "create definition reference premise";
+	private final static String CREATE_CONCLUSION = "create conclusion process";
+
 	private static final long serialVersionUID = 1L;
 
 	private JPanel premisePanel;
@@ -26,32 +33,44 @@ class ProofEnvironmentPanel extends JPanel {
 		JPanel premiseHeader = new JPanel();
 		premiseHeader.setBackground(Color.WHITE);
 		premiseHeader.setLayout(new BoxLayout(premiseHeader, BoxLayout.X_AXIS));
+		add(premiseHeader);
 		
 		JLabel premiseTitle = new JLabel("Voraussetzungen");
 		premiseTitle.setFont(titleFont);
 		premiseHeader.add(premiseTitle);
 
 		premiseHeader.add(Box.createHorizontalGlue());
-		premiseHeader.add(new JButton("+F"));
-		premiseHeader.add(new JButton("+D"));
-		add(premiseHeader);
+
+		JButton newFormulaButton = new JButton("+F");
+		newFormulaButton.setActionCommand(CREATE_FORMULA_PREMISE);
+		newFormulaButton.addActionListener(this);
+		premiseHeader.add(newFormulaButton);
+
+		JButton newDefRefButton = new JButton("+D");
+		newDefRefButton.setActionCommand(CREATE_DEF_REF_PREMISE);
+		newDefRefButton.addActionListener(this);
+		premiseHeader.add(newDefRefButton);
 
 		premisePanel = new JPanel();
 		premisePanel.setLayout(new BoxLayout(premisePanel, BoxLayout.Y_AXIS));
 		add(premisePanel);
-		
+
 		add(Box.createVerticalStrut(30));
 
 		JPanel conclusionHeader = new JPanel();
 		conclusionHeader.setBackground(Color.WHITE);
 		conclusionHeader.setLayout(new BoxLayout(conclusionHeader, BoxLayout.X_AXIS));
-		
+		add(conclusionHeader);
+
 		JLabel conclusionTitle = new JLabel("Folgerungen");
 		conclusionTitle.setFont(titleFont);
 		conclusionHeader.add(conclusionTitle);
 		conclusionHeader.add(Box.createHorizontalGlue());
-		conclusionHeader.add(new JButton("+"));
-		add(conclusionHeader);
+
+		JButton newConclusionButton = new JButton("+");
+		newConclusionButton.setActionCommand(CREATE_CONCLUSION);
+		newConclusionButton.addActionListener(this);
+		conclusionHeader.add(newConclusionButton);
 
 		conclusionPanel = new JPanel();
 		conclusionPanel.setLayout(new BoxLayout(conclusionPanel, BoxLayout.Y_AXIS));
@@ -141,5 +160,22 @@ class ProofEnvironmentPanel extends JPanel {
 		
 		panel.add(longForm, BorderLayout.CENTER);
 		conclusionPanel.add(panel);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent event) {
+		switch (event.getActionCommand()) {
+		case CREATE_FORMULA_PREMISE:
+			createFormulaPremise();
+			break;
+		case CREATE_DEF_REF_PREMISE:
+			createDefinitionReferencePremise();
+			break;
+		case CREATE_CONCLUSION:
+			createConclusion();
+			break;
+		}
+
+		revalidate();
 	}
 }
