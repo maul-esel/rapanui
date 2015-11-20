@@ -15,7 +15,7 @@ class MainWindow extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setExtendedState(MAXIMIZED_BOTH);
-		doLayout();
+		pack();
 		setVisible(true);
 	}
 	
