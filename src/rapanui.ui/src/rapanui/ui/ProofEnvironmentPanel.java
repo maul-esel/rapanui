@@ -25,13 +25,13 @@ class ProofEnvironmentPanel extends JPanel implements ActionListener {
 
 	private void initializeContent() {
 		setBorder(new EmptyBorder(20,20,20,20));
-		setBackground(Color.WHITE);
+		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		Font titleFont = new Font(getFont().getFamily(), Font.BOLD, 20);
 		
 		JPanel premiseHeader = new JPanel();
-		premiseHeader.setBackground(Color.WHITE);
+		premiseHeader.setOpaque(false);
 		premiseHeader.setLayout(new BoxLayout(premiseHeader, BoxLayout.X_AXIS));
 		add(premiseHeader);
 		
@@ -58,7 +58,7 @@ class ProofEnvironmentPanel extends JPanel implements ActionListener {
 		add(Box.createVerticalStrut(30));
 
 		JPanel conclusionHeader = new JPanel();
-		conclusionHeader.setBackground(Color.WHITE);
+		conclusionHeader.setOpaque(false);
 		conclusionHeader.setLayout(new BoxLayout(conclusionHeader, BoxLayout.X_AXIS));
 		add(conclusionHeader);
 
@@ -74,6 +74,7 @@ class ProofEnvironmentPanel extends JPanel implements ActionListener {
 
 		conclusionPanel = new JPanel();
 		conclusionPanel.setLayout(new BoxLayout(conclusionPanel, BoxLayout.Y_AXIS));
+		conclusionPanel.setOpaque(false);
 		add(conclusionPanel);
 
 		// TODO: remove dummy content
@@ -86,7 +87,7 @@ class ProofEnvironmentPanel extends JPanel implements ActionListener {
 	private void createFormulaPremise() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		panel.setBackground(Color.WHITE);
+		panel.setOpaque(false);
 		
 		panel.add(new JLabel(premiseCount == 0 ? "Sei " : "und "));
 		
@@ -107,7 +108,7 @@ class ProofEnvironmentPanel extends JPanel implements ActionListener {
 	private void createDefinitionReferencePremise() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		panel.setBackground(Color.WHITE);
+		panel.setOpaque(false);
 		
 		panel.add(new JLabel(premiseCount == 0 ? "Sei " : "und "));
 
@@ -130,9 +131,9 @@ class ProofEnvironmentPanel extends JPanel implements ActionListener {
 	private void createConclusion() {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BorderLayout());
-		panel.setBackground(Color.WHITE);
+		panel.setOpaque(false);
 		panel.setBorder(new CompoundBorder(new EmptyBorder(5,0,5,0),
-				new CompoundBorder(new LineBorder(new Color(0x42aaff), 1, true), new EmptyBorder(10,10,10,10))));
+				new LineBorder(Color.WHITE, 10, true)));
 		
 		String shortForm = "R = S;T"; // TODO: remove dummy data
 		
