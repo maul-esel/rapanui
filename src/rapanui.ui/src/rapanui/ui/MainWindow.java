@@ -32,9 +32,12 @@ class MainWindow extends JFrame {
 		proofTabs.setTabPlacement(JTabbedPane.LEFT);
 
 		// TODO: remove dummy content
-		proofTabs.addTab("1", new ProofEnvironmentPanel());
-		proofTabs.addTab("2", new ProofEnvironmentPanel());
-		proofTabs.addTab("3", new ProofEnvironmentPanel());
+		for (int i = 1; i < 4; ++i) {
+			JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel());
+			tab.setOpaque(false);
+			tab.getViewport().setOpaque(false);
+			proofTabs.add(Integer.toString(i), tab);
+		}
 		
 		JPanel suggestionPanel = new JPanel();
 		suggestionPanel.setBackground(Color.WHITE);
