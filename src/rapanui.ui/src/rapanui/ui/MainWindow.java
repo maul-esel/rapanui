@@ -12,6 +12,7 @@ class MainWindow extends JFrame {
 	public MainWindow(Application app) {
 		initializeContent();
 		setTitle("RAPA nui – Relational Algebra Proof Assistant");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setExtendedState(MAXIMIZED_BOTH);
 		doLayout();
