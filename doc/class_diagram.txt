@@ -1,0 +1,20 @@
+// Class diagram can be viewed on http://yuml.me
+// orange: rapanui.dsl
+// blue: rapanui.core
+
+[RuleSystem{bg:orange}]++-*[Rule]
+
+[Rule{bg:orange}]++-premises *[Formula{bg:orange}]
+[Rule]++-conclusions 1..*[Formula]
+
+[ProofEnvironment{bg:royalblue}|+variables]<>-*[RuleSystem]
+[ProofEnvironment]-premises *>[Formula]
+[ProofEnvironment]++-*[Conclusion]
+
+[Conclusion{bg:royalblue}]-startTerm>[Term]
+[Conclusion]++-*[Transformation|variableMatching:Map\<String\>]
+
+[Transformation{bg:royalblue}]-input>[Term{bg:orange}]
+[Transformation]-output>[Term]
+[Transformation]->[Rule]
+[Transformation]-premiseMatching 0..*>[Formula]
