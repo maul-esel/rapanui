@@ -26,55 +26,60 @@ class ProofEnvironmentPanel extends JPanel implements ActionListener {
 	private void initializeContent() {
 		setOpaque(false);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		
+
 		Font titleFont = new Font(getFont().getFamily(), Font.BOLD, 20);
-		
+
 		JPanel premiseHeader = new JPanel();
 		premiseHeader.setOpaque(false);
 		premiseHeader.setLayout(new BoxLayout(premiseHeader, BoxLayout.X_AXIS));
-		add(premiseHeader);
+
+		premisePanel = new JPanel();
+		premisePanel.setOpaque(false);
+		premisePanel.setLayout(new BoxLayout(premisePanel, BoxLayout.Y_AXIS));
 		
 		JLabel premiseTitle = new JLabel("Voraussetzungen");
 		premiseTitle.setFont(titleFont);
-		premiseHeader.add(premiseTitle);
-
-		premiseHeader.add(Box.createHorizontalGlue());
 
 		JButton newFormulaButton = new JButton("+F");
 		newFormulaButton.setActionCommand(CREATE_FORMULA_PREMISE);
 		newFormulaButton.addActionListener(this);
-		premiseHeader.add(newFormulaButton);
 
 		JButton newDefRefButton = new JButton("+D");
 		newDefRefButton.setActionCommand(CREATE_DEF_REF_PREMISE);
 		newDefRefButton.addActionListener(this);
+
+		premiseHeader.add(new CollapseButton(premisePanel, newFormulaButton, newDefRefButton));
+		premiseHeader.add(Box.createHorizontalStrut(5));
+		premiseHeader.add(premiseTitle);
+		premiseHeader.add(Box.createHorizontalGlue());
+		premiseHeader.add(newFormulaButton);
 		premiseHeader.add(newDefRefButton);
-
-		premisePanel = new JPanel();
-		premisePanel.setLayout(new BoxLayout(premisePanel, BoxLayout.Y_AXIS));
-		add(premisePanel);
-
-		add(Box.createVerticalStrut(30));
 
 		JPanel conclusionHeader = new JPanel();
 		conclusionHeader.setOpaque(false);
 		conclusionHeader.setLayout(new BoxLayout(conclusionHeader, BoxLayout.X_AXIS));
-		add(conclusionHeader);
 
 		JLabel conclusionTitle = new JLabel("Folgerungen");
 		conclusionTitle.setFont(titleFont);
-		conclusionHeader.add(conclusionTitle);
-		conclusionHeader.add(Box.createHorizontalGlue());
 
 		JButton newConclusionButton = new JButton("+");
 		newConclusionButton.setActionCommand(CREATE_CONCLUSION);
 		newConclusionButton.addActionListener(this);
+
+		conclusionHeader.add(conclusionTitle);
+		conclusionHeader.add(Box.createHorizontalGlue());
 		conclusionHeader.add(newConclusionButton);
 
 		conclusionPanel = new JPanel();
 		conclusionPanel.setLayout(new BoxLayout(conclusionPanel, BoxLayout.Y_AXIS));
 		conclusionPanel.setOpaque(false);
+
+		add(premiseHeader);
+		add(premisePanel);
+		add(Box.createVerticalStrut(30));
+		add(conclusionHeader);
 		add(conclusionPanel);
+		add(Box.createVerticalGlue());
 
 		// TODO: remove dummy content
 		createConclusion();
@@ -129,36 +134,48 @@ class ProofEnvironmentPanel extends JPanel implements ActionListener {
 	
 	private void createConclusion() {
 		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		panel.setOpaque(false);
 		panel.setBorder(new CompoundBorder(new EmptyBorder(5,0,5,0),
 				new LineBorder(Color.WHITE, 10, true)));
-		
+
 		String shortForm = "R = S;T"; // TODO: remove dummy data
-		
-		panel.add(new JLabel(shortForm), BorderLayout.NORTH);
-		
+
+		JPanel header = new JPanel();
+		header.setBackground(Color.WHITE);
+		header.setLayout(new BoxLayout(header, BoxLayout.X_AXIS));
+
 		JPanel longForm = new JPanel();
 		longForm.setLayout(new GridBagLayout());
 		longForm.setBackground(Color.LIGHT_GRAY);
-		
+
+		header.add(new CollapseButton(longForm));
+		header.add(new JLabel(shortForm));
+		header.add(Box.createHorizontalGlue());
+		header.add(new JButton("x"));
+
 		GridBagConstraints constraints = new GridBagConstraints();
 		constraints.fill = GridBagConstraints.HORIZONTAL;
-		
+
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		longForm.add(new JTextField("R")); // TODO: remove dummy data
-		
-		constraints.gridx = 1;
 
 		// TODO: remove dummy data
-		String[] steps = new String[] { "= R;I\t(Neutralität von I)", "= R;(S;T)\t(nach Voraussetzung)", "= (R;S);T\t(Assoziativität)", "= S;T\t(nach Voraussetzung)"};
+		String[] steps = new String[] { "= R;I", "= R;(S;T)", "= (R;S);T", "= S;T)"};
+		String[] reasons = new String[] { "Neutralität von I", "nach Voraussetzung", "Assoziativität", "nach Voraussetzung" };
+
 		for (int i = 0; i < steps.length; ++i) {
+			constraints.gridx = 1;
 			longForm.add(new JLabel(steps[i]), constraints);
+			constraints.gridx = 2;
+			longForm.add(new JLabel("(" + reasons[i] + ")"), constraints);
+
 			constraints.gridy++;
 		}
-		
-		panel.add(longForm, BorderLayout.CENTER);
+
+		panel.add(header);
+		panel.add(longForm);
 		conclusionPanel.add(panel);
 	}
 
