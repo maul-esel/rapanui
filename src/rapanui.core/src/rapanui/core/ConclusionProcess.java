@@ -3,6 +3,7 @@ package rapanui.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import rapanui.dsl.DslHelper;
 import rapanui.dsl.moai.Term;
 
 import static rapanui.core.Patterns.*;
@@ -60,7 +61,7 @@ public class ConclusionProcess {
 	public void appendTransformation(Transformation transformation) {
 		assert transformation != null;
 
-		if (!this.getLastTerm().equals(transformation.getInput()))
+		if (!DslHelper.equal(getLastTerm(), transformation.getInput()))
 			throw new IllegalArgumentException();
 		transformations.add(transformation);
 		notifyObservers(observers, ConclusionProcessObserver::transformationAdded, transformation);
