@@ -3,6 +3,7 @@ package rapanui.core;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.IntFunction;
+import java.util.function.BiConsumer;
 
 class Patterns {
 	public static <T> boolean addToSet(Collection<T> set, T item) {
@@ -31,5 +32,19 @@ class Patterns {
 
 	public static <T> T[] listToArray(Collection<T> collection, IntFunction<T[]> constructor) {
 		return collection.toArray(constructor.apply(collection.size()));
+	}
+
+	public static <TListener, TArgument> void notifyListeners(
+			Iterable<TListener> listeners,
+			BiConsumer<TListener, TArgument> listeningMethod,
+			TArgument argument) {
+
+		assert listeners != null;
+		assert listeningMethod != null;
+
+		for (TListener listener : listeners) {
+			if (listener != null)
+				listeningMethod.accept(listener, argument);
+		}
 	}
 }
