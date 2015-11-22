@@ -5,6 +5,7 @@
 .metadata
 .settings
 runtime-EclipseXtext
+src/.recommenders
 
 bin
 xtend-gen
