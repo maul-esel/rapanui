@@ -30,7 +30,7 @@ public class ConclusionProcess {
 	// TODO: get conclusion 'type' (equals or subset)
 
 	public Transformation[] getTransformations() {
-		return transformations.toArray(new Transformation[transformations.size()]);
+		return Patterns.listToArray(transformations, Transformation[]::new);
 	}
 
 	public void appendTransformation(Transformation transformation) {

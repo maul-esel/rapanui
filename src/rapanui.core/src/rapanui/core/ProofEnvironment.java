@@ -41,7 +41,7 @@ public class ProofEnvironment {
 	}
 
 	public Formula[] getPremises() {
-		return premises.toArray(new Formula[premises.size()]);
+		return Patterns.listToArray(premises, Formula[]::new);
 	}
 
 	public void addConclusion(Term startTerm) {
@@ -59,6 +59,6 @@ public class ProofEnvironment {
 	}
 
 	public ConclusionProcess[] getConclusions() {
-		return conclusions.toArray(new ConclusionProcess[conclusions.size()]);
+		return Patterns.listToArray(conclusions, ConclusionProcess[]::new);
 	}
 }

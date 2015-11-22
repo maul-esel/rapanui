@@ -2,6 +2,7 @@ package rapanui.core;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.IntFunction;
 
 class Patterns {
 	public static <T> boolean addToSet(Collection<T> set, T item) {
@@ -26,5 +27,9 @@ class Patterns {
 			return true;
 		}
 		return false;
+	}
+
+	public static <T> T[] listToArray(Collection<T> collection, IntFunction<T[]> constructor) {
+		return collection.toArray(constructor.apply(collection.size()));
 	}
 }
