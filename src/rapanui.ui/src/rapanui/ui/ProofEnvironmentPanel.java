@@ -1,9 +1,6 @@
 package rapanui.ui;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -51,13 +48,13 @@ class ProofEnvironmentPanel extends JPanel {
 		JRadioButton formulaPremise = new JRadioButton("Formel");
 		formulaPremise.setOpaque(false);
 		formulaPremise.setSelected(true);
-		formulaPremise.addActionListener((ActionEvent e) -> {
+		formulaPremise.addActionListener((e) -> {
 			((CardLayout)premiseInputPanel.getLayout()).first(premiseInputPanel);
 		});
 
 		JRadioButton definitionPremise = new JRadioButton("Definition");
 		definitionPremise.setOpaque(false);
-		definitionPremise.addActionListener((ActionEvent e) -> {
+		definitionPremise.addActionListener((e) -> {
 			((CardLayout)premiseInputPanel.getLayout()).last(premiseInputPanel);
 		});
 
@@ -178,56 +175,10 @@ class ProofEnvironmentPanel extends JPanel {
 	}
 	
 	private void createConclusion() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-		panel.setOpaque(false);
-		panel.setBorder(new CompoundBorder(new EmptyBorder(5,0,5,0),
-				new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5))));
-
-		String shortForm = "R = S;T"; // TODO: remove dummy data
-
-		JPanel header = new JPanel();
-		header.setBackground(Color.WHITE);
-		header.setLayout(new BoxLayout(header, BoxLayout.X_AXIS));
-
-		JPanel longForm = new JPanel(new GridBagLayout());
-		longForm.setOpaque(false);
-
-		JSeparator separator = new JSeparator();
-
-		header.add(new CollapseButton(longForm, separator));
-		header.add(new JLabel(shortForm));
-		header.add(Box.createHorizontalGlue());
-		header.add(new SimpleLink("\u27F2", "Letzter Schritt rückgängig"));
-		header.add(new SimpleLink("\u2718", "Folgerung entfernen"));
-
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
-
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		longForm.add(createMathematicalLabel("R ")); // TODO: remove dummy data
-
-		// TODO: remove dummy data
-		String[] steps = new String[] { "= R;I", "= R;(S;T)", "= (R;S);T", "= S;T"};
-		String[] reasons = new String[] { "Neutralität von I", "nach Voraussetzung", "Assoziativität", "nach Voraussetzung" };
-
-		for (int i = 0; i < steps.length; ++i) {
-			constraints.gridx = 1;
-			longForm.add(createMathematicalLabel(steps[i]), constraints);
-			constraints.gridx = 2;
-			longForm.add(new JLabel("(" + reasons[i] + ")"), constraints);
-
-			constraints.gridy++;
-		}
-
-		panel.add(header);
-		panel.add(separator);
-		panel.add(longForm);
-		conclusionPanel.add(panel);
+		conclusionPanel.add(new ConclusionProcessView());
 	}
 
-	private JLabel createMathematicalLabel(String text) {
+	static JLabel createMathematicalLabel(String text) {
 		JLabel label = new JLabel(text);
 		label.setFont(new Font(Font.MONOSPACED, Font.PLAIN, label.getFont().getSize()));
 		return label;
