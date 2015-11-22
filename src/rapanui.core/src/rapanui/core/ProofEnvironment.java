@@ -13,6 +13,7 @@ public class ProofEnvironment {
 	private final RuleSystem[] ruleSystems;
 	private final List<Formula> premises;
 	private final List<ConclusionProcess> conclusions;
+	private final List<ProofEnvironmentObserver> observers;
 
 	public ProofEnvironment(RuleSystem[] ruleSystems) {
 		assert ruleSystems != null;
@@ -20,6 +21,7 @@ public class ProofEnvironment {
 		this.ruleSystems = ruleSystems;
 		this.premises = new ArrayList<Formula>();
 		this.conclusions = new ArrayList<ConclusionProcess>();
+		this.observers = new ArrayList<ProofEnvironmentObserver>();
 	}
 
 	public RuleSystem[] getRuleSystems() {
@@ -28,18 +30,19 @@ public class ProofEnvironment {
 
 	public void addPremise(Formula premise) {
 		assert premise != null;
-		addToSet(premises, premise);
+		if (addToSet(premises, premise))
+			notifyObservers(observers, ProofEnvironmentObserver::premiseAdded, premise);
 	}
 
 	public boolean removePremise(Formula premise) {
 		// TODO: check dependencies
 		assert premise != null;
-		return removeWithCheck(premises, premise);
+		return removeWithCheckAndNotify(premises, premise, observers, ProofEnvironmentObserver::premiseRemoved);
 	}
 
 	public boolean removePremise(int index) {
 		// TODO: check dependencies
-		return removeWithCheck(premises, index);
+		return removeWithCheckAndNotify(premises, index, observers, ProofEnvironmentObserver::premiseRemoved);
 	}
 
 	public Formula[] getPremises() {
@@ -48,19 +51,29 @@ public class ProofEnvironment {
 
 	public void addConclusion(Term startTerm) {
 		assert startTerm != null;
-		conclusions.add(new ConclusionProcess(this, startTerm));
+		ConclusionProcess conclusion = new ConclusionProcess(this, startTerm);
+		conclusions.add(conclusion);
+		notifyObservers(observers, ProofEnvironmentObserver::conclusionStarted, conclusion);
 	}
 
 	public boolean removeConclusion(ConclusionProcess conclusion) {
 		assert conclusion != null;
-		return removeWithCheck(conclusions, conclusion);
+		return removeWithCheckAndNotify(conclusions, conclusion, observers, ProofEnvironmentObserver::conclusionRemoved);
 	}
 
 	public boolean removeConclusion(int index) {
-		return removeWithCheck(conclusions, index);
+		return removeWithCheckAndNotify(conclusions, index, observers, ProofEnvironmentObserver::conclusionRemoved);
 	}
 
 	public ConclusionProcess[] getConclusions() {
 		return listToArray(conclusions, ConclusionProcess[]::new);
+	}
+
+	public void addObserver(ProofEnvironmentObserver observer) {
+		observers.add(observer);
+	}
+
+	public void deleteObserver(ProofEnvironmentObserver observer) {
+		observers.remove(observer);
 	}
 }

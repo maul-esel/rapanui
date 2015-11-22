@@ -47,4 +47,27 @@ class Patterns {
 				listeningMethod.accept(observer, argument);
 		}
 	}
+
+	public static <TItem, TObserver> boolean removeWithCheckAndNotify(
+			Collection<TItem> collection,
+			TItem item,
+			Iterable<TObserver> observers,
+			BiConsumer<TObserver, TItem> listeningMethod) {
+		boolean removed = removeWithCheck(collection, item);
+		if (removed)
+			notifyObservers(observers, listeningMethod, item);
+		return removed;
+	}
+
+	public static <TItem, TObserver> boolean removeWithCheckAndNotify(
+			List<TItem> collection,
+			int index,
+			Iterable<TObserver> observers,
+			BiConsumer<TObserver, TItem> listeningMethod) {
+		TItem item = (0 <= index && index <= collection.size()) ? collection.get(index) : null;
+		boolean removed = removeWithCheck(collection, index);
+		if (removed)
+			notifyObservers(observers, listeningMethod, item);
+		return removed;
+	}
 }
