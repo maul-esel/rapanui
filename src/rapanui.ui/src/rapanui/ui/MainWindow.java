@@ -28,23 +28,42 @@ class MainWindow extends JFrame {
 		title.setBorder(new EmptyBorder(15,15,15,15));
 		rootPane.getContentPane().add(title, BorderLayout.NORTH);
 
-		JTabbedPane proofTabs = new JTabbedPane();
-		proofTabs.setTabPlacement(JTabbedPane.LEFT);
+		JPanel leftPanel = new JPanel(new BorderLayout());
+		leftPanel.setBackground(Color.WHITE);
+
+		JPanel proofSelectionPanel = new JPanel();
+		proofSelectionPanel.setOpaque(false);
+		proofSelectionPanel.setLayout(new BoxLayout(proofSelectionPanel, BoxLayout.X_AXIS));
+
+		JComboBox<String> proofList = new JComboBox<String>(new String[] { "Beweis 1" });
+
+		proofSelectionPanel.add(new JLabel("Aktueller Beweis:"));
+		proofSelectionPanel.add(Box.createHorizontalStrut(5));
+		proofSelectionPanel.add(proofList);
+		proofSelectionPanel.add(new SimpleLink("\u2A01", "Neuen Beweis starten"));
+		proofSelectionPanel.add(new SimpleLink("\u2718", "Aktuellen Beweis löschen"));
+
+		JPanel proofContainer = new JPanel(new CardLayout());
+		proofContainer.setOpaque(false);
 
 		// TODO: remove dummy content
 		for (int i = 1; i < 4; ++i) {
 			JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel());
+			tab.setBorder(null);
 			tab.setOpaque(false);
 			tab.getViewport().setOpaque(false);
-			tab.setViewportBorder(BorderFactory.createEmptyBorder(20,20,20,20));
-			proofTabs.add(Integer.toString(i), tab);
+			proofContainer.add(tab);
 		}
-		
+
+		leftPanel.setBorder(new EmptyBorder(10,10,10,10));
+		leftPanel.add(proofSelectionPanel, BorderLayout.NORTH);
+		leftPanel.add(proofContainer, BorderLayout.CENTER);
+
 		JPanel suggestionPanel = new JPanel();
 		suggestionPanel.setBackground(Color.WHITE);
 		suggestionPanel.add(new JLabel("Vorschläge"), BorderLayout.NORTH);
-		
-		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, proofTabs, suggestionPanel); 
+
+		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, suggestionPanel);
 		rootPane.getContentPane().add(splitter, BorderLayout.CENTER);
 	}
 }
