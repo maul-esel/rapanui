@@ -35,7 +35,7 @@ class MainWindow extends JFrame {
 		proofSelectionPanel.setOpaque(false);
 		proofSelectionPanel.setLayout(new BoxLayout(proofSelectionPanel, BoxLayout.X_AXIS));
 
-		JComboBox<String> proofList = new JComboBox<String>(new String[] { "Beweis 1" });
+		JComboBox<String> proofList = new JComboBox<String>(new String[] { "Beweis 1", "Beweis 2", "Beweis 3" });
 
 		proofSelectionPanel.add(new JLabel("Aktueller Beweis:"));
 		proofSelectionPanel.add(Box.createHorizontalStrut(5));
@@ -52,8 +52,12 @@ class MainWindow extends JFrame {
 			tab.setBorder(null);
 			tab.setOpaque(false);
 			tab.getViewport().setOpaque(false);
-			proofContainer.add(tab);
+			proofContainer.add(tab, "Beweis " + i);
 		}
+
+		proofList.addItemListener((e) -> {
+			((CardLayout)proofContainer.getLayout()).show(proofContainer, e.getItem().toString());
+		});
 
 		leftPanel.setBorder(new EmptyBorder(10,10,10,10));
 		leftPanel.add(proofSelectionPanel, BorderLayout.NORTH);
