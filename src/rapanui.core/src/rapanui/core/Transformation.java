@@ -1,6 +1,7 @@
 package rapanui.core;
 
 import rapanui.dsl.moai.Formula;
+import rapanui.dsl.moai.Inclusion;
 import rapanui.dsl.moai.Rule;
 import rapanui.dsl.moai.Term;
 
@@ -60,5 +61,9 @@ public class Transformation {
 
 	public Formula[] getPremiseMatching() {
 		return premiseMatching;
+	}
+
+	public FormulaType getType() {
+		return rule.getConclusions().get(ruleConclusionIndex) instanceof Inclusion ? FormulaType.Inclusion : FormulaType.Equality;
 	}
 }

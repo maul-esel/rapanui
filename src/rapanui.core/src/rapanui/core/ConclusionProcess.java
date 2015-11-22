@@ -2,8 +2,11 @@ package rapanui.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import rapanui.dsl.DslHelper;
+import rapanui.dsl.moai.Formula;
+import rapanui.dsl.moai.Inclusion;
 import rapanui.dsl.moai.Term;
 
 import static rapanui.core.Patterns.*;
@@ -45,7 +48,21 @@ public class ConclusionProcess {
 		return transformations.get(transformations.size() - 1).getOutput();
 	}
 
-	// TODO: get conclusion 'type' (equals or subset)
+	/**
+	 * Computes the type of the conclusion, i.e. equality or inclusion.
+	 *
+	 * @return @see ConclusionType.Inclusion if any transformation is an inclusion, @see ConclusionType.Equality otherwise
+	 */
+	public FormulaType getType() {
+		List<FormulaType> transformationTypes = transformations
+				.stream()
+				.map(Transformation::getType)
+				.collect(Collectors.toList());
+
+		if (transformationTypes.contains(FormulaType.Inclusion))
+			return FormulaType.Inclusion;
+		return FormulaType.Equality;
+	}
 
 	public Transformation[] getTransformations() {
 		return listToArray(transformations, Transformation[]::new);
