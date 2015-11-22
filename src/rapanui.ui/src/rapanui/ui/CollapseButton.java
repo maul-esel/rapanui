@@ -3,16 +3,16 @@ package rapanui.ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
 
-class CollapseButton extends JButton implements ActionListener {
+class CollapseButton extends SimpleLink implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	boolean isCollapsed;
 	JComponent[] targets;
 
 	public CollapseButton(JComponent... targets) {
+		super("", null);
 		this.targets = targets;
 		isCollapsed = !targets[0].isVisible();
 		addActionListener(this);
