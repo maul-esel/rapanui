@@ -8,7 +8,7 @@ import rapanui.dsl.moai.Term;
 public class ConclusionProcess {
 	private final Term startTerm;
 	private final List<Transformation> transformations;
-	private final List<ConclusionProcessListener> listeners;
+	private final List<ConclusionProcessObserver> observers;
 
 	ConclusionProcess(ProofEnvironment environment, Term startTerm) {
 		assert environment != null;
@@ -16,7 +16,7 @@ public class ConclusionProcess {
 
 		this.startTerm = startTerm;
 		this.transformations = new ArrayList<Transformation>();
-		this.listeners = new ArrayList<ConclusionProcessListener>();
+		this.observers = new ArrayList<ConclusionProcessObserver>();
 	}
 
 	public Term getStartTerm() {
@@ -41,20 +41,20 @@ public class ConclusionProcess {
 		if (!this.getLastTerm().equals(transformation.getInput()))
 			throw new IllegalArgumentException();
 		transformations.add(transformation);
-		Patterns.notifyListeners(listeners, ConclusionProcessListener::transformationAdded, transformation);
+		Patterns.notifyObservers(observers, ConclusionProcessObserver::transformationAdded, transformation);
 	}
 
 	public void removeLastTransformation() {
 		assert transformations.size() > 0;
 		Transformation removed = transformations.remove(transformations.size() - 1);
-		Patterns.notifyListeners(listeners, ConclusionProcessListener::transformationRemoved, removed);
+		Patterns.notifyObservers(observers, ConclusionProcessObserver::transformationRemoved, removed);
 	}
 
-	public void addListener(ConclusionProcessListener listener) {
-		listeners.add(listener);
+	public void addObserver(ConclusionProcessObserver observer) {
+		observers.add(observer);
 	}
 
-	public void deleteListener(ConclusionProcessListener listener) {
-		listeners.remove(listener);
+	public void deleteObserver(ConclusionProcessObserver observer) {
+		observers.remove(observer);
 	}
 }

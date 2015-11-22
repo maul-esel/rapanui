@@ -34,17 +34,17 @@ class Patterns {
 		return collection.toArray(constructor.apply(collection.size()));
 	}
 
-	public static <TListener, TArgument> void notifyListeners(
-			Iterable<TListener> listeners,
+	public static <TListener, TArgument> void notifyObservers(
+			Iterable<TListener> observers,
 			BiConsumer<TListener, TArgument> listeningMethod,
 			TArgument argument) {
 
-		assert listeners != null;
+		assert observers != null;
 		assert listeningMethod != null;
 
-		for (TListener listener : listeners) {
-			if (listener != null)
-				listeningMethod.accept(listener, argument);
+		for (TListener observer : observers) {
+			if (observer != null)
+				listeningMethod.accept(observer, argument);
 		}
 	}
 }
