@@ -5,6 +5,8 @@ import java.util.List;
 
 import rapanui.dsl.moai.Term;
 
+import static rapanui.core.Patterns.*;
+
 public class ConclusionProcess {
 	private final Term startTerm;
 	private final List<Transformation> transformations;
@@ -32,7 +34,7 @@ public class ConclusionProcess {
 	// TODO: get conclusion 'type' (equals or subset)
 
 	public Transformation[] getTransformations() {
-		return Patterns.listToArray(transformations, Transformation[]::new);
+		return listToArray(transformations, Transformation[]::new);
 	}
 
 	public void appendTransformation(Transformation transformation) {
@@ -41,13 +43,13 @@ public class ConclusionProcess {
 		if (!this.getLastTerm().equals(transformation.getInput()))
 			throw new IllegalArgumentException();
 		transformations.add(transformation);
-		Patterns.notifyObservers(observers, ConclusionProcessObserver::transformationAdded, transformation);
+		notifyObservers(observers, ConclusionProcessObserver::transformationAdded, transformation);
 	}
 
 	public void removeLastTransformation() {
 		assert transformations.size() > 0;
 		Transformation removed = transformations.remove(transformations.size() - 1);
-		Patterns.notifyObservers(observers, ConclusionProcessObserver::transformationRemoved, removed);
+		notifyObservers(observers, ConclusionProcessObserver::transformationRemoved, removed);
 	}
 
 	public void addObserver(ConclusionProcessObserver observer) {
