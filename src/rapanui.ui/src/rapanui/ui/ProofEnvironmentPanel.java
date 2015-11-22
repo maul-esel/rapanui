@@ -198,6 +198,7 @@ class ProofEnvironmentPanel extends JPanel {
 		header.add(new CollapseButton(longForm, separator));
 		header.add(new JLabel(shortForm));
 		header.add(Box.createHorizontalGlue());
+		header.add(new SimpleLink("\u27F2", "Letzter Schritt rückgängig"));
 		header.add(new SimpleLink("\u2718", "Folgerung entfernen"));
 
 		GridBagConstraints constraints = new GridBagConstraints();
