@@ -8,7 +8,6 @@ class ProofEnvironmentPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel premisePanel;
-	private JPanel conclusionPanel;
 
 	public ProofEnvironmentPanel(/* ProofEnvironment env */) {
 		initializeContent();
@@ -16,7 +15,7 @@ class ProofEnvironmentPanel extends JPanel {
 
 	private void initializeContent() {
 		setOpaque(false);
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setLayout(new MultilineLayout());
 
 		Font titleFont = new Font(getFont().getFamily(), Font.BOLD, 20);
 
@@ -89,8 +88,6 @@ class ProofEnvironmentPanel extends JPanel {
 		newPremisePanel.add(new JSeparator());
 		newPremisePanel.add(premiseContentPanel);
 
-		newPremisePanel.setMaximumSize(newPremisePanel.getPreferredSize());
-
 		premiseHeader.add(new CollapseButton(premisePanel, newPremisePanel));
 		premiseHeader.add(Box.createHorizontalStrut(5));
 		premiseHeader.add(premiseTitle);
@@ -105,10 +102,6 @@ class ProofEnvironmentPanel extends JPanel {
 
 		conclusionHeader.add(conclusionTitle);
 		conclusionHeader.add(Box.createHorizontalGlue());
-
-		conclusionPanel = new JPanel();
-		conclusionPanel.setLayout(new BoxLayout(conclusionPanel, BoxLayout.Y_AXIS));
-		conclusionPanel.setOpaque(false);
 
 		JPanel newConclusionPanel = new JPanel();
 		newConclusionPanel.setLayout(new BoxLayout(newConclusionPanel, BoxLayout.Y_AXIS));
@@ -126,14 +119,13 @@ class ProofEnvironmentPanel extends JPanel {
 		newConclusionPanel.add(new JSeparator());
 		newConclusionPanel.add(newConclusionContent);
 
-		add(premiseHeader);
-		add(premisePanel);
-		add(newPremisePanel);
-		add(Box.createVerticalStrut(30));
-		add(conclusionHeader);
-		add(conclusionPanel);
-		add(newConclusionPanel);
-		add(Box.createVerticalGlue());
+		add(premiseHeader, (Integer)0);
+		add(premisePanel, (Integer)1);
+		add(newPremisePanel, (Integer)2);
+		add(Box.createVerticalStrut(30), (Integer)3);
+		add(conclusionHeader, (Integer)4);
+		add(Box.createVerticalStrut(10), (Integer)5);
+		add(newConclusionPanel, (Integer)6);
 
 		// TODO: remove dummy content
 		createConclusion();
@@ -175,7 +167,8 @@ class ProofEnvironmentPanel extends JPanel {
 	}
 	
 	private void createConclusion() {
-		conclusionPanel.add(new ConclusionProcessView());
+		((MultilineLayout)getLayout()).newLine();
+		add(new ConclusionProcessView());
 	}
 
 	static JLabel createMathematicalLabel(String text) {
