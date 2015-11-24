@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import rapanui.dsl.DslHelper;
-import rapanui.dsl.moai.Formula;
-import rapanui.dsl.moai.Inclusion;
 import rapanui.dsl.moai.Term;
 
 import static rapanui.core.Patterns.*;
