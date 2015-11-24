@@ -1,8 +1,5 @@
 package rapanui.core;
 
-import rapanui.dsl.moai.Formula;
-import rapanui.dsl.moai.Inclusion;
-import rapanui.dsl.moai.Rule;
 import rapanui.dsl.moai.Term;
 
 /**
@@ -14,33 +11,28 @@ import rapanui.dsl.moai.Term;
 public class Transformation {
 	private final Term input;
 	private final Term output;
-	private final Rule rule;
-	private final int ruleConclusionIndex;
-	private final Formula[] premiseMatching;
+	private final Justification justification;
+	private final FormulaType type;
 
 	/**
 	 * Creates a new transformation from the given parameters.
 	 *
 	 * @param input The original term which is transformed
 	 * @param output The result of the transformation
-	 * @param rule The underlying rule which allows the transformation
-	 * @param int The index of the used conclusion among the rule's conclusions
-	 * @param premiseMatching Matches the rule's premises to known facts or premises of the environment
+	 * @param type The type of transformation
+	 * @param justification A justification why this transformation is allowed
 	 */
-	Transformation(Term input, Term output, Rule rule, int ruleConclusionIndex, Formula[] premiseMatching) {
+	Transformation(Term input, Term output, FormulaType type, Justification justification) {
 		// TODO: validate parameters? Or rely on valid input?
 
 		assert input != null;
 		assert output != null;
-		assert rule != null;
-		assert 0 <= ruleConclusionIndex && ruleConclusionIndex < rule.getConclusions().size();
-		assert premiseMatching != null;
+		assert justification != null;
 
 		this.input = input;
 		this.output = output;
-		this.rule = rule;
-		this.ruleConclusionIndex = ruleConclusionIndex;
-		this.premiseMatching = premiseMatching;
+		this.type = type;
+		this.justification = justification;
 	}
 
 	public Term getInput() {
@@ -51,19 +43,11 @@ public class Transformation {
 		return output;
 	}
 
-	public Rule getRule() {
-		return rule;
-	}
-
-	public int getRuleConclusionIndex() {
-		return ruleConclusionIndex;
-	}
-
-	public Formula[] getPremiseMatching() {
-		return premiseMatching;
-	}
-
 	public FormulaType getType() {
-		return rule.getConclusions().get(ruleConclusionIndex) instanceof Inclusion ? FormulaType.Inclusion : FormulaType.Equality;
+		return type;
+	}
+
+	public Justification getJustification() {
+		return justification;
 	}
 }
