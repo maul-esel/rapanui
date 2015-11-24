@@ -23,7 +23,7 @@ public class ConclusionProcessView extends JPanel {
 		header.setBackground(Color.WHITE);
 		header.setLayout(new BoxLayout(header, BoxLayout.X_AXIS));
 
-		JPanel longForm = new JPanel(new GridBagLayout());
+		JPanel longForm = new JPanel();
 		longForm.setOpaque(false);
 
 		JSeparator separator = new JSeparator();
@@ -36,24 +36,36 @@ public class ConclusionProcessView extends JPanel {
 		header.add(new SimpleLink("\u27F2", "Letzter Schritt rückgängig"));
 		header.add(new SimpleLink("\u2718", "Folgerung entfernen"));
 
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.HORIZONTAL;
+		JLabel initialTerm = ProofEnvironmentPanel.createMathematicalLabel("R ");
+		initialTerm.setVerticalAlignment(SwingConstants.TOP);
+		initialTerm.setHorizontalAlignment(SwingConstants.RIGHT);
+		longForm.add(initialTerm); // TODO: remove dummy data
 
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		longForm.add(ProofEnvironmentPanel.createMathematicalLabel("R ")); // TODO: remove dummy data
+		JPanel secondColumn = new JPanel();
+		secondColumn.setLayout(new BoxLayout(secondColumn, BoxLayout.Y_AXIS));
+		secondColumn.setOpaque(false);
+		longForm.add(secondColumn);
+
+		JPanel thirdColumn = new JPanel();
+		thirdColumn.setLayout(new BoxLayout(thirdColumn, BoxLayout.Y_AXIS));
+		thirdColumn.setOpaque(false);
+		longForm.add(thirdColumn);
+
+		initialTerm.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+		secondColumn.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+		thirdColumn.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+
+		initialTerm.setBorder(new LineBorder(Color.red));
+		secondColumn.setBorder(new LineBorder(Color.red));
+		thirdColumn.setBorder(new LineBorder(Color.red));
 
 		// TODO: remove dummy data
 		String[] steps = new String[] { "= R;I", "= R;(S;T)", "= (R;S);T", "= S;T"};
 		String[] reasons = new String[] { "Neutralität von I", "nach Voraussetzung", "Assoziativität", "nach Voraussetzung" };
 
 		for (int i = 0; i < steps.length; ++i) {
-			constraints.gridx = 1;
-			longForm.add(ProofEnvironmentPanel.createMathematicalLabel(steps[i]), constraints);
-			constraints.gridx = 2;
-			longForm.add(new JLabel("(" + reasons[i] + ")"), constraints);
-
-			constraints.gridy++;
+			secondColumn.add(ProofEnvironmentPanel.createMathematicalLabel(steps[i]));
+			thirdColumn.add(new JLabel("(" + reasons[i] + ")"));
 		}
 
 		add(header);
