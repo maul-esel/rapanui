@@ -3,6 +3,7 @@ package rapanui.ui;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.Insets;
 import java.awt.LayoutManager2;
 
 import java.util.Map;
@@ -62,19 +63,23 @@ public class MultilineLayout implements LayoutManager2 {
 
 		ToIntFunction<Dimension> x1; // primary axis
 		ToIntFunction<Dimension> x2; // secondary axis
-		int containerSize;
+		int containerSize, lineOffset, columnPadding;
+		Insets insets = container.getInsets();
 
 		if (orientation == SwingConstants.VERTICAL) {
 			x1 = (d) -> d.width;
 			x2 = (d) -> d.height;
-			containerSize = container.getWidth();
+			containerSize = container.getWidth() - insets.left - insets.right;
+			lineOffset = insets.top;
+			columnPadding = insets.left;
 		} else {
 			x1 = (d) -> d.height;
 			x2 = (d) -> d.width;
-			containerSize = container.getHeight();
+			containerSize = container.getHeight() - insets.top - insets.bottom;
+			lineOffset = insets.left;
+			columnPadding = insets.top;
 		}
 
-		int lineOffset = 0;
 		for (line = 0; line <= maxLine; ++line) {
 			if (!lines.containsKey(line))
 				continue;
@@ -130,7 +135,7 @@ public class MultilineLayout implements LayoutManager2 {
 
 			widthDifference = containerSize - assignedWidth.values().stream().mapToInt(Integer::intValue).sum();
 
-			double columnOffset = 0;
+			double columnOffset = columnPadding;
 			int gapCount = container.getComponentCount() - 1;
 			for (Component child : lineComponents) {
 				if (orientation == SwingConstants.VERTICAL) {
@@ -185,14 +190,16 @@ public class MultilineLayout implements LayoutManager2 {
 			lineHeight.put(line, currentLineHeight);
 		}
 
+		Insets insets = container.getInsets();
+		int deltaW = insets.left + insets.right, deltaH = insets.top + insets.bottom;
 		if (orientation == SwingConstants.VERTICAL)
 			return new Dimension(
-				lineWidth.values().stream().mapToInt(Integer::intValue).max().orElse(0),
-				lineHeight.values().stream().mapToInt(Integer::intValue).sum());
+				lineWidth.values().stream().mapToInt(Integer::intValue).max().orElse(0) + deltaW,
+				lineHeight.values().stream().mapToInt(Integer::intValue).sum() + deltaH);
 		else
 			return new Dimension(
-					lineWidth.values().stream().mapToInt(Integer::intValue).sum(),
-					lineHeight.values().stream().mapToInt(Integer::intValue).max().orElse(0));
+					lineWidth.values().stream().mapToInt(Integer::intValue).sum() + deltaW,
+					lineHeight.values().stream().mapToInt(Integer::intValue).max().orElse(0) + deltaH);
 	}
 
 	@Override
