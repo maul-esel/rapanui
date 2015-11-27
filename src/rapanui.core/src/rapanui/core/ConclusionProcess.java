@@ -52,7 +52,31 @@ public class ConclusionProcess {
 	 * @return @see ConclusionType.Inclusion if any transformation is an inclusion, @see ConclusionType.Equality otherwise
 	 */
 	public FormulaType getType() {
+		return getType(0, transformations.size());
+	}
+
+	/**
+	 * Computes the type of a range of transformations in the conclusion.
+	 *
+	 * @param startRange The index of the first term (not transformation!) to include in the range
+	 * @param endRange The index of the last term (not transformation!) to include in the range
+	 *
+	 * @return @see ConclusionType.Inclusion if any transformation in the range is an inclusion, @see ConclusionType.Equality otherwise.
+	 * 	If startIndex == endIndex, there is no transformation in the range and @see ConclusionType.Equality is returned.
+	 *
+	 * @throws IllegalArgumentException if the arguments do not specify a valid range
+	 */
+	public FormulaType getType(int startRange, int endRange) {
+		if (startRange < 0 || startRange > transformations.size())
+			throw new IllegalArgumentException("startRange");
+		else if (endRange < startRange || endRange > transformations.size())
+			throw new IllegalArgumentException("endRange");
+
+		if (startRange == endRange)
+			return FormulaType.Equality;
+
 		List<FormulaType> transformationTypes = transformations
+				.subList(Math.max(startRange - 1, 0), endRange)
 				.stream()
 				.map(Transformation::getType)
 				.collect(Collectors.toList());
