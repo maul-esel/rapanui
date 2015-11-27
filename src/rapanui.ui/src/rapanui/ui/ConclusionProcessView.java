@@ -8,16 +8,34 @@ public class ConclusionProcessView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel longForm;
+	private Color borderColor = Color.BLACK;
+	private int borderWidth = 1;
 
 	public ConclusionProcessView(/* ConclusionProcess conclusion */) {
 		initializeContent();
 	}
 
+	public void activate() {
+		borderColor = Color.ORANGE;
+		borderWidth = 2;
+		updateBorder();
+	}
+
+	public void deactivate() {
+		borderColor = Color.BLACK;
+		borderWidth = 1;
+		updateBorder();
+	}
+
+	private void updateBorder() {
+		setBorder(new CompoundBorder(new EmptyBorder(5,0,5,0),
+				new CompoundBorder(new LineBorder(borderColor, borderWidth), new EmptyBorder(5,5,5,5))));
+	}
+
 	private void initializeContent() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setOpaque(false);
-		setBorder(new CompoundBorder(new EmptyBorder(5,0,5,0),
-				new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5))));
+		updateBorder();
 
 		String shortForm = "R = S;T"; // TODO: remove dummy data
 

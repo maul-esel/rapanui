@@ -13,6 +13,7 @@ class ProofEnvironmentPanel extends JPanel {
 	private static final Font mathFont = new Font("Courier", Font.PLAIN, 14);
 
 	private JPanel premisePanel;
+	private ConclusionProcessView activeConclusion;
 
 	public ProofEnvironmentPanel(/* ProofEnvironment env */) {
 		initializeContent();
@@ -148,7 +149,18 @@ class ProofEnvironmentPanel extends JPanel {
 	
 	private void createConclusion() {
 		((MultilineLayout)getLayout()).newLine();
-		add(new ConclusionProcessView());
+		ConclusionProcessView conclusion = new ConclusionProcessView();
+		activate(conclusion);
+		add(conclusion);
+	}
+
+	private void activate(ConclusionProcessView conclusion) {
+		if (activeConclusion != conclusion) {
+			if (activeConclusion != null)
+				activeConclusion.deactivate();
+			activeConclusion = conclusion;
+			conclusion.activate();
+		}
 	}
 
 	static JLabel createMathematicalLabel(String text) {
