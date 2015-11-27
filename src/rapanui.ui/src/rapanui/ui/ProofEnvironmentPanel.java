@@ -10,6 +10,8 @@ class ProofEnvironmentPanel extends JPanel {
 	// ugly hack: use this instead of Integer.MAX_VALUE to avoid integer overflow
 	private static final int MAX_WIDTH = 5000;
 
+	private static final Font mathFont = new Font("Courier", Font.PLAIN, 14);
+
 	private JPanel premisePanel;
 
 	public ProofEnvironmentPanel(/* ProofEnvironment env */) {
@@ -33,7 +35,9 @@ class ProofEnvironmentPanel extends JPanel {
 
 		// TODO: remove dummy content
 		JTextField formulaInput = new JTextField("R = S;R");
+		formulaInput.setFont(mathFont);
 		JTextField termInput = new JTextField("R;S*");
+		termInput.setFont(mathFont);
 		termInput.setMaximumSize(new Dimension(MAX_WIDTH, termInput.getMaximumSize().height));
 		JComboBox<String> definitionSelection = new JComboBox<String>(new String[] { "reflexiv", "transitiv" });
 		definitionSelection.setMaximumSize(new Dimension(MAX_WIDTH, definitionSelection.getMaximumSize().height));
@@ -85,10 +89,13 @@ class ProofEnvironmentPanel extends JPanel {
 		newConclusionPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5)));
 		newConclusionPanel.setOpaque(false);
 
+		JTextField startTermInput = new JTextField("S;S;R"); // TODO: remove dummy content
+		startTermInput.setFont(mathFont);
+
 		newConclusionPanel.add(new JLabel("Neue Folgerung:"), (Integer)0);
 		newConclusionPanel.add(new JSeparator(), (Integer)1);
 		newConclusionPanel.add(new JLabel("Startterm: "), (Integer)2);
-		newConclusionPanel.add(new JTextField("S;S;R")); // TODO: remove dummy content
+		newConclusionPanel.add(startTermInput);
 		newConclusionPanel.add(new SimpleLink("\u2714", "Neue Folgerung erstellen"));
 
 		/* complete panel layout */
@@ -146,7 +153,8 @@ class ProofEnvironmentPanel extends JPanel {
 
 	static JLabel createMathematicalLabel(String text) {
 		JLabel label = new JLabel(text);
-		label.setFont(new Font(Font.MONOSPACED, Font.PLAIN, label.getFont().getSize()));
+		label.setFont(mathFont);
+		label.setAlignmentX(LEFT_ALIGNMENT);
 		return label;
 	}
 }
