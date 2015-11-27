@@ -10,7 +10,7 @@ class ProofEnvironmentPanel extends JPanel {
 	// ugly hack: use this instead of Integer.MAX_VALUE to avoid integer overflow
 	private static final int MAX_WIDTH = 5000;
 
-	private static final Font mathFont = new Font("Courier", Font.PLAIN, 14);
+	private static final Font mathFont = new Font("Courier New", Font.PLAIN, 14);
 
 	private JPanel premisePanel;
 	private ConclusionProcessView activeConclusion;

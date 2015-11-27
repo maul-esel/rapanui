@@ -1,13 +1,16 @@
 package rapanui.ui;
 
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-class MainWindow extends JFrame {
+class MainWindow extends JFrame implements PropertyChangeListener {
 	private static final long serialVersionUID = 1L;
-	
-	private static final char[] keyboardSymbols = { '˘', '*', '⁺', 'Π', '∅', '⊆', '∩', '∪' };
+
+	private final SymbolKeyboard keyboard = new SymbolKeyboard();
 	
 	public MainWindow(Application app) {
 		initializeContent();
@@ -62,6 +65,7 @@ class MainWindow extends JFrame {
 		leftPanel.setBorder(new EmptyBorder(10,10,10,10));
 		leftPanel.add(proofSelectionPanel, BorderLayout.NORTH);
 		leftPanel.add(proofContainer, BorderLayout.CENTER);
+		leftPanel.add(keyboard, BorderLayout.SOUTH);
 
 		JPanel suggestionPanel = new JPanel();
 		suggestionPanel.setBackground(Color.WHITE);
@@ -69,5 +73,13 @@ class MainWindow extends JFrame {
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, suggestionPanel);
 		rootPane.getContentPane().add(splitter, BorderLayout.CENTER);
+
+		KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(this);
+	}
+
+	@Override
+	public void propertyChange(PropertyChangeEvent evt) {
+		if ("focusOwner".equals(evt.getPropertyName()))
+			keyboard.setVisible(evt.getNewValue() instanceof JTextField);
 	}
 }
