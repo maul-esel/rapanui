@@ -4,7 +4,7 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-public class ConclusionProcessView extends JPanel {
+class ConclusionProcessView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JPanel longForm;
