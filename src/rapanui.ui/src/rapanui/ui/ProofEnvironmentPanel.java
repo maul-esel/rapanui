@@ -7,6 +7,9 @@ import javax.swing.border.*;
 class ProofEnvironmentPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
+	// ugly hack: use this instead of Integer.MAX_VALUE to avoid integer overflow
+	private static final int MAX_WIDTH = 5000;
+
 	private JPanel premisePanel;
 
 	public ProofEnvironmentPanel(/* ProofEnvironment env */) {
@@ -19,80 +22,54 @@ class ProofEnvironmentPanel extends JPanel {
 
 		Font titleFont = new Font(getFont().getFamily(), Font.BOLD, 20);
 
-		JPanel premiseHeader = new JPanel();
-		premiseHeader.setOpaque(false);
-		premiseHeader.setLayout(new BoxLayout(premiseHeader, BoxLayout.X_AXIS));
-
+		/* premises */
 		premisePanel = new JPanel(new GridLayout(0, 4));
 		premisePanel.setOpaque(false);
 
-		JLabel premiseTitle = new JLabel("Voraussetzungen");
-		premiseTitle.setFont(titleFont);
-
-		JPanel newPremisePanel = new JPanel();
-		newPremisePanel.setLayout(new BoxLayout(newPremisePanel, BoxLayout.Y_AXIS));
+		/* creating new premises */
+		JPanel newPremisePanel = new JPanel(new MultilineLayout());
 		newPremisePanel.setOpaque(false);
 		newPremisePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5)));
 
-		JPanel premiseContentPanel = new JPanel();
-		premiseContentPanel.setOpaque(false);
+		// TODO: remove dummy content
+		JTextField formulaInput = new JTextField("R = S;R");
+		JTextField termInput = new JTextField("R;S*");
+		termInput.setMaximumSize(new Dimension(MAX_WIDTH, termInput.getMaximumSize().height));
+		JComboBox<String> definitionSelection = new JComboBox<String>(new String[] { "reflexiv", "transitiv" });
+		definitionSelection.setMaximumSize(new Dimension(MAX_WIDTH, definitionSelection.getMaximumSize().height));
 
-		JPanel premiseTypePanel = new JPanel();
-		premiseTypePanel.setLayout(new BoxLayout(premiseTypePanel, BoxLayout.Y_AXIS));
-		premiseTypePanel.setOpaque(false);
-
-		JPanel premiseInputPanel = new JPanel(new CardLayout());
-		premiseInputPanel.setOpaque(false);
-
-		JRadioButton formulaPremise = new JRadioButton("Formel");
-		formulaPremise.setOpaque(false);
-		formulaPremise.setSelected(true);
-		formulaPremise.addActionListener((e) -> {
-			((CardLayout)premiseInputPanel.getLayout()).first(premiseInputPanel);
-		});
-
-		JRadioButton definitionPremise = new JRadioButton("Definition");
-		definitionPremise.setOpaque(false);
-		definitionPremise.addActionListener((e) -> {
-			((CardLayout)premiseInputPanel.getLayout()).last(premiseInputPanel);
-		});
-
-		ButtonGroup premiseTypeGroup = new ButtonGroup();
-		premiseTypeGroup.add(formulaPremise);
-		premiseTypeGroup.add(definitionPremise);
-
-		premiseTypePanel.add(formulaPremise);
-		premiseTypePanel.add(definitionPremise);
-
-		JTextField formulaInput = new JTextField("R = S;R"); // TODO: remove dummy content
-
-		JPanel defRefInputPanel = new JPanel(new FlowLayout());
-		defRefInputPanel.setOpaque(false);
-		defRefInputPanel.add(new JLabel("Sei"));
-		defRefInputPanel.add(new JTextField("R;T")); // TODO: remove dummy content
-		defRefInputPanel.add(new JComboBox<String>(new String[] { "reflexiv", "transitiv" })); // TODO: remove dummy content
-
-		premiseInputPanel.add(formulaInput);
-		premiseInputPanel.add(defRefInputPanel);
-
-		JButton createPremise = new SimpleLink("\u2714", "Neue Voraussetzung erstellen");
-
-		premiseContentPanel.add(premiseTypePanel);
-		premiseContentPanel.add(premiseInputPanel);
-		premiseContentPanel.add(createPremise);
+		JButton createFormulaPremise = new SimpleLink("\u2714", "Neue Voraussetzung erstellen");
+		JButton createDefRefPremise = new SimpleLink("\u2714", "Neue Voraussetzung erstellen");
 
 		JLabel newPremiseLabel = new JLabel("Neue Voraussetzung:");
 		newPremiseLabel.setAlignmentX(RIGHT_ALIGNMENT);
 
-		newPremisePanel.add(newPremiseLabel);
-		newPremisePanel.add(new JSeparator());
-		newPremisePanel.add(premiseContentPanel);
+		newPremisePanel.add(newPremiseLabel, (Integer)0);
+		newPremisePanel.add(new JSeparator(), (Integer)1);
+
+		newPremisePanel.add(new JLabel("Sei "), (Integer)2);
+		newPremisePanel.add(formulaInput);
+		newPremisePanel.add(createFormulaPremise);
+
+		newPremisePanel.add(new JLabel("Sei "), (Integer)3);
+		newPremisePanel.add(termInput);
+		newPremisePanel.add(definitionSelection);
+		newPremisePanel.add(createDefRefPremise);
+
+		/* premise header */
+		JPanel premiseHeader = new JPanel();
+		premiseHeader.setOpaque(false);
+		premiseHeader.setLayout(new BoxLayout(premiseHeader, BoxLayout.X_AXIS));
+
+		JLabel premiseTitle = new JLabel("Voraussetzungen");
+		premiseTitle.setFont(titleFont);
 
 		premiseHeader.add(new CollapseButton(premisePanel, newPremisePanel));
 		premiseHeader.add(Box.createHorizontalStrut(5));
 		premiseHeader.add(premiseTitle);
 		premiseHeader.add(Box.createHorizontalGlue());
 
+		/* conclusion header */
 		JPanel conclusionHeader = new JPanel();
 		conclusionHeader.setOpaque(false);
 		conclusionHeader.setLayout(new BoxLayout(conclusionHeader, BoxLayout.X_AXIS));
@@ -103,22 +80,18 @@ class ProofEnvironmentPanel extends JPanel {
 		conclusionHeader.add(conclusionTitle);
 		conclusionHeader.add(Box.createHorizontalGlue());
 
-		JPanel newConclusionPanel = new JPanel();
-		newConclusionPanel.setLayout(new BoxLayout(newConclusionPanel, BoxLayout.Y_AXIS));
+		/* creating new conclusions */
+		JPanel newConclusionPanel = new JPanel(new MultilineLayout());
 		newConclusionPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5)));
 		newConclusionPanel.setOpaque(false);
 
-		JPanel newConclusionContent = new JPanel();
-		newConclusionContent.setOpaque(false);
+		newConclusionPanel.add(new JLabel("Neue Folgerung:"), (Integer)0);
+		newConclusionPanel.add(new JSeparator(), (Integer)1);
+		newConclusionPanel.add(new JLabel("Startterm: "), (Integer)2);
+		newConclusionPanel.add(new JTextField("S;S;R")); // TODO: remove dummy content
+		newConclusionPanel.add(new SimpleLink("\u2714", "Neue Folgerung erstellen"));
 
-		newConclusionContent.add(new JLabel("Startterm:"));
-		newConclusionContent.add(new JTextField("S;S;R")); // TODO: remove dummy content
-		newConclusionContent.add(new SimpleLink("\u2714", "Neue Folgerung erstellen"));
-
-		newConclusionPanel.add(new JLabel("Neue Folgerung:"));
-		newConclusionPanel.add(new JSeparator());
-		newConclusionPanel.add(newConclusionContent);
-
+		/* complete panel layout */
 		add(premiseHeader, (Integer)0);
 		add(premisePanel, (Integer)1);
 		add(newPremisePanel, (Integer)2);
