@@ -4,16 +4,17 @@ import java.util.Map;
 
 import rapanui.dsl.moai.Formula;
 import rapanui.dsl.moai.Rule;
+import rapanui.dsl.moai.Term;
 
 public class RuleApplication extends Justification {
 	private final Rule appliedRule;
-	private final Map<String, String> variableTranslation;
+	private final Map<String, Term> variableTranslation;
 	private final Justification[] premiseJustifications;
 
 	public RuleApplication(
 			Formula justifiedFormula,
 			Rule appliedRule,
-			Map<String, String> variableTranslation,
+			Map<String, Term> variableTranslation,
 			Justification[] premiseJustifications) {
 		super(justifiedFormula);
 
