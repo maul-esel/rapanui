@@ -99,6 +99,7 @@ public class ConclusionProcess {
 	 */
 	public void appendTransformation(Transformation transformation) {
 		assert transformation != null;
+		assert transformation.getContainer() == this;
 
 		if (!DslHelper.equal(getLastTerm(), transformation.getInput()))
 			throw new IllegalArgumentException();

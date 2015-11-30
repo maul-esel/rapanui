@@ -1,5 +1,6 @@
 package rapanui.core;
 
+import rapanui.dsl.DslHelper;
 import rapanui.dsl.moai.Term;
 
 /**
@@ -9,6 +10,7 @@ import rapanui.dsl.moai.Term;
  *
  */
 public class Transformation {
+	private final ConclusionProcess container;
 	private final Term input;
 	private final Term output;
 	private final Justification justification;
@@ -22,17 +24,25 @@ public class Transformation {
 	 * @param type The type of transformation
 	 * @param justification A justification why this transformation is allowed
 	 */
-	Transformation(Term input, Term output, FormulaType type, Justification justification) {
+	Transformation(ConclusionProcess container, Term input, Term output, FormulaType type, Justification justification) {
 		// TODO: validate parameters? Or rely on valid input?
 
+		assert container != null;
 		assert input != null;
 		assert output != null;
 		assert justification != null;
 
+		assert DslHelper.equal(container.getLastTerm(), input);
+
+		this.container = container;
 		this.input = input;
 		this.output = output;
 		this.type = type;
 		this.justification = justification;
+	}
+
+	public ConclusionProcess getContainer() {
+		return container;
 	}
 
 	public Term getInput() {
