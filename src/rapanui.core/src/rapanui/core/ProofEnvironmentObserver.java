@@ -8,4 +8,5 @@ public interface ProofEnvironmentObserver {
 
 	void conclusionStarted(ConclusionProcess conclusion);
 	void conclusionRemoved(ConclusionProcess conclusion);
+	void conclusionMoved(ConclusionProcess conclusion);
 }

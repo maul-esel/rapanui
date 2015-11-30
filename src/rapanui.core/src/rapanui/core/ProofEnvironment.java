@@ -120,6 +120,38 @@ public class ProofEnvironment {
 		return removeWithCheckAndNotify(conclusions, index, observers, ProofEnvironmentObserver::conclusionRemoved);
 	}
 
+	/**
+	 * Changes a conclusion process' position within the environment.
+	 *
+	 * @param conclusion The conclusion to move
+	 * @param newIndex The new index of the conclusion
+	 *
+	 * @return true if successful, false otherwise
+	 */
+	public boolean moveConclusion(ConclusionProcess conclusion, int newIndex) {
+		if (0 > newIndex || newIndex > conclusions.size())
+			return false;
+		if (!conclusions.remove(conclusion))
+			return false;
+		conclusions.add(newIndex, conclusion);
+		notifyObservers(observers, ProofEnvironmentObserver::conclusionMoved, conclusion);
+		return true;
+	}
+
+	/**
+	 * Changes a conclusion process' position within the environment.
+	 *
+	 * @param oldIndex The current index of the conclusion
+	 * @param newIndex The new index of the conclusion
+	 *
+	 * @return true if successful, false otherwise
+	 */
+	public boolean moveConclusion(int oldIndex, int newIndex) {
+		if (0 > oldIndex || oldIndex >= conclusions.size())
+			return false;
+		return moveConclusion(conclusions.get(oldIndex), newIndex);
+	}
+
 	public ConclusionProcess[] getConclusions() {
 		return listToArray(conclusions, ConclusionProcess[]::new);
 	}
