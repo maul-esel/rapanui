@@ -65,10 +65,12 @@ public class ProofEnvironment {
 	 * @return True if it was actually removed, false otherwise
 	 *
 	 * Any conclusions based upon the removed premise become invalid.
+	 * @throws DependencyRemovalException If there are any derivatives of the premise in the environment.
 	 */
-	public boolean removePremise(Formula premise) {
-		// TODO: check dependencies
+	public boolean removePremise(Formula premise) throws DependencyRemovalException {
 		assert premise != null;
+		if (analyst.hasDerivatives(premise))
+			throw new DependencyRemovalException();
 		return removeWithCheckAndNotify(premises, premise, observers, ProofEnvironmentObserver::premiseRemoved);
 	}
 
@@ -79,9 +81,11 @@ public class ProofEnvironment {
 	 * @return True if it was actually removed, false otherwise
 	 *
 	 * Any conclusions based upon the removed premise become invalid.
+	 * @throws DependencyRemovalException If there are any derivatives of the premise in the environment.
 	 */
-	public boolean removePremise(int index) {
-		// TODO: check dependencies
+	public boolean removePremise(int index) throws DependencyRemovalException {
+		if (analyst.hasDerivatives(premises.get(index)))
+			throw new DependencyRemovalException();
 		return removeWithCheckAndNotify(premises, index, observers, ProofEnvironmentObserver::premiseRemoved);
 	}
 
@@ -108,10 +112,12 @@ public class ProofEnvironment {
 	 * @return True if it was actually removed, false otherwise
 	 *
 	 * Any conclusions which are based upon the removed conclusion become invalid.
+	 * @throws DependencyRemovalException If any transformation in the environment depends on the conclusion
 	 */
-	public boolean removeConclusion(ConclusionProcess conclusion) {
-		// TODO: check dependencies
+	public boolean removeConclusion(ConclusionProcess conclusion) throws DependencyRemovalException {
 		assert conclusion != null;
+		if (analyst.hasDerivatives(conclusion))
+			throw new DependencyRemovalException();
 		return removeWithCheckAndNotify(conclusions, conclusion, observers, ProofEnvironmentObserver::conclusionRemoved);
 	}
 
@@ -122,9 +128,11 @@ public class ProofEnvironment {
 	 * @return True if it was actually removed, false otherwise
 	 *
 	 * Any conclusions which are based upon the removed conclusion become invalid.
+	 * @throws DependencyRemovalException If any transformation in the environment depends on the conclusion
 	 */
-	public boolean removeConclusion(int index) {
-		// TODO: check dependencies
+	public boolean removeConclusion(int index) throws DependencyRemovalException {
+		if (analyst.hasDerivatives(conclusions.get(index)))
+			throw new DependencyRemovalException();
 		return removeWithCheckAndNotify(conclusions, index, observers, ProofEnvironmentObserver::conclusionRemoved);
 	}
 

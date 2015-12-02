@@ -117,9 +117,13 @@ public class ConclusionProcess {
 	 * Reverts one step by removing the last transformation in the chain.
 	 *
 	 * There must be at least one transformation.
+	 * @throws DependencyRemovalException If the last transformation has any
+	 * 	derivatives within the environment
 	 */
-	public void removeLastTransformation() {
+	public void removeLastTransformation() throws DependencyRemovalException {
 		assert transformations.size() > 0;
+		if (environment.getAnalyst().hasDerivatives(transformations.get(transformations.size() - 1)))
+			throw new DependencyRemovalException();
 		Transformation removed = transformations.remove(transformations.size() - 1);
 		notifyObservers(observers, ConclusionProcessObserver::transformationRemoved, removed);
 	}
