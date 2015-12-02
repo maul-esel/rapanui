@@ -119,6 +119,16 @@ public class ConclusionProcess {
 	}
 
 	/**
+	 * Removes all transformations from the end to the given transformation
+	 *
+	 * @param transformation The last transformation to remove
+	 */
+	public void resetBefore(Transformation transformation) {
+		while (transformations.size() > 0 && transformations.get(transformations.size() - 1) != transformation)
+			removeLastTransformation();
+	}
+
+	/**
 	 * Adds an observer to the process. Observers are notified upon changes.
 	 *
 	 * @param observer The new observer
