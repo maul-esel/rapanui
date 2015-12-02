@@ -19,6 +19,8 @@ public class ProofEnvironment {
 	private final List<ConclusionProcess> conclusions;
 	private final List<ProofEnvironmentObserver> observers;
 
+	private final DependencyAnalyst analyst;
+
 	/**
 	 * Create a new environment.
 	 *
@@ -31,10 +33,16 @@ public class ProofEnvironment {
 		this.premises = new ArrayList<Formula>();
 		this.conclusions = new ArrayList<ConclusionProcess>();
 		this.observers = new ArrayList<ProofEnvironmentObserver>();
+
+		this.analyst = new DependencyAnalyst(this);
 	}
 
 	public RuleSystem[] getRuleSystems() {
 		return ruleSystems;
+	}
+
+	public DependencyAnalyst getAnalyst() {
+		return analyst;
 	}
 
 	/**
