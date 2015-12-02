@@ -81,9 +81,10 @@ public class DependencyAnalyst {
 	 * Transformation(Formula). Given a way to test for direct dependency,
 	 * retrieves all derivatives.
 	 *
-	 * @param dependency The object whose derivatives should be retrieved. Currently either a @see Formula or a @see Transformation.
-	 * @param isDirectDependency A predicate that, given an instance of T and a transformation, checks if the transformation
-	 * 	depends directly on the first argument.
+	 * @param dependency The object whose derivatives should be retrieved. Currently
+	 * 	either a @see Formula or a @see Transformation.
+	 * @param isDirectDependency A predicate that, given an instance of T and a
+	 * 	transformation, checks if the transformation depends directly on the first argument.
 	 * @return All transformations that depend on the given object, from all
 	 *	 of the environment's conclusion processes
 	 *
@@ -221,6 +222,4 @@ public class DependencyAnalyst {
 				.filter(searchCondition)
 			).collect(Collectors.toSet());
 	}
-
-	// probably not needed: findDependencies(x)
 }
