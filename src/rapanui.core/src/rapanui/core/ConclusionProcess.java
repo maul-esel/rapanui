@@ -13,6 +13,7 @@ import static rapanui.core.Patterns.*;
  * Represents the core proof process, in which a term is transformed using rules and premises.
  */
 public class ConclusionProcess {
+	private final ProofEnvironment environment;
 	private final Term startTerm;
 	private final List<Transformation> transformations;
 	private final List<ConclusionProcessObserver> observers;
@@ -27,9 +28,14 @@ public class ConclusionProcess {
 		assert environment != null;
 		assert startTerm != null;
 
+		this.environment = environment;
 		this.startTerm = startTerm;
 		this.transformations = new ArrayList<Transformation>();
 		this.observers = new ArrayList<ConclusionProcessObserver>();
+	}
+
+	public ProofEnvironment getEnvironment() {
+		return environment;
 	}
 
 	public Term getStartTerm() {
