@@ -50,13 +50,15 @@ public class DependencyAnalyst {
 	 * @return All transformations that depend on the conclusion, from all of the environment's conclusion processes
 	 *
 	 * A transformation t1 depends on a conclusion process if it depends on any of the
-	 * conclusion process' transformations. Therefore the set of all derivatives of the
-	 * conclusion is the union of all derivatives of the conclusion's transformations.
+	 * conclusion process' transformations, but is not part of the conclusion itself.
+	 * Therefore the set of all derivatives of the conclusion is the union of all
+	 * derivatives of the conclusion's transformations, minus the conclusion's transformations.
 	 */
 	public Transformation[] findDerivatives(ConclusionProcess conclusion) {
 		return Arrays.stream(conclusion.getTransformations())
 			.flatMap(dependency -> Arrays.stream(findDerivatives(dependency)))
 			.distinct()
+			.filter(derivative -> derivative.getContainer() != conclusion)
 			.toArray(Transformation[]::new);
 	}
 
