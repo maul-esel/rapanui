@@ -37,6 +37,7 @@ class SymbolKeyboard extends JPanel {
 						String text = textField.getText();
 						int caret = textField.getCaretPosition();
 						textField.setText(text.substring(0, caret) + symbol + text.substring(caret));
+						textField.setCaretPosition(caret + 1);
 					}
 				}
 			});
