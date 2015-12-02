@@ -20,9 +20,9 @@ public class DependencyAnalyst {
 	private final ProofEnvironment environment;
 
 	/**
-	 * @param environment The environment to analyse.
+	 * @param environment The environment to analyze.
 	 */
-	public DependencyAnalyst(ProofEnvironment environment) {
+	DependencyAnalyst(ProofEnvironment environment) {
 		this.environment = environment;
 		// TODO: cache
 	}
