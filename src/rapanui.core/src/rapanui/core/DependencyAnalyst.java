@@ -28,6 +28,47 @@ public class DependencyAnalyst {
 	}
 
 	/**
+	 * Given a premise, tests if it has any derivatives in the environment
+	 *
+	 * @param premise
+	 * @return true if at least one transformation depends on the premise
+	 */
+	public boolean hasDerivatives(Formula premise) {
+		return Arrays.stream(environment.getConclusions())
+			.flatMap(conclusion -> Arrays.stream(conclusion.getTransformations()))
+			.anyMatch(transformation -> isDirectDependency(premise, transformation));
+	}
+
+	/**
+	 * Given a transformation, tests if it has any derivatives in the environment
+	 *
+	 * @param dependency
+	 * @return true if at least one transformation depends on the given transformation
+	 */
+	public boolean hasDerivatives(Transformation dependency) {
+		return Arrays.stream(environment.getConclusions())
+				.flatMap(conclusion -> Arrays.stream(conclusion.getTransformations()))
+				.anyMatch(transformation -> isDirectDependency(dependency, transformation));
+	}
+
+	/**
+	 * Given a conclusion process, tests if it has any derivatives in the environment
+	 *
+	 * @param dependency
+	 * @return true if at least one transformation that does not belong to the given conclusion itself,
+	 * 	depends on any transformation in the given conclusion
+	 */
+	public boolean hasDerivatives(ConclusionProcess dependency) {
+		return Arrays.stream(environment.getConclusions())
+				.filter(conclusion -> conclusion != dependency)
+				.flatMap(conclusion -> Arrays.stream(conclusion.getTransformations()))
+				.anyMatch(transformation ->
+					Arrays.stream(dependency.getTransformations())
+					.anyMatch(d -> isDirectDependency(d, transformation))
+				);
+	}
+
+	/**
 	 * Given an environment premise, find all transformations that directly or
 	 * indirectly depend on the premise.
 	 *
