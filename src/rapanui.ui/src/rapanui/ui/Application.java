@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -30,6 +31,12 @@ public class Application {
 		// TODO: remove dummy data
 		createEnvironment();
 		createEnvironment();
+	}
+
+	public String[] getKnownDefinitionNames() {
+		return ruleSystems.stream()
+			.flatMap(system -> Arrays.stream(system.getDefinitionNames()))
+			.toArray(String[]::new);
 	}
 
 	public void loadRuleSystem(String fileName) throws IOException {

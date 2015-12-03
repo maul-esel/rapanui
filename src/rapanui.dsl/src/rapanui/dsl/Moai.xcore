@@ -2,9 +2,16 @@
 
 package rapanui.dsl.moai
 
+import java.util.stream.Collectors
+type StringArray wraps String[]
+
 class RuleSystem {
 	contains Rule[] rules
 	contains Definition[] definitions
+
+	op StringArray getDefinitionNames() {
+		definitions.stream().map[ name ].collect(Collectors.toList())
+	}
 }
 
 class Rule {

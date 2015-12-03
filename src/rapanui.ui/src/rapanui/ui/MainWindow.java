@@ -24,6 +24,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	private final List<JScrollPane> environmentViews = new LinkedList<JScrollPane>();
 
 	public MainWindow(Application app) {
+		assert app != null;
 		this.app = app;
 		app.addObserver(this);
 
@@ -83,7 +84,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	}
 
 	private void createEnvironmentView(ProofEnvironment environment) {
-		JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel(environment));
+		JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel(app, environment));
 		tab.setBorder(null);
 		tab.setOpaque(false);
 		tab.getViewport().setOpaque(false);

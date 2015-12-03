@@ -14,13 +14,17 @@ class ProofEnvironmentPanel extends JPanel {
 
 	private static final Font mathFont = new Font("Courier New", Font.PLAIN, 14);
 
+	private final Application app;
 	private final ProofEnvironment model;
+
 	private final JPanel premisePanel = new JPanel(new GridLayout(0, 4));
 	private ConclusionProcessView activeConclusion;
 
-	public ProofEnvironmentPanel(ProofEnvironment model) {
+	public ProofEnvironmentPanel(Application app, ProofEnvironment model) {
+		assert app != null;
 		assert model != null;
 
+		this.app = app;
 		this.model = model;
 		initializeContent();
 	}
@@ -46,8 +50,7 @@ class ProofEnvironmentPanel extends JPanel {
 		termInput.setFont(mathFont);
 		termInput.setMaximumSize(new Dimension(MAX_WIDTH, termInput.getMaximumSize().height));
 
-		// TODO: remove dummy content
-		JComboBox<String> definitionSelection = new JComboBox<String>(new String[] { "reflexiv", "transitiv" });
+		JComboBox<String> definitionSelection = new JComboBox<String>(app.getKnownDefinitionNames());
 		definitionSelection.setMaximumSize(new Dimension(MAX_WIDTH, definitionSelection.getMaximumSize().height));
 
 		JButton createDefRefPremise = new SimpleLink("\u2714", "Neue Voraussetzung erstellen");
