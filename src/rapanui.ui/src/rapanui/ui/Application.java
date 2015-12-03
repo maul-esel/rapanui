@@ -26,6 +26,12 @@ public class Application {
 	}
 
 	public Application() {
+		try {
+			loadRuleSystem("../rapanui.library/library.moai");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		createEnvironment(); // always create initial environment
 
 		// TODO: remove dummy data
