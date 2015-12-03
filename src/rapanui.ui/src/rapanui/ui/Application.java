@@ -20,11 +20,16 @@ public class Application {
 	private final Parser parser = new Parser();
 
 	public static void main(String[] args) {
-		new Application().run();
+		Application instance = new Application();
+		new MainWindow(instance);
 	}
 
-	public void run() {
-		new MainWindow(this);
+	public Application() {
+		createEnvironment(); // always create initial environment
+
+		// TODO: remove dummy data
+		createEnvironment();
+		createEnvironment();
 	}
 
 	public void loadRuleSystem(String fileName) throws IOException {
