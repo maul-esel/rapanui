@@ -63,7 +63,7 @@ BinaryOperation returns Term hidden(WS):
 ;
 
 enum POSTFIX_UNARY_OPERATOR:
-	CONVERSE = '˘' | KLEENE = '*' | PLUS = '⁺'
+	CONVERSE = '˘' | KLEENE = '*' | PLUS = '⁺' | COMPLEMENT = 'ᶜ'
 ;
 enum BINARY_OPERATOR:
 	INTERSECTION = '∩' | UNION = '∪' | MINUS = '\\' | COMPOSITION = ';'
