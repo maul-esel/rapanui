@@ -13,14 +13,15 @@ import javax.swing.JButton;
 class SymbolKeyboard extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private static final char[] keyboardSymbols = { '˘', '*', '⁺', 'Π', '∅', '⊆', '∩', '∪', '=', ';', '*', '\\', 'ᶜ',  'I' };
+	private static final int keyboardLines = 3;
+	private static final char[] keyboardSymbols = { 'I', '˘', '*', '⁺', 'ᶜ', 'Π', '∩', '∪', ';', '\\', '∅', '⊆', '=', '(', ')' };
 
 	SymbolKeyboard() {
 		initializeContent();
 	}
 
 	private void initializeContent() {
-		setLayout(new GridLayout(2, 7));
+		setLayout(new GridLayout(keyboardLines, keyboardSymbols.length / keyboardLines));
 		for (char symbol : keyboardSymbols) {
 			JButton key = new JButton(Character.toString(symbol));
 			add(key);
