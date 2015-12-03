@@ -4,14 +4,21 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import rapanui.core.ConclusionProcess;
+
 class ConclusionProcessView extends JPanel {
 	private static final long serialVersionUID = 1L;
+
+	private final ConclusionProcess model;
 
 	private final JPanel longForm = new JPanel(new GridBagLayout());
 	private Color borderColor = Color.BLACK;
 	private int borderWidth = 1;
 
-	public ConclusionProcessView(/* ConclusionProcess conclusion */) {
+	public ConclusionProcessView(ConclusionProcess model) {
+		assert model != null;
+		this.model = model;
+
 		initializeContent();
 	}
 

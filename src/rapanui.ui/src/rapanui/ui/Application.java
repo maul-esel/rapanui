@@ -62,6 +62,8 @@ public class Application {
 
 		// TODO: remove mock data
 		MockData.mockPremises(environment);
+		MockData.createAndMockConclusionProcess(environment, "R");
+		MockData.createAndMockConclusionProcess(environment, "R");
 
 		notifyObservers(o -> o.environmentAdded(environment));
 	}

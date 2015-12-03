@@ -30,6 +30,8 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 	private ConclusionProcessView activeConclusion;
 
 	private final Map<Formula, JPanel> premiseViewMap = new HashMap<Formula, JPanel>();
+	private final Map<ConclusionProcess, JPanel> conclusionViewMap
+		= new HashMap<ConclusionProcess, JPanel>();
 
 	public ProofEnvironmentPanel(Application app, ProofEnvironment model) {
 		assert app != null;
@@ -41,6 +43,8 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 
 		for (Formula premise : model.getPremises())
 			displayPremise(premise);
+		for (ConclusionProcess conclusion : model.getConclusions())
+			displayConclusion(conclusion);
 
 		model.addObserver(this);
 	}
@@ -134,10 +138,6 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		add(conclusionHeader, (Integer)4);
 		add(Box.createVerticalStrut(10), (Integer)5);
 		add(newConclusionPanel, (Integer)6);
-
-		// TODO: remove dummy content
-		createConclusion();
-		createConclusion();
 	}
 
 	private void displayPremise(Formula premise) {
@@ -166,11 +166,11 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		premiseViewMap.put(premise, panel);
 	}
 
-	private void createConclusion() {
+	private void displayConclusion(ConclusionProcess conclusion) {
 		((MultilineLayout)getLayout()).newLine();
-		ConclusionProcessView conclusion = new ConclusionProcessView();
-		activate(conclusion);
-		add(conclusion);
+		ConclusionProcessView view = new ConclusionProcessView(conclusion);
+		add(view);
+		conclusionViewMap.put(conclusion, view);
 	}
 
 	private void activate(ConclusionProcessView conclusion) {
@@ -204,16 +204,19 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 
 	@Override
 	public void conclusionStarted(ConclusionProcess conclusion) {
-		// TODO
+		displayConclusion(conclusion);
 	}
 
 	@Override
 	public void conclusionRemoved(ConclusionProcess conclusion) {
-		// TODO
+		if (conclusionViewMap.containsKey(conclusion)) {
+			remove(conclusionViewMap.get(conclusion));
+			conclusionViewMap.remove(conclusion);
+		}
 	}
 
 	@Override
 	public void conclusionMoved(ConclusionProcess conclusion) {
-		// TODO
+		// currently not used
 	}
 }

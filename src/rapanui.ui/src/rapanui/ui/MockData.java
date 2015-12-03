@@ -21,4 +21,8 @@ final class MockData {
 		ref.setDefinitionName("\"" + defName + "\"");
 		return ref;
 	}
+
+	static void createAndMockConclusionProcess(ProofEnvironment env, String term) {
+		env.addConclusion(parser.parseTerm(term));
+	}
 }
