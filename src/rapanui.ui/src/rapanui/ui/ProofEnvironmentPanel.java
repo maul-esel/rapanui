@@ -1,15 +1,21 @@
 package rapanui.ui;
 
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import rapanui.core.ConclusionProcess;
 import rapanui.core.ProofEnvironment;
+import rapanui.core.ProofEnvironmentObserver;
 import rapanui.dsl.DslHelper;
 import rapanui.dsl.moai.DefinitionReference;
 import rapanui.dsl.moai.Formula;
 
-class ProofEnvironmentPanel extends JPanel {
+class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 	private static final long serialVersionUID = 1L;
 
 	// ugly hack: use this instead of Integer.MAX_VALUE to avoid integer overflow
@@ -22,6 +28,8 @@ class ProofEnvironmentPanel extends JPanel {
 
 	private final JPanel premisePanel = new JPanel(new GridLayout(0, 4));
 	private ConclusionProcessView activeConclusion;
+
+	private final Map<Formula, JPanel> premiseViewMap = new HashMap<Formula, JPanel>();
 
 	public ProofEnvironmentPanel(Application app, ProofEnvironment model) {
 		assert app != null;
@@ -36,6 +44,8 @@ class ProofEnvironmentPanel extends JPanel {
 
 		for (Formula premise : model.getPremises())
 			displayPremise(premise);
+
+		model.addObserver(this);
 	}
 
 	private void initializeContent() {
@@ -156,6 +166,7 @@ class ProofEnvironmentPanel extends JPanel {
 
 		panel.setBorder(new EmptyBorder(5,5,5,5));
 		premisePanel.add(panel);
+		premiseViewMap.put(premise, panel);
 	}
 
 	private void createConclusion() {
@@ -179,5 +190,33 @@ class ProofEnvironmentPanel extends JPanel {
 		label.setFont(mathFont);
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		return label;
+	}
+
+	@Override
+	public void premiseAdded(Formula premise) {
+		displayPremise(premise);
+	}
+
+	@Override
+	public void premiseRemoved(Formula premise) {
+		if (premiseViewMap.containsKey(premise)) {
+			premisePanel.remove(premiseViewMap.get(premise));
+			premiseViewMap.remove(premise);
+		}
+	}
+
+	@Override
+	public void conclusionStarted(ConclusionProcess conclusion) {
+		// TODO
+	}
+
+	@Override
+	public void conclusionRemoved(ConclusionProcess conclusion) {
+		// TODO
+	}
+
+	@Override
+	public void conclusionMoved(ConclusionProcess conclusion) {
+		// TODO
 	}
 }
