@@ -43,13 +43,14 @@ class ProofEnvironmentPanel extends JPanel {
 		// TODO: remove dummy content
 		JTextField formulaInput = new JTextField("R = S;R");
 		formulaInput.setFont(mathFont);
+
 		JTextField termInput = new JTextField("R;S*");
 		termInput.setFont(mathFont);
 		termInput.setMaximumSize(new Dimension(MAX_WIDTH, termInput.getMaximumSize().height));
+
 		JComboBox<String> definitionSelection = new JComboBox<String>(new String[] { "reflexiv", "transitiv" });
 		definitionSelection.setMaximumSize(new Dimension(MAX_WIDTH, definitionSelection.getMaximumSize().height));
 
-		JButton createFormulaPremise = new SimpleLink("\u2714", "Neue Voraussetzung erstellen");
 		JButton createDefRefPremise = new SimpleLink("\u2714", "Neue Voraussetzung erstellen");
 
 		JLabel newPremiseLabel = new JLabel("Neue Voraussetzung:");
@@ -60,7 +61,8 @@ class ProofEnvironmentPanel extends JPanel {
 
 		newPremisePanel.add(new JLabel("Sei "), (Integer)2);
 		newPremisePanel.add(formulaInput);
-		newPremisePanel.add(createFormulaPremise);
+		newPremisePanel.add(new SimpleLink("\u2714", "Neue Voraussetzung erstellen",
+				new CreateFormulaPremiseAction(model, formulaInput::getText)));
 
 		newPremisePanel.add(new JLabel("Sei "), (Integer)3);
 		newPremisePanel.add(termInput);
@@ -103,7 +105,8 @@ class ProofEnvironmentPanel extends JPanel {
 		newConclusionPanel.add(new JSeparator(), (Integer)1);
 		newConclusionPanel.add(new JLabel("Startterm: "), (Integer)2);
 		newConclusionPanel.add(startTermInput);
-		newConclusionPanel.add(new SimpleLink("\u2714", "Neue Folgerung erstellen"));
+		newConclusionPanel.add(new SimpleLink("\u2714", "Neue Folgerung erstellen",
+				new CreateConclusionProcessAction(model, startTermInput::getText)));
 
 		/* complete panel layout */
 		add(premiseHeader, (Integer)0);
@@ -160,7 +163,7 @@ class ProofEnvironmentPanel extends JPanel {
 
 		premisePanel.add(panel);
 	}
-	
+
 	private void createConclusion() {
 		((MultilineLayout)getLayout()).newLine();
 		ConclusionProcessView conclusion = new ConclusionProcessView();
