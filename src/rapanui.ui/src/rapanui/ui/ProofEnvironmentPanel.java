@@ -39,9 +39,6 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		this.model = model;
 		initializeContent();
 
-		// TODO: remove mock data
-		MockData.mockPremises(model);
-
 		for (Formula premise : model.getPremises())
 			displayPremise(premise);
 

@@ -59,6 +59,10 @@ public class Application {
 	public void createEnvironment() {
 		ProofEnvironment environment = new ProofEnvironment(ruleSystems.toArray(new RuleSystem[ruleSystems.size()]));
 		environments.add(environment);
+
+		// TODO: remove mock data
+		MockData.mockPremises(environment);
+
 		notifyObservers(o -> o.environmentAdded(environment));
 	}
 
