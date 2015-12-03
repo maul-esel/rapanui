@@ -1,15 +1,12 @@
 package rapanui.ui;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.AbstractAction;
-
-public abstract class ActionBase<TTarget> extends AbstractAction {
-	private static final long serialVersionUID = 1L;
-
+public abstract class UICommand<TTarget> implements ActionListener {
 	protected final TTarget target;
 
-	protected ActionBase(TTarget target) {
+	protected UICommand(TTarget target) {
 		this.target = target;
 	}
 

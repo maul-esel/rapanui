@@ -5,13 +5,12 @@ import java.util.function.Supplier;
 import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Parser;
 
-public class CreateConclusionProcessAction extends ActionBase<ProofEnvironment> {
-	private static final long serialVersionUID = 1L;
+public class CreateConclusionProcessCommand extends UICommand<ProofEnvironment> {
 	private static final Parser parser = new Parser();
 
 	private final Supplier<String> startTermSupplier;
 
-	public CreateConclusionProcessAction(ProofEnvironment target, Supplier<String> startTermSupplier) {
+	public CreateConclusionProcessCommand(ProofEnvironment target, Supplier<String> startTermSupplier) {
 		super(target);
 		this.startTermSupplier = startTermSupplier;
 	}

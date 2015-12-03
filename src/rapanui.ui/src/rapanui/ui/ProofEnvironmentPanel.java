@@ -61,7 +61,7 @@ class ProofEnvironmentPanel extends JPanel {
 		newPremisePanel.add(new JLabel("Sei "), (Integer)2);
 		newPremisePanel.add(formulaInput);
 		newPremisePanel.add(new SimpleLink("\u2714", "Neue Voraussetzung erstellen",
-				new CreateFormulaPremiseAction(model, formulaInput::getText)));
+				new CreateFormulaPremiseCommand(model, formulaInput::getText)));
 
 		newPremisePanel.add(new JLabel("Sei "), (Integer)3);
 		newPremisePanel.add(termInput);
@@ -105,7 +105,7 @@ class ProofEnvironmentPanel extends JPanel {
 		newConclusionPanel.add(new JLabel("Startterm: "), (Integer)2);
 		newConclusionPanel.add(startTermInput);
 		newConclusionPanel.add(new SimpleLink("\u2714", "Neue Folgerung erstellen",
-				new CreateConclusionProcessAction(model, startTermInput::getText)));
+				new CreateConclusionProcessCommand(model, startTermInput::getText)));
 
 		/* complete panel layout */
 		add(premiseHeader, (Integer)0);
