@@ -18,9 +18,6 @@ public class ProofEnvironment {
 	private final List<Formula> premises;
 	private final List<ConclusionProcess> conclusions;
 	private final List<ProofEnvironmentObserver> observers;
-
-	private final DependencyAnalyst analyst;
-
 	/**
 	 * Create a new environment.
 	 *
@@ -33,16 +30,10 @@ public class ProofEnvironment {
 		this.premises = new ArrayList<Formula>();
 		this.conclusions = new ArrayList<ConclusionProcess>();
 		this.observers = new ArrayList<ProofEnvironmentObserver>();
-
-		this.analyst = new DependencyAnalyst(this);
 	}
 
 	public RuleSystem[] getRuleSystems() {
 		return ruleSystems;
-	}
-
-	public DependencyAnalyst getAnalyst() {
-		return analyst;
 	}
 
 	/**
@@ -56,37 +47,6 @@ public class ProofEnvironment {
 		assert premise != null;
 		if (addToSet(premises, premise))
 			notifyObservers(observers, ProofEnvironmentObserver::premiseAdded, premise);
-	}
-
-	/**
-	 * Removes a premise from the environment.
-	 *
-	 * @param premise The premise to remove
-	 * @return True if it was actually removed, false otherwise
-	 *
-	 * Any conclusions based upon the removed premise become invalid.
-	 * @throws DependencyRemovalException If there are any derivatives of the premise in the environment.
-	 */
-	public boolean removePremise(Formula premise) throws DependencyRemovalException {
-		assert premise != null;
-		if (analyst.hasDerivatives(premise))
-			throw new DependencyRemovalException();
-		return removeWithCheckAndNotify(premises, premise, observers, ProofEnvironmentObserver::premiseRemoved);
-	}
-
-	/**
-	 * Removes a premise from the environment.
-	 *
-	 * @param index The index of the premise to remove
-	 * @return True if it was actually removed, false otherwise
-	 *
-	 * Any conclusions based upon the removed premise become invalid.
-	 * @throws DependencyRemovalException If there are any derivatives of the premise in the environment.
-	 */
-	public boolean removePremise(int index) throws DependencyRemovalException {
-		if (analyst.hasDerivatives(premises.get(index)))
-			throw new DependencyRemovalException();
-		return removeWithCheckAndNotify(premises, index, observers, ProofEnvironmentObserver::premiseRemoved);
 	}
 
 	public Formula[] getPremises() {
@@ -103,69 +63,6 @@ public class ProofEnvironment {
 		ConclusionProcess conclusion = new ConclusionProcess(this, startTerm);
 		conclusions.add(conclusion);
 		notifyObservers(observers, ProofEnvironmentObserver::conclusionStarted, conclusion);
-	}
-
-	/**
-	 * Removes a conclusion process from the environment.
-	 *
-	 * @param conclusion The conclusion to remove (must not be null)
-	 * @return True if it was actually removed, false otherwise
-	 *
-	 * Any conclusions which are based upon the removed conclusion become invalid.
-	 * @throws DependencyRemovalException If any transformation in the environment depends on the conclusion
-	 */
-	public boolean removeConclusion(ConclusionProcess conclusion) throws DependencyRemovalException {
-		assert conclusion != null;
-		if (analyst.hasDerivatives(conclusion))
-			throw new DependencyRemovalException();
-		return removeWithCheckAndNotify(conclusions, conclusion, observers, ProofEnvironmentObserver::conclusionRemoved);
-	}
-
-	/**
-	 * Removes a conclusion process from the environment.
-	 *
-	 * @param index The index of the conclusion to remove
-	 * @return True if it was actually removed, false otherwise
-	 *
-	 * Any conclusions which are based upon the removed conclusion become invalid.
-	 * @throws DependencyRemovalException If any transformation in the environment depends on the conclusion
-	 */
-	public boolean removeConclusion(int index) throws DependencyRemovalException {
-		if (analyst.hasDerivatives(conclusions.get(index)))
-			throw new DependencyRemovalException();
-		return removeWithCheckAndNotify(conclusions, index, observers, ProofEnvironmentObserver::conclusionRemoved);
-	}
-
-	/**
-	 * Changes a conclusion process' position within the environment.
-	 *
-	 * @param conclusion The conclusion to move
-	 * @param newIndex The new index of the conclusion
-	 *
-	 * @return true if successful, false otherwise
-	 */
-	public boolean moveConclusion(ConclusionProcess conclusion, int newIndex) {
-		if (0 > newIndex || newIndex > conclusions.size())
-			return false;
-		if (!conclusions.remove(conclusion))
-			return false;
-		conclusions.add(newIndex, conclusion);
-		notifyObservers(observers, ProofEnvironmentObserver::conclusionMoved, conclusion);
-		return true;
-	}
-
-	/**
-	 * Changes a conclusion process' position within the environment.
-	 *
-	 * @param oldIndex The current index of the conclusion
-	 * @param newIndex The new index of the conclusion
-	 *
-	 * @return true if successful, false otherwise
-	 */
-	public boolean moveConclusion(int oldIndex, int newIndex) {
-		if (0 > oldIndex || oldIndex >= conclusions.size())
-			return false;
-		return moveConclusion(conclusions.get(oldIndex), newIndex);
 	}
 
 	public ConclusionProcess[] getConclusions() {
