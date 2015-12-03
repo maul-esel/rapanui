@@ -1,16 +1,13 @@
 package rapanui.ui;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
-import java.awt.datatransfer.Clipboard;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import javax.swing.text.BadLocationException;
 import javax.swing.JButton;
 
 class SymbolKeyboard extends JPanel {
