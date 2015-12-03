@@ -51,10 +51,15 @@ class ConclusionProcessView extends JPanel {
 		header.add(new CollapseButton(longForm, separator));
 		header.add(ProofEnvironmentPanel.createMathematicalLabel(shortForm));
 		header.add(Box.createHorizontalGlue());
-		header.add(new SimpleLink("\u2B06", "Nach oben"));
-		header.add(new SimpleLink("\u2B07", "Nach unten"));
-		header.add(new SimpleLink("\u27F2", "Letzter Schritt rückgängig"));
-		header.add(new SimpleLink("\u2718", "Folgerung entfernen"));
+
+		/*
+		 * Implementation of modification features has been postponed.
+		 *
+		 * header.add(new SimpleLink("\u2B06", "Nach oben"));
+		 * header.add(new SimpleLink("\u2B07", "Nach unten"));
+		 * header.add(new SimpleLink("\u27F2", "Letzter Schritt rückgängig"));
+		 * header.add(new SimpleLink("\u2718", "Folgerung entfernen"));
+		 */
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;

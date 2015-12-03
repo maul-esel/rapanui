@@ -123,10 +123,14 @@ class ProofEnvironmentPanel extends JPanel {
 		panel.setOpaque(false);
 
 		panel.add(createMathematicalLabel(formula));
-		panel.add(new SimpleLink("\u2718", "Voraussetzung entfernen"));
-		
+		/*
+		 * Implementation of modification features has been postponed.
+		 *
+		 * panel.add(new SimpleLink("\u2718", "Voraussetzung entfernen"));
+		 */
+
 		panel.setBorder(new EmptyBorder(5,5,5,5));
-		
+
 		premisePanel.add(panel);
 
 		// TODO: setup validation
@@ -136,14 +140,18 @@ class ProofEnvironmentPanel extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		panel.setOpaque(false);
-		
+
 		panel.add(createMathematicalLabel(term));
 		panel.add(Box.createHorizontalStrut(3));
 		panel.add(new JLabel(definitionName));
-		panel.add(new SimpleLink("\u2718", "Voraussetzung entfernen"));
+		/*
+		 * Implementation of modification features has been postponed.
+		 *
+		 * panel.add(new SimpleLink("\u2718", "Voraussetzung entfernen"));
+		 */
 
 		panel.setBorder(new EmptyBorder(5,5,5,5));
-		
+
 		premisePanel.add(panel);
 	}
 	
