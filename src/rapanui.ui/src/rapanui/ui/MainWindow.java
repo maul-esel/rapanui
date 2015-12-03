@@ -4,15 +4,29 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import java.util.List;
+import java.util.LinkedList;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
-class MainWindow extends JFrame implements PropertyChangeListener {
+import rapanui.core.ProofEnvironment;
+import rapanui.dsl.moai.RuleSystem;
+
+class MainWindow extends JFrame implements PropertyChangeListener, ApplicationObserver {
 	private static final long serialVersionUID = 1L;
 
+	private final Application app;
 	private final SymbolKeyboard keyboard = new SymbolKeyboard();
-	
+
+	private final JPanel proofContainer = new JPanel(new CardLayout());
+	private final JComboBox<String> proofList = new JComboBox<String>();
+	private final List<JScrollPane> environmentViews = new LinkedList<JScrollPane>();
+
 	public MainWindow(Application app) {
+		this.app = app;
+		app.addObserver(this);
+
 		initializeContent();
 		setTitle("RAPA nui – Relational Algebra Proof Assistant");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -21,7 +35,7 @@ class MainWindow extends JFrame implements PropertyChangeListener {
 		pack();
 		setVisible(true);
 	}
-	
+
 	private void initializeContent() {
 		rootPane.getContentPane().setBackground(Color.WHITE);
 		rootPane.getContentPane().setLayout(new BorderLayout());	
@@ -38,25 +52,16 @@ class MainWindow extends JFrame implements PropertyChangeListener {
 		proofSelectionPanel.setOpaque(false);
 		proofSelectionPanel.setLayout(new BoxLayout(proofSelectionPanel, BoxLayout.X_AXIS));
 
-		JComboBox<String> proofList = new JComboBox<String>(new String[] { "Beweis 1", "Beweis 2", "Beweis 3" });
-
 		proofSelectionPanel.add(new JLabel("Aktueller Beweis:"));
 		proofSelectionPanel.add(Box.createHorizontalStrut(5));
 		proofSelectionPanel.add(proofList);
 		proofSelectionPanel.add(new SimpleLink("\u2A01", "Neuen Beweis starten"));
 		proofSelectionPanel.add(new SimpleLink("\u2718", "Aktuellen Beweis löschen"));
 
-		JPanel proofContainer = new JPanel(new CardLayout());
 		proofContainer.setOpaque(false);
 
-		// TODO: remove dummy content
-		for (int i = 1; i < 4; ++i) {
-			JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel());
-			tab.setBorder(null);
-			tab.setOpaque(false);
-			tab.getViewport().setOpaque(false);
-			proofContainer.add(tab, "Beweis " + i);
-		}
+		for (ProofEnvironment environment : app.getEnvironments())
+			createEnvironmentView(environment);
 
 		proofList.addItemListener((e) -> {
 			((CardLayout)proofContainer.getLayout()).show(proofContainer, e.getItem().toString());
@@ -77,9 +82,34 @@ class MainWindow extends JFrame implements PropertyChangeListener {
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(this);
 	}
 
+	private void createEnvironmentView(ProofEnvironment environment) {
+		JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel());
+		tab.setBorder(null);
+		tab.setOpaque(false);
+		tab.getViewport().setOpaque(false);
+
+		String name = "Beweis " + (environmentViews.size()+1);
+		proofContainer.add(tab, name);
+		proofList.addItem(name);
+		environmentViews.add(tab);
+	}
+
 	@Override
 	public void propertyChange(PropertyChangeEvent evt) {
 		if ("focusOwner".equals(evt.getPropertyName()))
 			keyboard.setVisible(evt.getNewValue() instanceof JTextField);
+	}
+
+	@Override
+	public void ruleSystemLoaded(RuleSystem loaded) { /* nothing to do here */ }
+
+	@Override
+	public void environmentAdded(ProofEnvironment environment) {
+		createEnvironmentView(environment);
+	}
+
+	@Override
+	public void environmentRemoved(ProofEnvironment environment) {
+		// TODO
 	}
 }
