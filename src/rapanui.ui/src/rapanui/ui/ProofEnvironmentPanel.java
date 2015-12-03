@@ -15,7 +15,7 @@ class ProofEnvironmentPanel extends JPanel {
 	private static final Font mathFont = new Font("Courier New", Font.PLAIN, 14);
 
 	private final ProofEnvironment model;
-	private JPanel premisePanel;
+	private final JPanel premisePanel = new JPanel(new GridLayout(0, 4));
 	private ConclusionProcessView activeConclusion;
 
 	public ProofEnvironmentPanel(ProofEnvironment model) {
@@ -32,7 +32,6 @@ class ProofEnvironmentPanel extends JPanel {
 		Font titleFont = new Font(getFont().getFamily(), Font.BOLD, 20);
 
 		/* premises */
-		premisePanel = new JPanel(new GridLayout(0, 4));
 		premisePanel.setOpaque(false);
 
 		/* creating new premises */
@@ -139,10 +138,7 @@ class ProofEnvironmentPanel extends JPanel {
 		 */
 
 		panel.setBorder(new EmptyBorder(5,5,5,5));
-
 		premisePanel.add(panel);
-
-		// TODO: setup validation
 	}
 
 	private void createDefinitionReferencePremise(String term, String definitionName /* TODO: make Definition instance */) {
@@ -160,7 +156,6 @@ class ProofEnvironmentPanel extends JPanel {
 		 */
 
 		panel.setBorder(new EmptyBorder(5,5,5,5));
-
 		premisePanel.add(panel);
 	}
 

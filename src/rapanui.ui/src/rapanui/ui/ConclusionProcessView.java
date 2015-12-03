@@ -7,7 +7,7 @@ import javax.swing.border.*;
 class ConclusionProcessView extends JPanel {
 	private static final long serialVersionUID = 1L;
 
-	private JPanel longForm;
+	private final JPanel longForm = new JPanel(new GridBagLayout());
 	private Color borderColor = Color.BLACK;
 	private int borderWidth = 1;
 
@@ -43,7 +43,6 @@ class ConclusionProcessView extends JPanel {
 		header.setBackground(Color.WHITE);
 		header.setLayout(new BoxLayout(header, BoxLayout.X_AXIS));
 
-		longForm = new JPanel(new GridBagLayout());
 		longForm.setOpaque(false);
 
 		JSeparator separator = new JSeparator();
