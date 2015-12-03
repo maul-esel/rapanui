@@ -39,6 +39,10 @@ public class Application {
 		notifyObservers(o -> o.ruleSystemLoaded(system));
 	}
 
+	public ProofEnvironment[] getEnvironments() {
+		return environments.toArray(new ProofEnvironment[environments.size()]);
+	}
+
 	public void createEnvironment() {
 		ProofEnvironment environment = new ProofEnvironment(ruleSystems.toArray(new RuleSystem[ruleSystems.size()]));
 		environments.add(environment);
