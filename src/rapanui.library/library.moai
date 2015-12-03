@@ -1,0 +1,135 @@
+# Vereinigung: allgemeine mengentheoretische Eigenschaften
+
+axiom "Kommutativität der Vereinigung"
+  always M ∪ N = N ∪ M
+
+axiom "Assoziativität der Vereinigung"
+  always M ∪ (N ∪ L) = (M ∪ N) ∪ L
+
+axiom "Neutralelement der Vereinigung"
+  always M ∪ ∅ = M
+  and ∅ ∪ M = M
+
+axiom "Vereinigung ist Obermenge der Argumente"
+  always M ⊆ M ∪ N
+  and N ⊆ M ∪ N
+
+axiom "Idempotenz der Vereinigung"
+  always M = M ∪ M
+
+theorem "Vereinigung mit einer Obermenge (1)"
+  if M ⊆ N
+  then M ∪ N = N
+
+theorem "Vereinigung mit einer Obermenge (2)"
+  if M ∪ N = N
+  then M ⊆ N
+
+# Vereinigung von Relationen
+
+axiom "Nullelement der Vereinigung"
+  always R ∪ Π = Π
+  and Π ∪ R = Π
+
+# Schnitt: allgemeine mengentheoretische Eigenschaften
+
+axiom "Kommutativität des Schnittes"
+  always M ∩ N = N ∩ M
+
+axiom "Assoziativität des Schnittes"
+  always M ∩ (N ∩ L) = (M ∩ N) ∩ L
+
+axiom "Nullelement des Schnittes"
+  always M ∩ ∅ = ∅
+  and ∅ ∩ M = ∅
+
+axiom "Schnitt ist Teilmenge der Argumente"
+  always M ∩ N ⊆ M
+  and M ∩ N ⊆ N
+
+axiom "Idempotenz des Schnittes"
+  always M ∩ M = M
+
+theorem "Schnitt mit einer Teilmenge (1)"
+  if M ⊆ N
+  then M ∩ N = M
+
+theorem "Schnitt mit einer Teilmenge (2)"
+  if M ∩ N = M
+  then M ⊆ N
+
+# Schnitt von Relationen
+
+axiom "Neutralelement des Schnittes"
+  always M ∩ Π = M
+  and Π ∩ M = M
+
+# Vereinigung und Schnitt
+
+axiom "Distributivität des Schnittes über die Vereinigung"
+  always M ∩ (N ∪ L) = (M ∩ N) ∪ (M ∩ L)
+
+axiom "Distributivität der Vereinigung über den Schnitt"
+  always M ∪ (N ∩ L) = (M ∪ N) ∩ (M ∪ L)
+
+# Vereinigung, Schnitt und Komplement
+
+axiom "Vereinigung, Schnitt und Komplement"
+  always (M ∪ N)ᶜ = Mᶜ ∩ Nᶜ
+  and (M ∩ N)ᶜ = Mᶜ ∪ Nᶜ
+
+axiom "Tertium non datur"
+  always M ∪ Mᶜ = Π
+
+axiom "Disjunktheit des Komplements"
+  always M ∩ Mᶜ = ∅
+
+# Komplement: allgemeine mengentheoretische Eigenschaften
+
+axiom "Involutionsgesetz"
+  always (Mᶜ)ᶜ = M
+
+theorem "Antitonie des Komplements"
+  if M ⊆ N
+  then Nᶜ ⊆ Mᶜ
+
+# Komplement von Relationen
+
+axiom "Definition des Komplements"
+  always Rᶜ = Π \ R
+
+axiom "Komplement der Allrelation"
+  always Πᶜ = ∅
+
+axiom "Komplement der leeren Relation"
+  always ∅ᶜ = Π
+
+# Minimum und Maximum
+
+axiom "Leere Menge ist Teilmenge jeder Menge"
+  always ∅ ⊆ M
+
+axiom "Maximalität von Π"
+  always R ⊆ Π
+
+# Mengendifferenz: allgemeine mengentheoretische Eigenschaften
+
+axiom "Mengendifferenz und Schnitt"
+  always M \ N = M ∩ Nᶜ
+
+axiom "Rechts-Neutralelement der Mengendifferenz"
+  always M \ ∅ = M
+
+axiom "Links-Nullelement der Mengendifferenz"
+  always ∅ \ M = ∅
+
+theorem "Mengendifferenz mit einer Obermenge"
+  if M ⊆ N
+  then M \ N = ∅
+
+# Mengendifferenz von Relationen
+
+axiom "Mengendifferenz mit der Allrelation"
+  always R \ Π = ∅
+
+# ˘ ⁺ ᶜ Π ∩ ∪ ∅ ⊆
