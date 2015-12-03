@@ -8,12 +8,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JButton;
+import javax.swing.Action;
 
 class SimpleLink extends JButton {
 	private static final long serialVersionUID = 1L;
 
 	private static final Color defaultColor = new Color(0x000099);
 	private static final Color hoverColor = Color.ORANGE;
+
+	public SimpleLink(String text, String tooltip, Action action) {
+		this(text, tooltip);
+		setAction(action);
+	}
 
 	public SimpleLink(String text, String tooltip, ActionListener action) {
 		this(text, tooltip);
