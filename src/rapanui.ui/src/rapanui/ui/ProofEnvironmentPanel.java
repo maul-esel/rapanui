@@ -39,14 +39,14 @@ class ProofEnvironmentPanel extends JPanel {
 		newPremisePanel.setOpaque(false);
 		newPremisePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5)));
 
-		// TODO: remove dummy content
-		JTextField formulaInput = new JTextField("R = S;R");
+		JTextField formulaInput = new JTextField();
 		formulaInput.setFont(mathFont);
 
-		JTextField termInput = new JTextField("R;S*");
+		JTextField termInput = new JTextField();
 		termInput.setFont(mathFont);
 		termInput.setMaximumSize(new Dimension(MAX_WIDTH, termInput.getMaximumSize().height));
 
+		// TODO: remove dummy content
 		JComboBox<String> definitionSelection = new JComboBox<String>(new String[] { "reflexiv", "transitiv" });
 		definitionSelection.setMaximumSize(new Dimension(MAX_WIDTH, definitionSelection.getMaximumSize().height));
 
@@ -97,7 +97,7 @@ class ProofEnvironmentPanel extends JPanel {
 		newConclusionPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5)));
 		newConclusionPanel.setOpaque(false);
 
-		JTextField startTermInput = new JTextField("S;S;R"); // TODO: remove dummy content
+		JTextField startTermInput = new JTextField();
 		startTermInput.setFont(mathFont);
 
 		newConclusionPanel.add(new JLabel("Neue Folgerung:"), (Integer)0);
