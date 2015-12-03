@@ -133,3 +133,51 @@ axiom "Mengendifferenz mit der Allrelation"
   always R \ Π = ∅
 
 # ˘ ⁺ ᶜ Π ∩ ∪ ∅ ⊆
+
+# Relationseigenschaften:
+
+define R as "reflexiv"
+  iff I ⊆ R
+
+define R as "irreflexiv"
+  iff R ∩ I =  ∅
+
+define R as "symmetrisch"
+  iff R˘ ⊆ R
+
+define R as "antisymmetrisch"
+  iff R ∩ R˘ ⊆ I
+
+define R as "asymmetrisch"
+  iff R ∩ R˘ = ∅
+
+define R as "transitiv"
+  iff R;R ⊆ R
+
+define R as "dicht"
+  iff R ⊆ R;R
+
+define R as "total"
+  iff R ∪ R˘ = Π
+
+define R as "euklidisch"
+  iff R˘;R ⊆ R
+
+# Relationsklassen:
+
+define R as "Äquivalenzrelation"
+  iff R is "reflexiv"
+  and R is "transitiv"
+  and R is "symmetrisch"
+
+define R as "Präordnung"
+  iff R is "reflexiv"
+  and R is "transitiv"
+
+define R as "Ordnung"
+  iff R is "Präordnung"
+  and R is "antisymmetrisch"
+
+define R as "Striktordnung"
+  iff R is "irreflexiv"
+  and R is "transitiv"
