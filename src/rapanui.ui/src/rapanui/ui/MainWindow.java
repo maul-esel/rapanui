@@ -55,7 +55,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 		proofSelectionPanel.add(new JLabel("Aktueller Beweis:"));
 		proofSelectionPanel.add(Box.createHorizontalStrut(5));
 		proofSelectionPanel.add(proofList);
-		proofSelectionPanel.add(new SimpleLink("\u2A01", "Neuen Beweis starten"));
+		proofSelectionPanel.add(new SimpleLink("\u2A01", "Neuen Beweis starten", new CreateProofEnvironmentCommand(app)));
 		proofSelectionPanel.add(new SimpleLink("\u2718", "Aktuellen Beweis löschen"));
 
 		proofContainer.setOpaque(false);
