@@ -83,7 +83,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	}
 
 	private void createEnvironmentView(ProofEnvironment environment) {
-		JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel());
+		JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel(environment));
 		tab.setBorder(null);
 		tab.setOpaque(false);
 		tab.getViewport().setOpaque(false);

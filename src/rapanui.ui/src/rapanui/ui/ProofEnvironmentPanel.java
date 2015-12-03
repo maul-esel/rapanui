@@ -4,6 +4,8 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import rapanui.core.ProofEnvironment;
+
 class ProofEnvironmentPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -12,10 +14,14 @@ class ProofEnvironmentPanel extends JPanel {
 
 	private static final Font mathFont = new Font("Courier New", Font.PLAIN, 14);
 
+	private final ProofEnvironment model;
 	private JPanel premisePanel;
 	private ConclusionProcessView activeConclusion;
 
-	public ProofEnvironmentPanel(/* ProofEnvironment env */) {
+	public ProofEnvironmentPanel(ProofEnvironment model) {
+		assert model != null;
+
+		this.model = model;
 		initializeContent();
 	}
 
