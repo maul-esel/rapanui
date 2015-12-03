@@ -5,6 +5,9 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import rapanui.core.ProofEnvironment;
+import rapanui.dsl.DslHelper;
+import rapanui.dsl.moai.DefinitionReference;
+import rapanui.dsl.moai.Formula;
 
 class ProofEnvironmentPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -27,6 +30,12 @@ class ProofEnvironmentPanel extends JPanel {
 		this.app = app;
 		this.model = model;
 		initializeContent();
+
+		// TODO: remove mock data
+		MockData.mockPremises(model);
+
+		for (Formula premise : model.getPremises())
+			displayPremise(premise);
 	}
 
 	private void initializeContent() {
@@ -122,36 +131,23 @@ class ProofEnvironmentPanel extends JPanel {
 		// TODO: remove dummy content
 		createConclusion();
 		createConclusion();
-		createFormulaPremise("R;S = S;R");
-		createDefinitionReferencePremise("R;R", "reflexiv");
-		createFormulaPremise("S = R;R");
-		createDefinitionReferencePremise("S;S", "transitiv");
 	}
 
-	private void createFormulaPremise(String formula) {
+	private void displayPremise(Formula premise) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		panel.setOpaque(false);
 
-		panel.add(createMathematicalLabel(formula));
-		/*
-		 * Implementation of modification features has been postponed.
-		 *
-		 * panel.add(new SimpleLink("\u2718", "Voraussetzung entfernen"));
-		 */
+		if (premise instanceof DefinitionReference) {
+			DefinitionReference ref = (DefinitionReference)premise;
+			panel.add(createMathematicalLabel(DslHelper.serialize(ref.getTarget())));
+			panel.add(Box.createHorizontalStrut(3));
+			panel.add(new JLabel(ref.getDefinitionName()));
+		} else {
+			System.out.println(DslHelper.serialize(premise));
+			panel.add(createMathematicalLabel(DslHelper.serialize(premise)));
+		}
 
-		panel.setBorder(new EmptyBorder(5,5,5,5));
-		premisePanel.add(panel);
-	}
-
-	private void createDefinitionReferencePremise(String term, String definitionName /* TODO: make Definition instance */) {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
-		panel.setOpaque(false);
-
-		panel.add(createMathematicalLabel(term));
-		panel.add(Box.createHorizontalStrut(3));
-		panel.add(new JLabel(definitionName));
 		/*
 		 * Implementation of modification features has been postponed.
 		 *
