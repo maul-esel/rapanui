@@ -2,7 +2,9 @@
 
 package rapanui.dsl.moai
 
+import org.eclipse.emf.ecore.util.EcoreUtil
 import java.util.stream.Collectors
+
 type StringArray wraps String[]
 
 class RuleSystem {
@@ -26,6 +28,9 @@ class Definition {
 }
 
 abstract class Formula {
+	op boolean structurallyEquals(Formula other) {
+		EcoreUtil.equals(this, other)
+	}
 }
 class Equation extends Formula {
 	contains Term left
@@ -42,6 +47,9 @@ class DefinitionReference extends Formula {
 }
 
 abstract class Term {
+	op boolean structurallyEquals(Term other) {
+		EcoreUtil.equals(this, other)
+	}
 }
 class VariableReference extends Term {
 	String variable

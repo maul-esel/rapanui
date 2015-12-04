@@ -1,6 +1,5 @@
 package rapanui.core;
 
-import rapanui.dsl.DslHelper;
 import rapanui.dsl.moai.Term;
 
 /**
@@ -32,7 +31,7 @@ public class Transformation {
 		assert output != null;
 		assert justification != null;
 
-		assert DslHelper.equal(container.getLastTerm(), input);
+		assert input.structurallyEquals(container.getLastTerm());
 
 		this.container = container;
 		this.input = input;

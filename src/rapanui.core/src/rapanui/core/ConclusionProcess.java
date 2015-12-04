@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import rapanui.dsl.DslHelper;
 import rapanui.dsl.moai.Term;
 
 import static rapanui.core.Patterns.*;
@@ -107,7 +106,7 @@ public class ConclusionProcess {
 		assert transformation != null;
 		assert transformation.getContainer() == this;
 
-		if (!DslHelper.equal(getLastTerm(), transformation.getInput()))
+		if (!getLastTerm().structurallyEquals(transformation.getInput()))
 			throw new IllegalArgumentException();
 		transformations.add(transformation);
 		notifyObservers(observers, ConclusionProcessObserver::transformationAdded, transformation);
