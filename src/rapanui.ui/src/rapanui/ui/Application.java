@@ -18,8 +18,6 @@ public class Application {
 	private final List<ProofEnvironment> environments = new ArrayList<ProofEnvironment>();
 	private final List<RuleSystem> ruleSystems = new ArrayList<RuleSystem>();
 
-	private final Parser parser = new Parser();
-
 	public static void main(String[] args) {
 		Application instance = new Application();
 		new MainWindow(instance);
@@ -47,7 +45,7 @@ public class Application {
 
 	public void loadRuleSystem(String fileName) throws IOException {
 		String source = new String(Files.readAllBytes(Paths.get(fileName)));
-		RuleSystem system = parser.parseRuleSystem(source);
+		RuleSystem system = Parser.getInstance().parseRuleSystem(source);
 		ruleSystems.add(system);
 		notifyObservers(o -> o.ruleSystemLoaded(system));
 	}

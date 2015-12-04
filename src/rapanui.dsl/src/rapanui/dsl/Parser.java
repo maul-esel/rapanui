@@ -16,13 +16,19 @@ import rapanui.dsl.moai.Term;
 import rapanui.dsl.services.MoaiGrammarAccess;
 
 public class Parser {
+	private static final Parser instance = new Parser();
+
+	public static Parser getInstance() {
+		return instance;
+	}
+
 	@Inject
 	private IParser internalParser;
 
 	@Inject
 	private MoaiGrammarAccess grammar;
 
-	public Parser() {
+	private Parser() {
 		new MoaiStandaloneSetup()
 		.createInjectorAndDoEMFRegistration()
 		.injectMembers(this);

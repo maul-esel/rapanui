@@ -6,23 +6,21 @@ import rapanui.dsl.moai.DefinitionReference;
 import rapanui.dsl.moai.MoaiFactory;
 
 final class MockData {
-	private static final Parser parser = new Parser();
-
 	static void mockPremises(ProofEnvironment env) {
-		env.addPremise(parser.parseFormula("R;S = S;R"));
+		env.addPremise(Parser.getInstance().parseFormula("R;S = S;R"));
 		env.addPremise(createDefinitionReference("R;R", "reflexiv"));
-		env.addPremise(parser.parseFormula("S = R;R"));
+		env.addPremise(Parser.getInstance().parseFormula("S = R;R"));
 		env.addPremise(createDefinitionReference("S;S", "transitiv"));
 	}
 
 	static DefinitionReference createDefinitionReference(String term, String defName) {
 		DefinitionReference ref = MoaiFactory.eINSTANCE.createDefinitionReference();
-		ref.setTarget(parser.parseTerm(term));
+		ref.setTarget(Parser.getInstance().parseTerm(term));
 		ref.setDefinitionName("\"" + defName + "\"");
 		return ref;
 	}
 
 	static void createAndMockConclusionProcess(ProofEnvironment env, String term) {
-		env.addConclusion(parser.parseTerm(term));
+		env.addConclusion(Parser.getInstance().parseTerm(term));
 	}
 }

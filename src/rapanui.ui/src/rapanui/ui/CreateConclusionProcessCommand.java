@@ -6,8 +6,6 @@ import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Parser;
 
 public class CreateConclusionProcessCommand extends UICommand<ProofEnvironment> {
-	private static final Parser parser = new Parser();
-
 	private final Supplier<String> startTermSupplier;
 
 	public CreateConclusionProcessCommand(ProofEnvironment target, Supplier<String> startTermSupplier) {
@@ -17,6 +15,6 @@ public class CreateConclusionProcessCommand extends UICommand<ProofEnvironment> 
 
 	@Override
 	public void execute() {
-		target.addConclusion(parser.parseTerm(startTermSupplier.get()));
+		target.addConclusion(Parser.getInstance().parseTerm(startTermSupplier.get()));
 	}
 }
