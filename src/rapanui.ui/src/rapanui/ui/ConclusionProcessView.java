@@ -5,13 +5,20 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import rapanui.core.ConclusionProcess;
+import rapanui.core.ConclusionProcessObserver;
+import rapanui.core.FormulaType;
+import rapanui.core.Transformation;
 
-class ConclusionProcessView extends JPanel {
+import rapanui.dsl.DslHelper;
+
+class ConclusionProcessView extends JPanel implements ConclusionProcessObserver {
 	private static final long serialVersionUID = 1L;
 
 	private final ConclusionProcess model;
 
 	private final JPanel longForm = new JPanel(new GridBagLayout());
+	private JLabel titleLabel;
+
 	private Color borderColor = Color.BLACK;
 	private int borderWidth = 1;
 
@@ -20,6 +27,8 @@ class ConclusionProcessView extends JPanel {
 		this.model = model;
 
 		initializeContent();
+
+		model.addObserver(this);
 	}
 
 	public void activate() {
@@ -44,7 +53,7 @@ class ConclusionProcessView extends JPanel {
 		setOpaque(false);
 		updateBorder();
 
-		String shortForm = "R = S;T"; // TODO: remove dummy data
+		String shortForm = getTitle();
 
 		JPanel header = new JPanel();
 		header.setBackground(Color.WHITE);
@@ -55,7 +64,7 @@ class ConclusionProcessView extends JPanel {
 		JSeparator separator = new JSeparator();
 
 		header.add(new CollapseButton(longForm, separator));
-		header.add(ProofEnvironmentPanel.createMathematicalLabel(shortForm));
+		header.add(titleLabel = ProofEnvironmentPanel.createMathematicalLabel(shortForm));
 		header.add(Box.createHorizontalGlue());
 
 		/*
@@ -101,5 +110,23 @@ class ConclusionProcessView extends JPanel {
 		c.weightx = 0;
 		longForm.add(new JLabel("(" + reason + ")"), c);
 		line++;
+	}
+
+	private String getTitle() {
+		return DslHelper.serialize(model.getStartTerm())
+		+ " "
+		+ (model.getType() == FormulaType.Equality ? "=" : "⊆")
+		+ " "
+		+ DslHelper.serialize(model.getLastTerm());
+	}
+
+	@Override
+	public void transformationAdded(Transformation transformation) {
+		titleLabel.setText(getTitle());
+	}
+
+	@Override
+	public void transformationRemoved(Transformation transformation) {
+		titleLabel.setText(getTitle());
 	}
 }
