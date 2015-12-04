@@ -6,7 +6,12 @@ import javax.swing.border.*;
 
 import rapanui.core.ConclusionProcess;
 import rapanui.core.ConclusionProcessObserver;
+import rapanui.core.EnvironmentPremiseJustification;
 import rapanui.core.FormulaType;
+import rapanui.core.Justification;
+import rapanui.core.ProofJustification;
+import rapanui.core.RuleApplication;
+import rapanui.core.SubtermEqualityJustification;
 import rapanui.core.Transformation;
 
 import rapanui.dsl.DslHelper;
@@ -22,11 +27,16 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessObserver 
 	private Color borderColor = Color.BLACK;
 	private int borderWidth = 1;
 
+	private int displayedTransformations = 0;
+
 	public ConclusionProcessView(ConclusionProcess model) {
 		assert model != null;
 		this.model = model;
 
 		initializeContent();
+
+		for (Transformation transformation : model.getTransformations())
+			displayTransformation(transformation);
 
 		model.addObserver(this);
 	}
@@ -84,32 +94,27 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessObserver 
 		c.weightx = 0.3;
 		longForm.add(ProofEnvironmentPanel.createMathematicalLabel("R "), c);
 
-		// TODO: remove dummy data
-		String[] steps = new String[] { "= R;I", "= R;(S;T)", "= (R;S);T", "= S;T"};
-		String[] reasons = new String[] { "Neutralität von I", "nach Voraussetzung", "Assoziativität", "nach Voraussetzung" };
-
-		for (int i = 0; i < steps.length; ++i)
-			addTransformation(steps[i], reasons[i]);
-
 		add(header);
 		add(separator);
 		add(longForm);
 	}
 
-	private int line = 0; // TODO: remove and use model data
-	private void addTransformation(String transformation, String reason) { // TODO: Transformation as parameter
+	private void displayTransformation(Transformation transformation) {
 		GridBagConstraints c = new GridBagConstraints();
 		c.ipadx = 5;
 		c.gridx = 1;
 		c.anchor = GridBagConstraints.WEST;
-		c.gridy = line;
+		c.gridy = displayedTransformations;
 		c.weightx = 0.35;
-		longForm.add(ProofEnvironmentPanel.createMathematicalLabel(transformation), c);
+		longForm.add(ProofEnvironmentPanel.createMathematicalLabel(
+				(transformation.getType() == FormulaType.Equality ? "= " : "⊆ ")
+				+ DslHelper.serialize(transformation.getOutput())),
+				c);
 
 		c.gridx = 2;
 		c.weightx = 0;
-		longForm.add(new JLabel("(" + reason + ")"), c);
-		line++;
+		longForm.add(new JLabel(justificationText(transformation.getJustification())), c);
+		displayedTransformations++;
 	}
 
 	private String getTitle() {
@@ -120,9 +125,24 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessObserver 
 		+ DslHelper.serialize(model.getLastTerm());
 	}
 
+	private String justificationText(Justification justification) {
+		if (justification instanceof EnvironmentPremiseJustification)
+			return "(nach Voraussetzung)";
+		else if (justification instanceof RuleApplication)
+			return "(" + ((RuleApplication)justification).getAppliedRule().getName() + ")";
+		else if (justification instanceof ProofJustification)
+			return "(siehe oben)";
+		else if (justification instanceof SubtermEqualityJustification)
+			return "(" + DslHelper.serialize(((SubtermEqualityJustification) justification).getOriginalSubTerm())
+					+ " = "
+					+ DslHelper.serialize(((SubtermEqualityJustification) justification).getNewSubTerm()) + ")";
+		return "";
+	}
+
 	@Override
 	public void transformationAdded(Transformation transformation) {
 		titleLabel.setText(getTitle());
+		displayTransformation(transformation);
 	}
 
 	@Override
