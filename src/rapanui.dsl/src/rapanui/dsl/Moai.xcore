@@ -48,7 +48,6 @@ class Inclusion extends Formula {
 class DefinitionReference extends Formula {
 	contains Term target
 	String definitionName
-	refers Definition definition
 }
 
 abstract class Term {
