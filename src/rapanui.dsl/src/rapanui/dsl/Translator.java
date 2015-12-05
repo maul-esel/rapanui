@@ -67,7 +67,7 @@ public class Translator {
 	public DefinitionReference translate(DefinitionReference input) {
 		DefinitionReference output = DslFactory.eINSTANCE.createDefinitionReference();
 		output.setTarget(translate(input.getTarget()));
-		output.setDefinitionName(input.getDefinitionName());
+		output.setDefinition(input.getDefinition());
 		return output;
 	}
 }

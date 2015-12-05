@@ -148,7 +148,7 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 			DefinitionReference ref = (DefinitionReference)premise;
 			panel.add(createMathematicalLabel(ref.getTarget().serialize()));
 			panel.add(Box.createHorizontalStrut(3));
-			panel.add(new JLabel(ref.getDefinitionName()));
+			panel.add(new JLabel(ref.getDefinition().getName()));
 		} else {
 			System.out.println(premise.serialize());
 			panel.add(createMathematicalLabel(premise.serialize()));

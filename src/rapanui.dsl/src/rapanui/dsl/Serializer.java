@@ -44,7 +44,7 @@ public class Serializer {
 	}
 
 	protected String serialize(DefinitionReference reference) {
-		return serialize(reference.getTarget()) + " is \"" + reference.getDefinitionName() + "\"";
+		return serialize(reference.getTarget()) + " is \"" + reference.getDefinition().getName() + "\"";
 	}
 
 	protected String serialize(BinaryOperation operation, boolean isNested) {
