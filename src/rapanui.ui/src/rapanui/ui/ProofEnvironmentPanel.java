@@ -62,11 +62,9 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		newPremisePanel.setOpaque(false);
 		newPremisePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5)));
 
-		JTextField formulaInput = new JTextField();
-		formulaInput.setFont(mathFont);
+		JTextField formulaInput = new SyntaxTextField(SyntaxTextField.ParsingMode.Formula);
 
-		JTextField termInput = new JTextField();
-		termInput.setFont(mathFont);
+		JTextField termInput = new SyntaxTextField(SyntaxTextField.ParsingMode.Term);
 		termInput.setMaximumSize(new Dimension(MAX_WIDTH, termInput.getMaximumSize().height));
 
 		JComboBox<String> definitionSelection = new JComboBox<String>(app.getKnownDefinitionNames());
@@ -119,8 +117,7 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		newConclusionPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5)));
 		newConclusionPanel.setOpaque(false);
 
-		JTextField startTermInput = new JTextField();
-		startTermInput.setFont(mathFont);
+		JTextField startTermInput = new  SyntaxTextField(SyntaxTextField.ParsingMode.Term);
 
 		newConclusionPanel.add(new JLabel("Neue Folgerung:"), (Integer)0);
 		newConclusionPanel.add(new JSeparator(), (Integer)1);
