@@ -17,14 +17,27 @@ class RuleSystem {
 	}
 }
 
-class Rule {
-	String name
+interface PremiseContainer {
 	contains Formula[] premises
+
+	contains derived Formula[] resolvedPremises get {
+		newBasicEList(premises.map[ premise |
+			var resolved = #[premise]
+			if (premise instanceof DefinitionReference) {
+				val translator = new Translator(#{ premise.definition.target -> premise.target})
+				resolved = premise.definition.resolvedPremises.map[ p | translator.translate(p) ]
+			}
+			resolved
+		].flatten.toList)
+	}
+}
+
+class Rule extends PremiseContainer {
+	String name
 	contains Formula[] conclusions
 }
-class Definition {
+class Definition extends PremiseContainer {
 	String name
-	contains Formula[] premises
 	String target
 }
 
