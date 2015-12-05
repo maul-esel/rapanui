@@ -14,8 +14,6 @@ import rapanui.core.RuleApplication;
 import rapanui.core.SubtermEqualityJustification;
 import rapanui.core.Transformation;
 
-import rapanui.dsl.DslHelper;
-
 class ConclusionProcessView extends JPanel implements ConclusionProcessObserver {
 	private static final long serialVersionUID = 1L;
 
@@ -108,7 +106,7 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessObserver 
 		c.weightx = 0.35;
 		longForm.add(ProofEnvironmentPanel.createMathematicalLabel(
 				(transformation.getType() == FormulaType.Equality ? "= " : "⊆ ")
-				+ DslHelper.serialize(transformation.getOutput())),
+				+ transformation.getOutput().serialize()),
 				c);
 
 		c.gridx = 2;
@@ -118,11 +116,11 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessObserver 
 	}
 
 	private String getTitle() {
-		return DslHelper.serialize(model.getStartTerm())
+		return model.getStartTerm().serialize()
 		+ " "
 		+ (model.getType() == FormulaType.Equality ? "=" : "⊆")
 		+ " "
-		+ DslHelper.serialize(model.getLastTerm());
+		+ model.getLastTerm().serialize();
 	}
 
 	private String justificationText(Justification justification) {
@@ -133,9 +131,9 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessObserver 
 		else if (justification instanceof ProofJustification)
 			return "(siehe oben)";
 		else if (justification instanceof SubtermEqualityJustification)
-			return "(" + DslHelper.serialize(((SubtermEqualityJustification) justification).getOriginalSubTerm())
+			return "(" + ((SubtermEqualityJustification) justification).getOriginalSubTerm().serialize()
 					+ " = "
-					+ DslHelper.serialize(((SubtermEqualityJustification) justification).getNewSubTerm()) + ")";
+					+ ((SubtermEqualityJustification) justification).getNewSubTerm().serialize() + ")";
 		return "";
 	}
 

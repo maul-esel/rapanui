@@ -2,6 +2,7 @@
 
 package rapanui.dsl.moai
 
+import rapanui.dsl.Serializer
 import org.eclipse.emf.ecore.util.EcoreUtil
 import java.util.stream.Collectors
 
@@ -31,6 +32,10 @@ abstract class Formula {
 	op boolean structurallyEquals(Formula other) {
 		EcoreUtil.equals(this, other)
 	}
+
+	op String serialize() {
+		Serializer.getInstance().serialize(this);
+	}
 }
 class Equation extends Formula {
 	contains Term left
@@ -49,6 +54,10 @@ class DefinitionReference extends Formula {
 abstract class Term {
 	op boolean structurallyEquals(Term other) {
 		EcoreUtil.equals(this, other)
+	}
+
+	op String serialize() {
+		Serializer.getInstance().serialize(this);
 	}
 }
 class VariableReference extends Term {

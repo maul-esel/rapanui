@@ -11,7 +11,6 @@ import java.util.Map;
 import rapanui.core.ConclusionProcess;
 import rapanui.core.ProofEnvironment;
 import rapanui.core.ProofEnvironmentObserver;
-import rapanui.dsl.DslHelper;
 import rapanui.dsl.moai.DefinitionReference;
 import rapanui.dsl.moai.Formula;
 
@@ -147,12 +146,12 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 
 		if (premise instanceof DefinitionReference) {
 			DefinitionReference ref = (DefinitionReference)premise;
-			panel.add(createMathematicalLabel(DslHelper.serialize(ref.getTarget())));
+			panel.add(createMathematicalLabel(ref.getTarget().serialize()));
 			panel.add(Box.createHorizontalStrut(3));
 			panel.add(new JLabel(ref.getDefinitionName()));
 		} else {
-			System.out.println(DslHelper.serialize(premise));
-			panel.add(createMathematicalLabel(DslHelper.serialize(premise)));
+			System.out.println(premise.serialize());
+			panel.add(createMathematicalLabel(premise.serialize()));
 		}
 
 		/*
