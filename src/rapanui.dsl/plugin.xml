@@ -4,11 +4,11 @@
 <plugin>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated Moai -->
+      <!-- @generated Dsl -->
       <package
             uri="rapanui.dsl"
             class="rapanui.dsl.DslPackage"
-            genModel="src/rapanui/dsl/Moai.xcore"/>
+            genModel="src/rapanui/dsl/Dsl.xcore"/>
    </extension>
 
 </plugin>

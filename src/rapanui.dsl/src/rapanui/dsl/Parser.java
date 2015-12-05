@@ -10,7 +10,7 @@ import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parser.IParser;
 
-import rapanui.dsl.services.MoaiGrammarAccess;
+import rapanui.dsl.services.DslGrammarAccess;
 
 public class Parser {
 	private static final Parser instance = new Parser();
@@ -23,10 +23,10 @@ public class Parser {
 	private IParser internalParser;
 
 	@Inject
-	private MoaiGrammarAccess grammar;
+	private DslGrammarAccess grammar;
 
 	private Parser() {
-		new MoaiStandaloneSetup()
+		new DslStandaloneSetup()
 		.createInjectorAndDoEMFRegistration()
 		.injectMembers(this);
 	}

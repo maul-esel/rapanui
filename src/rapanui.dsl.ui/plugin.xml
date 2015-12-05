@@ -6,48 +6,48 @@
     <extension
             point="org.eclipse.ui.editors">
         <editor
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
             contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
             default="true"
-            extensions="moai"
-            id="rapanui.dsl.Moai"
-            name="Moai Editor">
+            extensions="raps"
+            id="rapanui.dsl.Dsl"
+            name="Dsl Editor">
         </editor>
     </extension>
     <extension
         point="org.eclipse.ui.handlers">
         <handler
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
             commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
             <activeWhen>
                 <reference
-                    definitionId="rapanui.dsl.Moai.Editor.opened">
+                    definitionId="rapanui.dsl.Dsl.Editor.opened">
                 </reference>
             </activeWhen>
         </handler>
         <handler
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
-            commandId="rapanui.dsl.Moai.validate">
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+            commandId="rapanui.dsl.Dsl.validate">
          <activeWhen>
             <reference
-                    definitionId="rapanui.dsl.Moai.Editor.opened">
+                    definitionId="rapanui.dsl.Dsl.Editor.opened">
             </reference>
          </activeWhen>
       	</handler>
       	<!-- copy qualified name -->
         <handler
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
             commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
             <activeWhen>
-				<reference definitionId="rapanui.dsl.Moai.Editor.opened" />
+				<reference definitionId="rapanui.dsl.Dsl.Editor.opened" />
             </activeWhen>
         </handler>
         <handler
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
             commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
             <activeWhen>
             	<and>
-            		<reference definitionId="rapanui.dsl.Moai.XtextEditor.opened" />
+            		<reference definitionId="rapanui.dsl.Dsl.XtextEditor.opened" />
 	                <iterate>
 						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
 					</iterate>
@@ -56,22 +56,22 @@
         </handler>
     </extension>
     <extension point="org.eclipse.core.expressions.definitions">
-        <definition id="rapanui.dsl.Moai.Editor.opened">
+        <definition id="rapanui.dsl.Dsl.Editor.opened">
             <and>
                 <reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
                 <with variable="activeEditor">
                     <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
-                        value="rapanui.dsl.Moai" 
+                        value="rapanui.dsl.Dsl" 
                         forcePluginActivation="true"/>
                 </with>        
             </and>
         </definition>
-        <definition id="rapanui.dsl.Moai.XtextEditor.opened">
+        <definition id="rapanui.dsl.Dsl.XtextEditor.opened">
             <and>
                 <reference definitionId="isXtextEditorActive"/>
                 <with variable="activeEditor">
                     <test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName" 
-                        value="rapanui.dsl.Moai" 
+                        value="rapanui.dsl.Dsl" 
                         forcePluginActivation="true"/>
                 </with>        
             </and>
@@ -80,33 +80,33 @@
     <extension
             point="org.eclipse.ui.preferencePages">
         <page
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
-            id="rapanui.dsl.Moai"
-            name="Moai">
-            <keywordReference id="rapanui.dsl.ui.keyword_Moai"/>
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="rapanui.dsl.Dsl"
+            name="Dsl">
+            <keywordReference id="rapanui.dsl.ui.keyword_Dsl"/>
         </page>
         <page
-            category="rapanui.dsl.Moai"
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
-            id="rapanui.dsl.Moai.coloring"
+            category="rapanui.dsl.Dsl"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+            id="rapanui.dsl.Dsl.coloring"
             name="Syntax Coloring">
-            <keywordReference id="rapanui.dsl.ui.keyword_Moai"/>
+            <keywordReference id="rapanui.dsl.ui.keyword_Dsl"/>
         </page>
         <page
-            category="rapanui.dsl.Moai"
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
-            id="rapanui.dsl.Moai.templates"
+            category="rapanui.dsl.Dsl"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+            id="rapanui.dsl.Dsl.templates"
             name="Templates">
-            <keywordReference id="rapanui.dsl.ui.keyword_Moai"/>
+            <keywordReference id="rapanui.dsl.ui.keyword_Dsl"/>
         </page>
     </extension>
     <extension
             point="org.eclipse.ui.propertyPages">
         <page
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
-            id="rapanui.dsl.Moai"
-            name="Moai">
-            <keywordReference id="rapanui.dsl.ui.keyword_Moai"/>
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+            id="rapanui.dsl.Dsl"
+            name="Dsl">
+            <keywordReference id="rapanui.dsl.ui.keyword_Dsl"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
 			</enabledWhen>
@@ -116,14 +116,14 @@
     <extension
         point="org.eclipse.ui.keywords">
         <keyword
-            id="rapanui.dsl.ui.keyword_Moai"
-            label="Moai"/>
+            id="rapanui.dsl.ui.keyword_Dsl"
+            label="Dsl"/>
     </extension>
     <extension
          point="org.eclipse.ui.commands">
       <command
             description="Trigger expensive validation"
-            id="rapanui.dsl.Moai.validate"
+            id="rapanui.dsl.Dsl.validate"
             name="Validate">
       </command>
       <!-- copy qualified name -->
@@ -144,12 +144,12 @@
         <menuContribution
             locationURI="popup:#TextEditorContext?after=group.edit">
              <command
-                 commandId="rapanui.dsl.Moai.validate"
+                 commandId="rapanui.dsl.Dsl.validate"
                  style="push"
                  tooltip="Trigger expensive validation">
             <visibleWhen checkEnabled="false">
                 <reference
-                    definitionId="rapanui.dsl.Moai.Editor.opened">
+                    definitionId="rapanui.dsl.Dsl.Editor.opened">
                 </reference>
             </visibleWhen>
          </command>  
@@ -159,7 +159,7 @@
          	<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName" 
          		style="push" tooltip="Copy Qualified Name">
             	<visibleWhen checkEnabled="false">
-                	<reference definitionId="rapanui.dsl.Moai.Editor.opened" />
+                	<reference definitionId="rapanui.dsl.Dsl.Editor.opened" />
             	</visibleWhen>
          	</command>  
          </menuContribution>
@@ -167,7 +167,7 @@
          	<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
             	style="push" tooltip="Copy Qualified Name">
             	<visibleWhen checkEnabled="false">
-                	<reference definitionId="rapanui.dsl.Moai.Editor.opened" />
+                	<reference definitionId="rapanui.dsl.Dsl.Editor.opened" />
             	</visibleWhen>
          	</command>  
          </menuContribution>
@@ -176,7 +176,7 @@
 				style="push" tooltip="Copy Qualified Name">
          		<visibleWhen checkEnabled="false">
 	            	<and>
-	            		<reference definitionId="rapanui.dsl.Moai.XtextEditor.opened" />
+	            		<reference definitionId="rapanui.dsl.Dsl.XtextEditor.opened" />
 						<iterate>
 							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
 						</iterate>
@@ -189,7 +189,7 @@
 		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
 			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
 				<visibleWhen checkEnabled="false">
-                	<reference definitionId="rapanui.dsl.Moai.Editor.opened">
+                	<reference definitionId="rapanui.dsl.Dsl.Editor.opened">
                 	</reference>
             	</visibleWhen>
 			</command>
@@ -197,11 +197,11 @@
 	</extension>
 	<extension point="org.eclipse.ui.handlers">
 	    <handler
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
             commandId="org.eclipse.xtext.ui.editor.FindReferences">
             <activeWhen>
                 <reference
-                    definitionId="rapanui.dsl.Moai.Editor.opened">
+                    definitionId="rapanui.dsl.Dsl.Editor.opened">
                 </reference>
             </activeWhen>
         </handler>
@@ -212,67 +212,67 @@
 	<extension
 		point="org.eclipse.emf.ecore.extension_parser">
 		<parser
-			class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
-			type="moai">
+			class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="raps">
 		</parser>
 	</extension>
 	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
         <resourceServiceProvider
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
-            uriExtension="moai">
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+            uriExtension="raps">
         </resourceServiceProvider>
     </extension>
 
 
-	<!-- marker definitions for rapanui.dsl.Moai -->
+	<!-- marker definitions for rapanui.dsl.Dsl -->
 	<extension
-	        id="moai.check.fast"
-	        name="Moai Problem"
+	        id="dsl.check.fast"
+	        name="Dsl Problem"
 	        point="org.eclipse.core.resources.markers">
 	    <super type="org.eclipse.xtext.ui.check.fast"/>
 	    <persistent value="true"/>
 	</extension>
 	<extension
-	        id="moai.check.normal"
-	        name="Moai Problem"
+	        id="dsl.check.normal"
+	        name="Dsl Problem"
 	        point="org.eclipse.core.resources.markers">
 	    <super type="org.eclipse.xtext.ui.check.normal"/>
 	    <persistent value="true"/>
 	</extension>
 	<extension
-	        id="moai.check.expensive"
-	        name="Moai Problem"
+	        id="dsl.check.expensive"
+	        name="Dsl Problem"
 	        point="org.eclipse.core.resources.markers">
 	    <super type="org.eclipse.xtext.ui.check.expensive"/>
 	    <persistent value="true"/>
 	</extension>
-
+	
    <extension
          point="org.eclipse.xtext.builder.participant">
       <participant
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
-            fileExtensions="moai"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
+            fileExtensions="raps"
             >
       </participant>
    </extension>
    <extension
             point="org.eclipse.ui.preferencePages">
         <page
-            category="rapanui.dsl.Moai"
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-            id="rapanui.dsl.Moai.compiler.preferencePage"
+            category="rapanui.dsl.Dsl"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="rapanui.dsl.Dsl.compiler.preferencePage"
             name="Compiler">
-            <keywordReference id="rapanui.dsl.ui.keyword_Moai"/>
+            <keywordReference id="rapanui.dsl.ui.keyword_Dsl"/>
         </page>
     </extension>
     <extension
             point="org.eclipse.ui.propertyPages">
         <page
-            category="rapanui.dsl.Moai"
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
-            id="rapanui.dsl.Moai.compiler.propertyPage"
+            category="rapanui.dsl.Dsl"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+            id="rapanui.dsl.Dsl.compiler.propertyPage"
             name="Compiler">
-            <keywordReference id="rapanui.dsl.ui.keyword_Moai"/>
+            <keywordReference id="rapanui.dsl.ui.keyword_Dsl"/>
             <enabledWhen>
 	            <adapt type="org.eclipse.core.resources.IProject"/>
 			</enabledWhen>
@@ -283,20 +283,20 @@
 		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
 			<command
 				commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand"
-				id="rapanui.dsl.Moai.OpenGeneratedCode"
+				id="rapanui.dsl.Dsl.OpenGeneratedCode"
 				style="push">
 					<visibleWhen checkEnabled="false">
-						<reference definitionId="rapanui.dsl.Moai.Editor.opened" />
+						<reference definitionId="rapanui.dsl.Dsl.Editor.opened" />
 					</visibleWhen>
 			</command>
 		</menuContribution>
 	</extension>
 	<extension point="org.eclipse.ui.handlers">
 		<handler
-			class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
+			class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
 			commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand">
 				<activeWhen>
-					<reference definitionId="rapanui.dsl.Moai.Editor.opened" />
+					<reference definitionId="rapanui.dsl.Dsl.Editor.opened" />
 				</activeWhen>
 		</handler>
 	</extension>
@@ -305,11 +305,11 @@
 	<extension
 		point="org.eclipse.ui.handlers">
 		<handler 
-			class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
 			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
 			<activeWhen>
 				<reference
-					definitionId="rapanui.dsl.Moai.Editor.opened">
+					definitionId="rapanui.dsl.Dsl.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
@@ -329,33 +329,33 @@
 				style="push"
 				tooltip="Open Quick Outline">
 				<visibleWhen checkEnabled="false">
-					<reference definitionId="rapanui.dsl.Moai.Editor.opened"/>
+					<reference definitionId="rapanui.dsl.Dsl.Editor.opened"/>
 				</visibleWhen>
 			</command>
 		</menuContribution>
 	</extension>
-    <!-- quickfix marker resolution generator for rapanui.dsl.Moai -->
+    <!-- quickfix marker resolution generator for rapanui.dsl.Dsl -->
     <extension
             point="org.eclipse.ui.ide.markerResolution">
         <markerResolutionGenerator
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
-            markerType="rapanui.dsl.ui.moai.check.fast">
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="rapanui.dsl.ui.dsl.check.fast">
             <attribute
                 name="FIXABLE_KEY"
                 value="true">
             </attribute>
         </markerResolutionGenerator>
         <markerResolutionGenerator
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
-            markerType="rapanui.dsl.ui.moai.check.normal">
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="rapanui.dsl.ui.dsl.check.normal">
             <attribute
                 name="FIXABLE_KEY"
                 value="true">
             </attribute>
         </markerResolutionGenerator>
         <markerResolutionGenerator
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
-            markerType="rapanui.dsl.ui.moai.check.expensive">
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+            markerType="rapanui.dsl.ui.dsl.check.expensive">
             <attribute
                 name="FIXABLE_KEY"
                 value="true">
@@ -365,11 +365,11 @@
    	<!-- Rename Refactoring -->
 	<extension point="org.eclipse.ui.handlers">
 		<handler 
-			class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
+			class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
 			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
 			<activeWhen>
 				<reference
-					definitionId="rapanui.dsl.Moai.Editor.opened">
+					definitionId="rapanui.dsl.Dsl.Editor.opened">
 				</reference>
 			</activeWhen>
 		</handler>
@@ -381,7 +381,7 @@
                style="push">
             <visibleWhen checkEnabled="false">
                <reference
-                     definitionId="rapanui.dsl.Moai.Editor.opened">
+                     definitionId="rapanui.dsl.Dsl.Editor.opened">
                </reference>
             </visibleWhen>
          </command>
@@ -389,35 +389,35 @@
    </extension>
    <extension point="org.eclipse.ui.preferencePages">
 	    <page
-	        category="rapanui.dsl.Moai"
-	        class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
-	        id="rapanui.dsl.Moai.refactoring"
+	        category="rapanui.dsl.Dsl"
+	        class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+	        id="rapanui.dsl.Dsl.refactoring"
 	        name="Refactoring">
-	        <keywordReference id="rapanui.dsl.ui.keyword_Moai"/>
+	        <keywordReference id="rapanui.dsl.ui.keyword_Dsl"/>
 	    </page>
 	</extension>
 
   <extension point="org.eclipse.compare.contentViewers">
-    <viewer id="rapanui.dsl.Moai.compare.contentViewers"
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
-            extensions="moai">
+    <viewer id="rapanui.dsl.Dsl.compare.contentViewers"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="raps">
     </viewer>
   </extension>
   <extension point="org.eclipse.compare.contentMergeViewers">
-    <viewer id="rapanui.dsl.Moai.compare.contentMergeViewers"
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
-            extensions="moai" label="Moai Compare">
+    <viewer id="rapanui.dsl.Dsl.compare.contentMergeViewers"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+            extensions="raps" label="Dsl Compare">
      </viewer>
   </extension>
   <extension point="org.eclipse.ui.editors.documentProviders">
-    <provider id="rapanui.dsl.Moai.editors.documentProviders"
-            class="rapanui.dsl.ui.MoaiExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
-            extensions="moai">
+    <provider id="rapanui.dsl.Dsl.editors.documentProviders"
+            class="rapanui.dsl.ui.DslExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+            extensions="raps">
     </provider>
   </extension>
   <extension point="org.eclipse.team.core.fileTypes">
     <fileTypes
-            extension="moai"
+            extension="raps"
             type="text">
     </fileTypes>
   </extension>

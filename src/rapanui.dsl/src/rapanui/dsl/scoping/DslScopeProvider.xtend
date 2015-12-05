@@ -10,6 +10,6 @@ package rapanui.dsl.scoping
  * on how and when to use it.
  *
  */
-class MoaiScopeProvider extends org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider {
+class DslScopeProvider extends org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider {
 
 }

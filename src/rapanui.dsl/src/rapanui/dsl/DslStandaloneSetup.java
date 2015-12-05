@@ -8,10 +8,10 @@ import org.eclipse.emf.ecore.EPackage;
 import com.google.inject.Injector;
 
 /**
- * Initialization support for running Xtext languages 
+ * Initialization support for running Xtext languages
  * without equinox extension registry
  */
-public class MoaiStandaloneSetup extends MoaiStandaloneSetupGenerated{
+public class DslStandaloneSetup extends DslStandaloneSetupGenerated{
 	@Override
 	public void register(Injector injector) {
 		// Xcore support as specified at https://bugs.eclipse.org/bugs/show_bug.cgi?id=379999
@@ -20,7 +20,7 @@ public class MoaiStandaloneSetup extends MoaiStandaloneSetupGenerated{
 	}
 
 	public static void doSetup() {
-		new MoaiStandaloneSetup().createInjectorAndDoEMFRegistration();
+		new DslStandaloneSetup().createInjectorAndDoEMFRegistration();
 	}
 }
 

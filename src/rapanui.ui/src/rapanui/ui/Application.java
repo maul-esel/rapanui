@@ -25,7 +25,7 @@ public class Application {
 
 	public Application() {
 		try {
-			loadRuleSystem("../rapanui.library/library.moai");
+			loadRuleSystem("../rapanui.library/library.raps");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

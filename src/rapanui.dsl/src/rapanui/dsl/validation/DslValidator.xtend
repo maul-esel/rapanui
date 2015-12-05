@@ -10,7 +10,7 @@ package rapanui.dsl.validation
  *
  * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#validation
  */
-class MoaiValidator extends AbstractMoaiValidator {
+class DslValidator extends AbstractDslValidator {
 
 //  public static val INVALID_NAME = 'invalidName'
 //

@@ -20,4 +20,4 @@ Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: rapanui.dsl.ui.internal,
  rapanui.dsl.ui.contentassist.antlr
-Bundle-Activator: rapanui.dsl.ui.internal.MoaiActivator
+Bundle-Activator: rapanui.dsl.ui.internal.DslActivator

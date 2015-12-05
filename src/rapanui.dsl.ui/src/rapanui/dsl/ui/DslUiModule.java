@@ -8,8 +8,8 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 /**
  * Use this class to register components to be used within the IDE.
  */
-public class MoaiUiModule extends rapanui.dsl.ui.AbstractMoaiUiModule {
-	public MoaiUiModule(AbstractUIPlugin plugin) {
+public class DslUiModule extends rapanui.dsl.ui.AbstractDslUiModule {
+	public DslUiModule(AbstractUIPlugin plugin) {
 		super(plugin);
 	}
 }
