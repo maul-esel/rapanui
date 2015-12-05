@@ -16,7 +16,7 @@ final class MockData {
 	static DefinitionReference createDefinitionReference(String term, String defName) {
 		DefinitionReference ref = DslFactory.eINSTANCE.createDefinitionReference();
 		ref.setTarget(Parser.getInstance().parseTerm(term));
-		ref.setDefinitionName("\"" + defName + "\"");
+		ref.setDefinitionName(defName);
 		return ref;
 	}
 
