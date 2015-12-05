@@ -1,7 +1,5 @@
 package rapanui.dsl;
 
-import rapanui.dsl.moai.*;
-
 public class Serializer {
 	private static final Serializer instance = new Serializer();
 

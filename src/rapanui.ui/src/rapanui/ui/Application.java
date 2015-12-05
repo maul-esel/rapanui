@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Parser;
-import rapanui.dsl.moai.RuleSystem;
+import rapanui.dsl.RuleSystem;
 
 public class Application {
 	private final List<ApplicationObserver> observers = new ArrayList<ApplicationObserver>();

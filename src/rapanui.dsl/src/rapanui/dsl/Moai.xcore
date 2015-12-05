@@ -1,6 +1,6 @@
 @GenModel(modelDirectory="rapanui.dsl/xcore-gen")
 
-package rapanui.dsl.moai
+package rapanui.dsl
 
 import rapanui.dsl.Serializer
 import org.eclipse.emf.ecore.util.EcoreUtil

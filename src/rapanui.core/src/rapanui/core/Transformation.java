@@ -1,6 +1,6 @@
 package rapanui.core;
 
-import rapanui.dsl.moai.Term;
+import rapanui.dsl.Term;
 
 /**
  * Describes a transformation step from one term to another.

@@ -11,8 +11,8 @@ import java.util.Map;
 import rapanui.core.ConclusionProcess;
 import rapanui.core.ProofEnvironment;
 import rapanui.core.ProofEnvironmentObserver;
-import rapanui.dsl.moai.DefinitionReference;
-import rapanui.dsl.moai.Formula;
+import rapanui.dsl.DefinitionReference;
+import rapanui.dsl.Formula;
 
 class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 	private static final long serialVersionUID = 1L;

@@ -3,9 +3,9 @@ package rapanui.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import rapanui.dsl.moai.Formula;
-import rapanui.dsl.moai.RuleSystem;
-import rapanui.dsl.moai.Term;
+import rapanui.dsl.Formula;
+import rapanui.dsl.RuleSystem;
+import rapanui.dsl.Term;
 
 import static rapanui.core.Patterns.*;
 

@@ -2,9 +2,9 @@ package rapanui.core;
 
 import java.util.Map;
 
-import rapanui.dsl.moai.Formula;
-import rapanui.dsl.moai.Rule;
-import rapanui.dsl.moai.Term;
+import rapanui.dsl.Formula;
+import rapanui.dsl.Rule;
+import rapanui.dsl.Term;
 
 public class RuleApplication extends Justification {
 	private final Rule appliedRule;

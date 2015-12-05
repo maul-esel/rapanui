@@ -1,6 +1,6 @@
 package rapanui.core;
 
-import rapanui.dsl.moai.Formula;
+import rapanui.dsl.Formula;
 
 public class ProofJustification extends Justification {
 	private final ConclusionProcess conclusion;

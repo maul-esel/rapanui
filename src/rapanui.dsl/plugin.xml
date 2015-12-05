@@ -6,8 +6,8 @@
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated Moai -->
       <package
-            uri="rapanui.dsl.moai"
-            class="rapanui.dsl.moai.MoaiPackage"
+            uri="rapanui.dsl"
+            class="rapanui.dsl.DslPackage"
             genModel="src/rapanui/dsl/Moai.xcore"/>
    </extension>
 

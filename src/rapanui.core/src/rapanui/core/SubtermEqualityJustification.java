@@ -1,7 +1,7 @@
 package rapanui.core;
 
-import rapanui.dsl.moai.Formula;
-import rapanui.dsl.moai.Term;
+import rapanui.dsl.Formula;
+import rapanui.dsl.Term;
 
 public class SubtermEqualityJustification extends Justification {
 	private final Term originalSubTerm;

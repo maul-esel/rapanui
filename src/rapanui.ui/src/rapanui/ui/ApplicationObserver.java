@@ -1,7 +1,7 @@
 package rapanui.ui;
 
 import rapanui.core.ProofEnvironment;
-import rapanui.dsl.moai.RuleSystem;
+import rapanui.dsl.RuleSystem;
 
 public interface ApplicationObserver {
 	void ruleSystemLoaded(RuleSystem loaded);

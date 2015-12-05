@@ -7,8 +7,6 @@ import org.eclipse.emf.ecore.EPackage;
 
 import com.google.inject.Injector;
 
-import rapanui.dsl.moai.MoaiPackage;
-
 /**
  * Initialization support for running Xtext languages 
  * without equinox extension registry
@@ -17,7 +15,7 @@ public class MoaiStandaloneSetup extends MoaiStandaloneSetupGenerated{
 	@Override
 	public void register(Injector injector) {
 		// Xcore support as specified at https://bugs.eclipse.org/bugs/show_bug.cgi?id=379999
-		EPackage.Registry.INSTANCE.put(MoaiPackage.eINSTANCE.getNsURI(), MoaiPackage.eINSTANCE.getNsURI());
+		EPackage.Registry.INSTANCE.put(DslPackage.eINSTANCE.getNsURI(), DslPackage.eINSTANCE.getNsURI());
 		super.register(injector);
 	}
 

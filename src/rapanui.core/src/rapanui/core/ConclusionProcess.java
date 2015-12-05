@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import rapanui.dsl.moai.Term;
+import rapanui.dsl.Term;
 
 import static rapanui.core.Patterns.*;
 

@@ -10,9 +10,6 @@ import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.parser.IParseResult;
 import org.eclipse.xtext.parser.IParser;
 
-import rapanui.dsl.moai.RuleSystem;
-import rapanui.dsl.moai.Formula;
-import rapanui.dsl.moai.Term;
 import rapanui.dsl.services.MoaiGrammarAccess;
 
 public class Parser {

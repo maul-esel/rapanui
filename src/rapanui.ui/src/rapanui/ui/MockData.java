@@ -2,8 +2,8 @@ package rapanui.ui;
 
 import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Parser;
-import rapanui.dsl.moai.DefinitionReference;
-import rapanui.dsl.moai.MoaiFactory;
+import rapanui.dsl.DefinitionReference;
+import rapanui.dsl.DslFactory;
 
 final class MockData {
 	static void mockPremises(ProofEnvironment env) {
@@ -14,7 +14,7 @@ final class MockData {
 	}
 
 	static DefinitionReference createDefinitionReference(String term, String defName) {
-		DefinitionReference ref = MoaiFactory.eINSTANCE.createDefinitionReference();
+		DefinitionReference ref = DslFactory.eINSTANCE.createDefinitionReference();
 		ref.setTarget(Parser.getInstance().parseTerm(term));
 		ref.setDefinitionName("\"" + defName + "\"");
 		return ref;

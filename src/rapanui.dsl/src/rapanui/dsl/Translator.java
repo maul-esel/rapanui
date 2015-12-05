@@ -2,8 +2,6 @@ package rapanui.dsl;
 
 import java.util.Map;
 
-import rapanui.dsl.moai.*;
-
 public class Translator {
 	private final Map<String, Term> dictionary;
 
@@ -24,7 +22,7 @@ public class Translator {
 	}
 
 	public BinaryOperation translate(BinaryOperation input) {
-		BinaryOperation output = MoaiFactory.eINSTANCE.createBinaryOperation();
+		BinaryOperation output = DslFactory.eINSTANCE.createBinaryOperation();
 		output.setLeft(translate(input.getLeft()));
 		output.setOperator(input.getOperator());
 		output.setRight(translate(input.getRight()));
@@ -32,7 +30,7 @@ public class Translator {
 	}
 
 	public UnaryOperation translate(UnaryOperation input) {
-		UnaryOperation output = MoaiFactory.eINSTANCE.createUnaryOperation();
+		UnaryOperation output = DslFactory.eINSTANCE.createUnaryOperation();
 		output.setOperand(translate(input.getOperand()));
 		output.setOperator(input.getOperator());
 		return output;
@@ -53,21 +51,21 @@ public class Translator {
 	}
 
 	public Equation translate(Equation input){
-		Equation output = MoaiFactory.eINSTANCE.createEquation();
+		Equation output = DslFactory.eINSTANCE.createEquation();
 		output.setLeft(translate(input.getLeft()));
 		output.setRight(translate(input.getRight()));
 		return output;
 	}
 
 	public Inclusion translate(Inclusion input) {
-		Inclusion output = MoaiFactory.eINSTANCE.createInclusion();
+		Inclusion output = DslFactory.eINSTANCE.createInclusion();
 		output.setLeft(translate(input.getLeft()));
 		output.setRight(translate(input.getRight()));
 		return output;
 	}
 
 	public DefinitionReference translate(DefinitionReference input) {
-		DefinitionReference output = MoaiFactory.eINSTANCE.createDefinitionReference();
+		DefinitionReference output = DslFactory.eINSTANCE.createDefinitionReference();
 		output.setTarget(translate(input.getTarget()));
 		output.setDefinitionName(input.getDefinitionName());
 		return output;
