@@ -68,14 +68,14 @@ class BinaryOperation extends Term {
 }
 
 enum POSTFIX_UNARY_OPERATOR {
-	CONVERSE
-	KLEENE
-	PLUS
-	COMPLEMENT
+	CONVERSE as '˘'
+	KLEENE as '*'
+	PLUS as '⁺'
+	COMPLEMENT as 'ᶜ'
 }
 enum BINARY_OPERATOR {
-	INTERSECTION
-	UNION
-	MINUS
-	COMPOSITION
+	INTERSECTION as '∩'
+	UNION as '∪'
+	MINUS as '\\'
+	COMPOSITION as ';'
 }
