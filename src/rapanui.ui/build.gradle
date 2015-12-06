@@ -1,0 +1,32 @@
+plugins {
+  id "java"
+}
+
+group 'rapanui'
+version '0.1.0-alpha.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile project(':rapanui.dsl')
+  compile project(':rapanui.core')
+}
+
+jar {
+  manifest {
+    attributes 'Main-Class': 'rapanui.ui.Application'
+  }
+}
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src'
+    }
+  }
+}
