@@ -6,6 +6,8 @@
 .settings
 runtime-EclipseXtext
 src/.recommenders
+.classpath
+.project
 
 bin
 xtend-gen

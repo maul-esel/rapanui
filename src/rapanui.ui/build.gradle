@@ -1,5 +1,6 @@
 plugins {
   id "java"
+  id "eclipse"
 }
 
 group 'rapanui'
@@ -29,4 +30,9 @@ sourceSets {
       srcDir 'src'
     }
   }
+}
+
+eclipse.project {
+  natures 'org.eclipse.buildship.core.gradleprojectnature'
+  buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
 }

@@ -2,6 +2,7 @@ plugins {
   id "org.xtext.xtext" version "0.3.26" // used to build Xcore model
   id "org.xtend.xtend" version "0.4.14"
   id "java"
+  id "eclipse"
 }
 
 group 'rapanui'
@@ -110,3 +111,14 @@ task(generateLang, type: JavaExec) {
 Since Xtend is integrated into the build task, this also integrates
 generateLang and thus generateModel into the build task. */
 compileXtend.dependsOn generateLang
+
+eclipse.project {
+  natures 'org.eclipse.buildship.core.gradleprojectnature'
+  natures 'org.eclipse.pde.PluginNature'
+  natures 'org.eclipse.xtext.ui.shared.xtextNature'
+
+  buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
+  buildCommand 'org.eclipse.xtext.ui.shared.xtextBuilder'
+  buildCommand 'org.eclipse.pde.SchemaBuilder'
+  buildCommand 'org.eclipse.pde.ManifestBuilder'
+}
