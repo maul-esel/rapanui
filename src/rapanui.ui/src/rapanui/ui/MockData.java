@@ -29,6 +29,7 @@ final class MockData {
 
 	static void createAndMockConclusionProcess(ProofEnvironment env, String term) {
 		env.addConclusion(Parser.getInstance().parseTerm(term));
+	}
 
 	static RuleSystem getRuleSystem(Application app) {
 		try {
