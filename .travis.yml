@@ -2,4 +2,4 @@ language: java
 
 jdk: oraclejdk8
 
-script: cd src && gradle build
+script: cd src && gradle eclipse build
