@@ -34,4 +34,8 @@ public class RuleApplication extends Justification {
 	public Justification[] getPremiseJustifications() {
 		return premiseJustifications;
 	}
+
+	public Map<String, Term> getVariableTranslation() {
+		return variableTranslation;
+	}
 }
