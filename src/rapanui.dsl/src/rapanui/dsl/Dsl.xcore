@@ -1,4 +1,4 @@
-@GenModel(modelDirectory="rapanui.dsl/xcore-gen")
+@GenModel(modelDirectory="rapanui.dsl/xcore-gen",complianceLevel="8.0")
 
 package rapanui.dsl
 
