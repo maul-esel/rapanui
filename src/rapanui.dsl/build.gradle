@@ -129,6 +129,7 @@ eclipse {
     file.whenMerged { cp ->
       cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('xcore-gen', null) )
       cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('src-gen', null) )
+      cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('xtend-gen', null) )
     }
   }
 }
