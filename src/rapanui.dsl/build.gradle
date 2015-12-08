@@ -55,6 +55,11 @@ sourceSets {
       srcDir 'src-gen'
     }
     xtendOutputDir = 'xtend-gen'
+
+    resources {
+      // include generated *.xtextbin file in JAR
+      srcDir 'src-gen'
+    }
   }
 }
 
