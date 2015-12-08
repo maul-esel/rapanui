@@ -112,13 +112,23 @@ Since Xtend is integrated into the build task, this also integrates
 generateLang and thus generateModel into the build task. */
 compileXtend.dependsOn generateLang
 
-eclipse.project {
-  natures 'org.eclipse.buildship.core.gradleprojectnature'
-  natures 'org.eclipse.pde.PluginNature'
-  natures 'org.eclipse.xtext.ui.shared.xtextNature'
+eclipse {
+  project {
+    natures 'org.eclipse.buildship.core.gradleprojectnature'
+    natures 'org.eclipse.pde.PluginNature'
+    natures 'org.eclipse.xtext.ui.shared.xtextNature'
 
-  buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
-  buildCommand 'org.eclipse.xtext.ui.shared.xtextBuilder'
-  buildCommand 'org.eclipse.pde.SchemaBuilder'
-  buildCommand 'org.eclipse.pde.ManifestBuilder'
+    buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
+    buildCommand 'org.eclipse.xtext.ui.shared.xtextBuilder'
+    buildCommand 'org.eclipse.pde.SchemaBuilder'
+    buildCommand 'org.eclipse.pde.ManifestBuilder'
+  }
+
+  // adapted from https://stackoverflow.com/questions/26750869/how-to-add-gradle-generated-source-folder-to-eclipse-project
+  classpath {
+    file.whenMerged { cp ->
+      cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('xcore-gen', null) )
+      cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('src-gen', null) )
+    }
+  }
 }
