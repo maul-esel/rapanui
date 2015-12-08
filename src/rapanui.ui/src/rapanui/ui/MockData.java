@@ -5,7 +5,6 @@ import java.util.List;
 
 import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Parser;
-import rapanui.dsl.Definition;
 import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.DslFactory;
 import rapanui.dsl.RuleSystem;
@@ -23,7 +22,7 @@ final class MockData {
 		ref.setTarget(Parser.getInstance().parseTerm(term));
 
 		ref.setDefinition(
-			(Definition)getRuleSystem(app).getDefinitions().stream().filter(p -> ((Definition)p).getName().equals(defName)).findFirst().orElse(null)
+			getRuleSystem(app).getDefinitions().stream().filter(p -> p.getName().equals(defName)).findFirst().orElse(null)
 		);
 		return ref;
 	}
