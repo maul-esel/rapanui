@@ -106,10 +106,12 @@ public abstract class Emitter<T> {
 
 	protected static class HeadEmitter<T> extends Emitter<T> {
 		private int count;
+		private final Emitter<T> source;
 
 		public HeadEmitter(Emitter<T> source, int count) {
 			this.count = count;
 			source.onEmit(this::acceptResult);
+			this.source = source;
 		}
 
 		@Override
@@ -117,6 +119,8 @@ public abstract class Emitter<T> {
 			if (count > 0) {
 				super.acceptResult(result);
 				count--;
+				if (count <= 0)
+					source.stop();
 			}
 		}
 	}
