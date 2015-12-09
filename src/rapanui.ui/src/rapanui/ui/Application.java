@@ -1,22 +1,17 @@
 package rapanui.ui;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
 import rapanui.core.ProofEnvironment;
-import rapanui.dsl.Parser;
-import rapanui.dsl.RuleSystem;
+import rapanui.dsl.RuleSystemCollection;
 
 public class Application {
 	private final List<ApplicationObserver> observers = new ArrayList<ApplicationObserver>();
 	private final List<ProofEnvironment> environments = new ArrayList<ProofEnvironment>();
-	private final List<RuleSystem> ruleSystems = new ArrayList<RuleSystem>();
+
+	private final RuleSystemCollection ruleSystems = new RuleSystemCollection();
 
 	public static void main(String[] args) {
 		Application instance = new Application();
@@ -24,11 +19,7 @@ public class Application {
 	}
 
 	public Application() {
-		try {
-			loadRuleSystem("../rapanui.library/library.raps");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		ruleSystems.load("../rapanui.library/library.raps");
 
 		createEnvironment(); // always create initial environment
 
@@ -37,25 +28,16 @@ public class Application {
 		createEnvironment();
 	}
 
-	public String[] getKnownDefinitionNames() {
-		return ruleSystems.stream()
-			.flatMap(system -> Arrays.stream(system.getDefinitionNames()))
-			.toArray(String[]::new);
-	}
-
-	public void loadRuleSystem(String fileName) throws IOException {
-		String source = new String(Files.readAllBytes(Paths.get(fileName)));
-		RuleSystem system = Parser.getInstance().parseRuleSystem(source);
-		ruleSystems.add(system);
-		notifyObservers(o -> o.ruleSystemLoaded(system));
-	}
-
 	public ProofEnvironment[] getEnvironments() {
 		return environments.toArray(new ProofEnvironment[environments.size()]);
 	}
 
+	public RuleSystemCollection getRuleSystems() {
+		return ruleSystems;
+	}
+
 	public void createEnvironment() {
-		ProofEnvironment environment = new ProofEnvironment(ruleSystems.toArray(new RuleSystem[ruleSystems.size()]));
+		ProofEnvironment environment = new ProofEnvironment(ruleSystems);
 		environments.add(environment);
 
 		// TODO: remove mock data

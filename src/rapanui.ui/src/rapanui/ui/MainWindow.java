@@ -11,7 +11,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import rapanui.core.ProofEnvironment;
-import rapanui.dsl.RuleSystem;
 
 class MainWindow extends JFrame implements PropertyChangeListener, ApplicationObserver {
 	private static final long serialVersionUID = 1L;
@@ -100,9 +99,6 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 		if ("focusOwner".equals(evt.getPropertyName()))
 			keyboard.setVisible(evt.getNewValue() instanceof JTextField);
 	}
-
-	@Override
-	public void ruleSystemLoaded(RuleSystem loaded) { /* nothing to do here */ }
 
 	@Override
 	public void environmentAdded(ProofEnvironment environment) {

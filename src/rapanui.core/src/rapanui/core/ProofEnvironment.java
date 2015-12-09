@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rapanui.dsl.Formula;
-import rapanui.dsl.RuleSystem;
+import rapanui.dsl.RuleSystemCollection;
 import rapanui.dsl.Term;
 
 import static rapanui.core.Patterns.*;
@@ -14,7 +14,7 @@ import static rapanui.core.Patterns.*;
  * and the resulting conclusions.
  */
 public class ProofEnvironment {
-	private final RuleSystem[] ruleSystems;
+	private final RuleSystemCollection ruleSystems;
 	private final List<Formula> premises;
 	private final List<ConclusionProcess> conclusions;
 	private final List<ProofEnvironmentObserver> observers;
@@ -23,7 +23,7 @@ public class ProofEnvironment {
 	 *
 	 * @param ruleSystems The rule systems upon which any conclusions in the environment are based (must not be null)
 	 */
-	public ProofEnvironment(RuleSystem[] ruleSystems) {
+	public ProofEnvironment(RuleSystemCollection ruleSystems) {
 		assert ruleSystems != null;
 
 		this.ruleSystems = ruleSystems;
@@ -32,7 +32,7 @@ public class ProofEnvironment {
 		this.observers = new ArrayList<ProofEnvironmentObserver>();
 	}
 
-	public RuleSystem[] getRuleSystems() {
+	public RuleSystemCollection getRuleSystems() {
 		return ruleSystems;
 	}
 

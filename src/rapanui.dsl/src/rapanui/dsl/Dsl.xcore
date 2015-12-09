@@ -20,15 +20,21 @@ class RuleSystem {
 interface PremiseContainer {
 	contains Formula[] premises
 
-	contains derived Formula[] resolvedPremises get {
-		newBasicEList(premises.map[ premise |
+	// Use a method instead of a derived feature to avoid problems with different EList
+	// implementations: must return an instance of InternalEList, not BasicEList, or there
+	// is a cast exception. But even with InternalEList, there's another problem where
+	// the code apparently gets executed before references are resolved, which of course
+	// results in NullPointerExceptions.
+	// See also https://www.eclipse.org/forums/index.php?t=msg&th=552590&goto=1140023&#msg_1140023
+	op Formula[] getResolvedPremises() {
+		premises.map[ premise |
 			var resolved = #[premise]
 			if (premise instanceof DefinitionReference) {
 				val translator = new Translator(#{ premise.definition.target -> premise.target})
 				resolved = premise.definition.resolvedPremises.map[ p | translator.translate(p) ]
 			}
 			resolved
-		].flatten.toList)
+		].flatten.toEList
 	}
 }
 
