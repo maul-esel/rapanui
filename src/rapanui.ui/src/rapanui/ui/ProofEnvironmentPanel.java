@@ -70,8 +70,6 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		JComboBox<String> definitionSelection = new JComboBox<String>(app.getRuleSystems().getDefinitionNames());
 		definitionSelection.setMaximumSize(new Dimension(MAX_WIDTH, definitionSelection.getMaximumSize().height));
 
-		JButton createDefRefPremise = new SimpleLink("\u2714", "Neue Voraussetzung erstellen");
-
 		JLabel newPremiseLabel = new JLabel("Neue Voraussetzung:");
 		newPremiseLabel.setAlignmentX(RIGHT_ALIGNMENT);
 
@@ -86,7 +84,8 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		newPremisePanel.add(new JLabel("Sei "), (Integer)3);
 		newPremisePanel.add(termInput);
 		newPremisePanel.add(definitionSelection);
-		newPremisePanel.add(createDefRefPremise);
+		newPremisePanel.add(new SimpleLink("\u2714", "Neue Voraussetzung erstellen",
+				UICommand.createDefinitionReferencePremise(model, termInput, definitionSelection)));
 
 		/* premise header */
 		JPanel premiseHeader = new JPanel();

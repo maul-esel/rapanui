@@ -3,9 +3,12 @@ package rapanui.ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JComboBox;
 import javax.swing.text.JTextComponent;
 
 import rapanui.core.ProofEnvironment;
+import rapanui.dsl.DefinitionReference;
+import rapanui.dsl.DslFactory;
 import rapanui.dsl.Parser;
 
 public abstract class UICommand implements ActionListener {
@@ -39,6 +42,19 @@ public abstract class UICommand implements ActionListener {
 	public static UICommand createFormulaPremise(ProofEnvironment environment, JTextComponent input) {
 		return new RunnableUICommand(() -> {
 			environment.addPremise(Parser.getInstance().parseFormula(input.getText()));
+			input.setText(null);
+		});
+	}
+
+	public static UICommand createDefinitionReferencePremise(ProofEnvironment environment, JTextComponent input,
+			JComboBox<String> definitionSelection) {
+		return new RunnableUICommand(() -> {
+			DefinitionReference reference = DslFactory.eINSTANCE.createDefinitionReference();
+			reference.setTarget(Parser.getInstance().parseTerm(input.getText()));
+			reference.setDefinition(environment.getRuleSystems()
+					.resolveDefinition(definitionSelection.getSelectedItem().toString())
+			);
+			environment.addPremise(reference);
 			input.setText(null);
 		});
 	}
