@@ -67,7 +67,7 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		JTextField termInput = new SyntaxTextField(SyntaxTextField.ParsingMode.Term);
 		termInput.setMaximumSize(new Dimension(MAX_WIDTH, termInput.getMaximumSize().height));
 
-		JComboBox<String> definitionSelection = new JComboBox<String>(app.getKnownDefinitionNames());
+		JComboBox<String> definitionSelection = new JComboBox<String>(app.getRuleSystems().getDefinitionNames());
 		definitionSelection.setMaximumSize(new Dimension(MAX_WIDTH, definitionSelection.getMaximumSize().height));
 
 		JButton createDefRefPremise = new SimpleLink("\u2714", "Neue Voraussetzung erstellen");

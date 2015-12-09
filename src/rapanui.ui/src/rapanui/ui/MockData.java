@@ -1,8 +1,5 @@
 package rapanui.ui;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
 import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Parser;
 import rapanui.dsl.DefinitionReference;
@@ -32,12 +29,6 @@ final class MockData {
 	}
 
 	static RuleSystem getRuleSystem(Application app) {
-		try {
-			Field f = Application.class.getDeclaredField("ruleSystems");
-			f.setAccessible(true);
-			return ((List<RuleSystem>)f.get(app)).get(0);
-		} catch (Exception e) {
-			return null;
-		}
+		return app.getRuleSystems().get(0);
 	}
 }
