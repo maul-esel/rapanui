@@ -158,6 +158,8 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		panel.setBorder(new EmptyBorder(5,5,5,5));
 		premisePanel.add(panel);
 		premiseViewMap.put(premise, panel);
+
+		validate(); // make sure new premise is actually shown
 	}
 
 	private void displayConclusion(ConclusionProcess conclusion) {
@@ -165,6 +167,8 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		ConclusionProcessView view = new ConclusionProcessView(conclusion);
 		add(view);
 		conclusionViewMap.put(conclusion, view);
+
+		validate(); // make sure new conclusion is actually shown
 	}
 
 	private void activate(ConclusionProcessView conclusion) {
