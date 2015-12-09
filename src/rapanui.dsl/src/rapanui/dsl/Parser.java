@@ -31,10 +31,6 @@ public class Parser {
 		.injectMembers(this);
 	}
 
-	public RuleSystem parseRuleSystem(String input) {
-		return (RuleSystem)parse(input, grammar.getRuleSystemRule());
-	}
-
 	public Formula parseFormula(String input) {
 		return (Formula)parse(input, grammar.getFormulaRule());
 	}
