@@ -131,6 +131,7 @@ eclipse {
 
   // adapted from https://stackoverflow.com/questions/26750869/how-to-add-gradle-generated-source-folder-to-eclipse-project
   classpath {
+    containers 'org.eclipse.pde.core.requiredPlugins'
     file.whenMerged { cp ->
       cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('xcore-gen', null) )
       cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('src-gen', null) )
