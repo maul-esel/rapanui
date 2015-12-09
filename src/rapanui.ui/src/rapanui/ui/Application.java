@@ -47,7 +47,6 @@ public class Application {
 		String source = new String(Files.readAllBytes(Paths.get(fileName)));
 		RuleSystem system = Parser.getInstance().parseRuleSystem(source);
 		ruleSystems.add(system);
-		notifyObservers(o -> o.ruleSystemLoaded(system));
 	}
 
 	public ProofEnvironment[] getEnvironments() {

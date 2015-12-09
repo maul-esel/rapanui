@@ -102,9 +102,6 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	}
 
 	@Override
-	public void ruleSystemLoaded(RuleSystem loaded) { /* nothing to do here */ }
-
-	@Override
 	public void environmentAdded(ProofEnvironment environment) {
 		createEnvironmentView(environment);
 	}
