@@ -6,9 +6,14 @@
 .settings
 runtime-EclipseXtext
 src/.recommenders
+.classpath
+.project
 
 bin
 xtend-gen
 src-gen
 xcore-gen
 *.xml_gen
+
+.gradle
+build
