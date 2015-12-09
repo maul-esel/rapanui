@@ -1,0 +1,141 @@
+plugins {
+  id "org.xtext.xtext" version "0.3.26" // used to build Xcore model
+  id "org.xtend.xtend" version "0.4.14"
+  id "java"
+  id "eclipse"
+}
+
+group 'rapanui'
+version '0.1.0-alpha.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+jar.manifest {
+  from 'META-INF/MANIFEST.MF'
+}
+
+repositories {
+  mavenCentral()
+}
+
+/* * * * * Configuration for Xcore * * * * *
+Adapted from https://github.com/ghillairet/xcore-gradle-example */
+xtext {
+  version = '2.9+'
+  encoding = 'UTF-8'
+
+  sources {
+    srcDir 'src'
+  }
+
+  languages {
+    ecore {
+      setup = 'org.eclipse.xtext.ecore.EcoreSupport'
+    }
+    codegen {
+      setup = 'org.eclipse.emf.codegen.ecore.xtext.GenModelSupport'
+    }
+    xcore {
+      setup = 'org.eclipse.emf.ecore.xcore.XcoreStandaloneSetup'
+      consumesJava = true
+      output {
+        dir = 'xcore-gen'
+        producesJavaFor sourceSets.main
+      }
+    }
+  }
+}
+
+/* Java source code. 'xcore-gen' is added by the Xcore config above. */
+sourceSets {
+  main {
+    java {
+      srcDir 'src'
+      srcDir 'src-gen'
+    }
+    xtendOutputDir = 'xtend-gen'
+
+    resources {
+      // include generated *.xtextbin file in JAR
+      srcDir 'src-gen'
+    }
+  }
+}
+
+configurations {
+  xtext.extendsFrom compile // for workflow execution
+  xtextTooling.extendsFrom xcore // alias xtextTooling to xcore to prevent confusion
+}
+
+dependencies {
+  compile 'org.eclipse.xtext:org.eclipse.xtext.xtext:2.9+'
+  compile 'org.eclipse.xtend:org.eclipse.xtend.lib:2.9.+'
+  compile 'org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:1.1.100'
+
+  xtext files('src')
+  xtext 'org.eclipse.emf:org.eclipse.emf.ecore.xcore:1.3.1'
+  xtext 'org.ow2.asm:asm:5.0+'
+  xtext 'org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext:1.2.0'
+  xtext 'org.eclipse.xtext:org.eclipse.xtext.xbase:2.9+'
+
+  xcore 'org.eclipse.text:org.eclipse.text:3.5.101'
+  xcore 'org.eclipse.core:org.eclipse.core.resources:3.7.100'
+  xcore 'org.eclipse.xtext:org.eclipse.xtext.ecore:2.9.0'
+  xcore 'org.eclipse.emf:org.eclipse.emf.codegen.ecore.xtext:1.2.0'
+  xcore 'org.eclipse.emf:org.eclipse.emf.common:2.11+'
+  xcore 'org.eclipse.emf:org.eclipse.emf.ecore.xmi:2.11+'
+  xcore 'org.eclipse.emf:org.eclipse.emf.ecore.xcore:1.3.1'
+  xcore 'org.eclipse.emf:org.eclipse.emf.ecore.xcore.lib:1.1.100'
+  xcore 'org.eclipse.emf:org.eclipse.emf.codegen:2.10+'
+  xcore 'org.eclipse.emf:org.eclipse.emf.codegen.ecore:2.11+'
+}
+
+/* delete generated code */
+clean {
+  delete 'xcore-gen'
+  delete 'xtend-gen'
+  delete 'src-gen'
+}
+
+/* generate Xcore model using Xtext plugin */
+task(generateModel).dependsOn xtextGenerate
+
+/* language artifact generation by workflow execution */
+task(generateLang, type: JavaExec) {
+  inputs.files "src/rapanui/dsl/GenerateDsl.mwe2", "src/rapanui/dsl/Dsl.xtext"
+  outputs.dir "src-gen"
+
+  dependsOn generateModel // model needs to be generated first
+  classpath configurations.xtext
+  main = "org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher"
+  args "src/rapanui/dsl/GenerateDsl.mwe2"
+}
+
+/* Language is generated before Xtend is compiled.
+Since Xtend is integrated into the build task, this also integrates
+generateLang and thus generateModel into the build task. */
+compileXtend.dependsOn generateLang
+
+eclipse {
+  project {
+    natures 'org.eclipse.buildship.core.gradleprojectnature'
+    natures 'org.eclipse.pde.PluginNature'
+    natures 'org.eclipse.xtext.ui.shared.xtextNature'
+
+    buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
+    buildCommand 'org.eclipse.xtext.ui.shared.xtextBuilder'
+    buildCommand 'org.eclipse.pde.SchemaBuilder'
+    buildCommand 'org.eclipse.pde.ManifestBuilder'
+  }
+
+  // adapted from https://stackoverflow.com/questions/26750869/how-to-add-gradle-generated-source-folder-to-eclipse-project
+  classpath {
+    containers 'org.eclipse.pde.core.requiredPlugins'
+    file.whenMerged { cp ->
+      cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('xcore-gen', null) )
+      cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('src-gen', null) )
+      cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('xtend-gen', null) )
+    }
+  }
+}

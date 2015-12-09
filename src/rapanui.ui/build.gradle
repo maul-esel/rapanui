@@ -1,0 +1,37 @@
+plugins {
+  id "java"
+  id "eclipse"
+  id "application"
+  id "com.github.johnrengelman.shadow" version '1.2.2'
+}
+
+group 'rapanui'
+version '0.1.0-alpha.1'
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+  mavenCentral()
+  jcenter()
+}
+
+dependencies {
+  compile project(':rapanui.dsl')
+  compile project(':rapanui.core')
+}
+
+mainClassName = 'rapanui.ui.Application'
+
+sourceSets {
+  main {
+    java {
+      srcDir 'src'
+    }
+  }
+}
+
+eclipse.project {
+  natures 'org.eclipse.buildship.core.gradleprojectnature'
+  buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
+}
