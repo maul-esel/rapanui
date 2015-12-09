@@ -81,7 +81,7 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		newPremisePanel.add(new JLabel("Sei "), (Integer)2);
 		newPremisePanel.add(formulaInput);
 		newPremisePanel.add(new SimpleLink("\u2714", "Neue Voraussetzung erstellen",
-				UICommand.createFormulaPremise(model, formulaInput::getText)));
+				UICommand.createFormulaPremise(model, formulaInput)));
 
 		newPremisePanel.add(new JLabel("Sei "), (Integer)3);
 		newPremisePanel.add(termInput);
@@ -124,7 +124,7 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		newConclusionPanel.add(new JLabel("Startterm: "), (Integer)2);
 		newConclusionPanel.add(startTermInput);
 		newConclusionPanel.add(new SimpleLink("\u2714", "Neue Folgerung erstellen",
-				UICommand.createConclusionProcess(model, startTermInput::getText)));
+				UICommand.createConclusionProcess(model, startTermInput)));
 
 		/* complete panel layout */
 		add(premiseHeader, (Integer)0);

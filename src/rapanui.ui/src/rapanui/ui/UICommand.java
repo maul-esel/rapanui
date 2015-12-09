@@ -2,7 +2,8 @@ package rapanui.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.function.Supplier;
+
+import javax.swing.text.JTextComponent;
 
 import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Parser;
@@ -28,16 +29,18 @@ public abstract class UICommand implements ActionListener {
 		}
 	}
 
-	public static UICommand createConclusionProcess(ProofEnvironment environment, Supplier<String> startTermSupplier) {
-		return new RunnableUICommand(
-			() -> environment.addConclusion(Parser.getInstance().parseTerm(startTermSupplier.get()))
-		);
+	public static UICommand createConclusionProcess(ProofEnvironment environment, JTextComponent input) {
+		return new RunnableUICommand(() -> {
+			environment.addConclusion(Parser.getInstance().parseTerm(input.getText()));
+			input.setText(null);
+		});
 	}
 
-	public static UICommand createFormulaPremise(ProofEnvironment environment, Supplier<String> premiseSupplier) {
-		return new RunnableUICommand(
-			() -> environment.addPremise(Parser.getInstance().parseFormula(premiseSupplier.get()))
-		);
+	public static UICommand createFormulaPremise(ProofEnvironment environment, JTextComponent input) {
+		return new RunnableUICommand(() -> {
+			environment.addPremise(Parser.getInstance().parseFormula(input.getText()));
+			input.setText(null);
+		});
 	}
 
 	public static UICommand createProofEnvironment(Application app) {
