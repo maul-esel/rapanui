@@ -16,6 +16,8 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	private static final long serialVersionUID = 1L;
 
 	private final Application app;
+	private ProofEnvironment activeEnvironment;
+
 	private final SymbolKeyboard keyboard = new SymbolKeyboard();
 
 	private final JPanel proofContainer = new JPanel(new CardLayout());
@@ -23,7 +25,8 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 
 	// use a counter instead of counting existing ones so there are no duplicates after a deletion
 	private int environmentCounter = 1;
-	private final Map<ProofEnvironment, JComponent> environmentViewMap = new HashMap<ProofEnvironment, JComponent>();
+	private final Map<ProofEnvironment, String> environmentNameMap = new HashMap<ProofEnvironment, String>();
+	private final Map<String, ProofEnvironmentPanel> environmentViewMap = new HashMap<String, ProofEnvironmentPanel>();
 
 	public MainWindow(Application app) {
 		assert app != null;
@@ -61,11 +64,12 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 		proofSelectionPanel.add(new JLabel("Aktueller Beweis:"));
 		proofSelectionPanel.add(Box.createHorizontalStrut(5));
 		proofSelectionPanel.add(proofList);
-		proofSelectionPanel.add(new SimpleLink("\u2A01", "Neuen Beweis starten", UICommand.createProofEnvironment(app)));
-		proofSelectionPanel.add(new SimpleLink("\u2718", "Aktuellen Beweis löschen"));
+		proofSelectionPanel.add(new SimpleLink("\u2A01", "Neuen Beweis starten",
+				UICommand.createProofEnvironment(app)));
+		proofSelectionPanel.add(new SimpleLink("\u2718", "Aktuellen Beweis löschen",
+				UICommand.removeProofEnvironment(app, () -> activeEnvironment)));
 
 		proofContainer.setOpaque(false);
-
 		proofList.addItemListener((e) -> activateEnvironmentView(e.getItem().toString()));
 
 		JScrollPane scrollContainer = new JScrollPane(proofContainer);
@@ -91,9 +95,12 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	private void createEnvironmentView(ProofEnvironment environment) {
 		ProofEnvironmentPanel view = new ProofEnvironmentPanel(app, environment);
 		String name = "Beweis " + environmentCounter++;
-		proofContainer.add(tab, name);
+
+		environmentNameMap.put(environment, name);
+		environmentViewMap.put(name, view);
+
+		proofContainer.add(view, name);
 		proofList.addItem(name);
-		environmentViewMap.put(environment, tab);
 
 		activateEnvironmentView(name);
 	}
@@ -101,6 +108,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	private void activateEnvironmentView(String name) {
 		((CardLayout)proofContainer.getLayout()).show(proofContainer, name);
 		proofList.setSelectedItem(name);
+		activeEnvironment = environmentViewMap.get(name).getModel();
 	}
 
 	@Override
@@ -116,6 +124,15 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 
 	@Override
 	public void environmentRemoved(ProofEnvironment environment) {
-		// TODO
+		String name = environmentNameMap.get(environment);
+		ProofEnvironmentPanel view = environmentViewMap.get(name);
+		if (name != null && view != null) {
+			proofContainer.remove(view);
+			proofList.removeItem(name);
+
+			// first remove from UI so that any reactions to UI modification still know the objects.
+			environmentNameMap.remove(environment);
+			environmentViewMap.remove(name);
+		}
 	}
 }

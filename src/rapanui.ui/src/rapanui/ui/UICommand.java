@@ -2,6 +2,7 @@ package rapanui.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.function.Supplier;
 
 import javax.swing.JComboBox;
 import javax.swing.text.JTextComponent;
@@ -61,5 +62,11 @@ public abstract class UICommand implements ActionListener {
 
 	public static UICommand createProofEnvironment(Application app) {
 		return new RunnableUICommand(app::createEnvironment);
+	}
+
+	public static UICommand removeProofEnvironment(Application app, Supplier<ProofEnvironment> environment) {
+		return new RunnableUICommand(() -> {
+			app.removeEnvironment(environment.get());
+		});
 	}
 }
