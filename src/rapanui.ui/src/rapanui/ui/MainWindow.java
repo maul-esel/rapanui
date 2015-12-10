@@ -4,8 +4,8 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.util.List;
-import java.util.LinkedList;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -20,18 +20,24 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 
 	private final JPanel proofContainer = new JPanel(new CardLayout());
 	private final JComboBox<String> proofList = new JComboBox<String>();
-	private final List<JScrollPane> environmentViews = new LinkedList<JScrollPane>();
+
+	// use a counter instead of counting existing ones so there are no duplicates after a deletion
+	private int environmentCounter = 1;
+	private final Map<ProofEnvironment, JComponent> environmentViewMap = new HashMap<ProofEnvironment, JComponent>();
 
 	public MainWindow(Application app) {
 		assert app != null;
 		this.app = app;
-		app.addObserver(this);
 
 		initializeContent();
 		setTitle("RAPA nui – Relational Algebra Proof Assistant");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		setExtendedState(MAXIMIZED_BOTH);
+
+		for (ProofEnvironment environment : app.getEnvironments())
+			createEnvironmentView(environment);
+		app.addObserver(this);
+
 		pack();
 		setVisible(true);
 	}
@@ -60,9 +66,6 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 
 		proofContainer.setOpaque(false);
 
-		for (ProofEnvironment environment : app.getEnvironments())
-			createEnvironmentView(environment);
-
 		proofList.addItemListener((e) -> activateEnvironmentView(e.getItem().toString()));
 
 		leftPanel.setBorder(new EmptyBorder(10,10,10,10));
@@ -86,10 +89,10 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 		tab.setOpaque(false);
 		tab.getViewport().setOpaque(false);
 
-		String name = "Beweis " + (environmentViews.size()+1);
+		String name = "Beweis " + environmentCounter++;
 		proofContainer.add(tab, name);
 		proofList.addItem(name);
-		environmentViews.add(tab);
+		environmentViewMap.put(environment, tab);
 
 		activateEnvironmentView(name);
 	}
