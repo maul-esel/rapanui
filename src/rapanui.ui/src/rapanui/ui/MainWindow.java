@@ -68,9 +68,14 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 
 		proofList.addItemListener((e) -> activateEnvironmentView(e.getItem().toString()));
 
+		JScrollPane scrollContainer = new JScrollPane(proofContainer);
+		scrollContainer.setBorder(null);
+		scrollContainer.setOpaque(false);
+		scrollContainer.getViewport().setOpaque(false);
+
 		leftPanel.setBorder(new EmptyBorder(10,10,10,10));
 		leftPanel.add(proofSelectionPanel, BorderLayout.NORTH);
-		leftPanel.add(proofContainer, BorderLayout.CENTER);
+		leftPanel.add(scrollContainer, BorderLayout.CENTER);
 		leftPanel.add(keyboard, BorderLayout.SOUTH);
 
 		JPanel suggestionPanel = new JPanel();
@@ -84,11 +89,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	}
 
 	private void createEnvironmentView(ProofEnvironment environment) {
-		JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel(app, environment));
-		tab.setBorder(null);
-		tab.setOpaque(false);
-		tab.getViewport().setOpaque(false);
-
+		ProofEnvironmentPanel view = new ProofEnvironmentPanel(app, environment);
 		String name = "Beweis " + environmentCounter++;
 		proofContainer.add(tab, name);
 		proofList.addItem(name);
