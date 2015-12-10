@@ -63,9 +63,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 		for (ProofEnvironment environment : app.getEnvironments())
 			createEnvironmentView(environment);
 
-		proofList.addItemListener((e) -> {
-			((CardLayout)proofContainer.getLayout()).show(proofContainer, e.getItem().toString());
-		});
+		proofList.addItemListener((e) -> activateEnvironmentView(e.getItem().toString()));
 
 		leftPanel.setBorder(new EmptyBorder(10,10,10,10));
 		leftPanel.add(proofSelectionPanel, BorderLayout.NORTH);
@@ -92,6 +90,13 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 		proofContainer.add(tab, name);
 		proofList.addItem(name);
 		environmentViews.add(tab);
+
+		activateEnvironmentView(name);
+	}
+
+	private void activateEnvironmentView(String name) {
+		((CardLayout)proofContainer.getLayout()).show(proofContainer, name);
+		proofList.setSelectedItem(name);
 	}
 
 	@Override
