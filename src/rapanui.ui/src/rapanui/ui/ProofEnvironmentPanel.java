@@ -48,6 +48,10 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		model.addObserver(this);
 	}
 
+	public ProofEnvironment getModel() {
+		return model;
+	}
+
 	private void initializeContent() {
 		setOpaque(false);
 		setLayout(new MultilineLayout());
