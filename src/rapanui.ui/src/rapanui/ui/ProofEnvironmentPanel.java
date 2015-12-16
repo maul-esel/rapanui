@@ -48,6 +48,10 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		model.addObserver(this);
 	}
 
+	public ProofEnvironment getModel() {
+		return model;
+	}
+
 	private void initializeContent() {
 		setOpaque(false);
 		setLayout(new MultilineLayout());
@@ -70,8 +74,6 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		JComboBox<String> definitionSelection = new JComboBox<String>(app.getRuleSystems().getDefinitionNames());
 		definitionSelection.setMaximumSize(new Dimension(MAX_WIDTH, definitionSelection.getMaximumSize().height));
 
-		JButton createDefRefPremise = new SimpleLink("\u2714", "Neue Voraussetzung erstellen");
-
 		JLabel newPremiseLabel = new JLabel("Neue Voraussetzung:");
 		newPremiseLabel.setAlignmentX(RIGHT_ALIGNMENT);
 
@@ -81,12 +83,13 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		newPremisePanel.add(new JLabel("Sei "), (Integer)2);
 		newPremisePanel.add(formulaInput);
 		newPremisePanel.add(new SimpleLink("\u2714", "Neue Voraussetzung erstellen",
-				new CreateFormulaPremiseCommand(model, formulaInput::getText)));
+				UICommand.createFormulaPremise(model, formulaInput)));
 
 		newPremisePanel.add(new JLabel("Sei "), (Integer)3);
 		newPremisePanel.add(termInput);
 		newPremisePanel.add(definitionSelection);
-		newPremisePanel.add(createDefRefPremise);
+		newPremisePanel.add(new SimpleLink("\u2714", "Neue Voraussetzung erstellen",
+				UICommand.createDefinitionReferencePremise(model, termInput, definitionSelection)));
 
 		/* premise header */
 		JPanel premiseHeader = new JPanel();
@@ -124,7 +127,7 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		newConclusionPanel.add(new JLabel("Startterm: "), (Integer)2);
 		newConclusionPanel.add(startTermInput);
 		newConclusionPanel.add(new SimpleLink("\u2714", "Neue Folgerung erstellen",
-				new CreateConclusionProcessCommand(model, startTermInput::getText)));
+				UICommand.createConclusionProcess(model, startTermInput)));
 
 		/* complete panel layout */
 		add(premiseHeader, (Integer)0);
@@ -158,6 +161,8 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		panel.setBorder(new EmptyBorder(5,5,5,5));
 		premisePanel.add(panel);
 		premiseViewMap.put(premise, panel);
+
+		validate(); // make sure new premise is actually shown
 	}
 
 	private void displayConclusion(ConclusionProcess conclusion) {
@@ -165,6 +170,8 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		ConclusionProcessView view = new ConclusionProcessView(conclusion);
 		add(view);
 		conclusionViewMap.put(conclusion, view);
+
+		validate(); // make sure new conclusion is actually shown
 	}
 
 	private void activate(ConclusionProcessView conclusion) {

@@ -4,8 +4,8 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import java.util.List;
-import java.util.LinkedList;
+import java.util.Map;
+import java.util.HashMap;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,22 +16,31 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	private static final long serialVersionUID = 1L;
 
 	private final Application app;
+	private ProofEnvironment activeEnvironment;
+
 	private final SymbolKeyboard keyboard = new SymbolKeyboard();
 
 	private final JPanel proofContainer = new JPanel(new CardLayout());
 	private final JComboBox<String> proofList = new JComboBox<String>();
-	private final List<JScrollPane> environmentViews = new LinkedList<JScrollPane>();
+
+	// use a counter instead of counting existing ones so there are no duplicates after a deletion
+	private int environmentCounter = 1;
+	private final Map<ProofEnvironment, String> environmentNameMap = new HashMap<ProofEnvironment, String>();
+	private final Map<String, ProofEnvironmentPanel> environmentViewMap = new HashMap<String, ProofEnvironmentPanel>();
 
 	public MainWindow(Application app) {
 		assert app != null;
 		this.app = app;
-		app.addObserver(this);
 
 		initializeContent();
 		setTitle("RAPA nui – Relational Algebra Proof Assistant");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
 		setExtendedState(MAXIMIZED_BOTH);
+
+		for (ProofEnvironment environment : app.getEnvironments())
+			createEnvironmentView(environment);
+		app.addObserver(this);
+
 		pack();
 		setVisible(true);
 	}
@@ -55,21 +64,22 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 		proofSelectionPanel.add(new JLabel("Aktueller Beweis:"));
 		proofSelectionPanel.add(Box.createHorizontalStrut(5));
 		proofSelectionPanel.add(proofList);
-		proofSelectionPanel.add(new SimpleLink("\u2A01", "Neuen Beweis starten", new CreateProofEnvironmentCommand(app)));
-		proofSelectionPanel.add(new SimpleLink("\u2718", "Aktuellen Beweis löschen"));
+		proofSelectionPanel.add(new SimpleLink("\u2A01", "Neuen Beweis starten",
+				UICommand.createProofEnvironment(app)));
+		proofSelectionPanel.add(new SimpleLink("\u2718", "Aktuellen Beweis löschen",
+				UICommand.removeProofEnvironment(app, () -> activeEnvironment)));
 
 		proofContainer.setOpaque(false);
+		proofList.addItemListener((e) -> activateEnvironmentView(e.getItem().toString()));
 
-		for (ProofEnvironment environment : app.getEnvironments())
-			createEnvironmentView(environment);
-
-		proofList.addItemListener((e) -> {
-			((CardLayout)proofContainer.getLayout()).show(proofContainer, e.getItem().toString());
-		});
+		JScrollPane scrollContainer = new JScrollPane(proofContainer);
+		scrollContainer.setBorder(null);
+		scrollContainer.setOpaque(false);
+		scrollContainer.getViewport().setOpaque(false);
 
 		leftPanel.setBorder(new EmptyBorder(10,10,10,10));
 		leftPanel.add(proofSelectionPanel, BorderLayout.NORTH);
-		leftPanel.add(proofContainer, BorderLayout.CENTER);
+		leftPanel.add(scrollContainer, BorderLayout.CENTER);
 		leftPanel.add(keyboard, BorderLayout.SOUTH);
 
 		JPanel suggestionPanel = new JPanel();
@@ -83,15 +93,22 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	}
 
 	private void createEnvironmentView(ProofEnvironment environment) {
-		JScrollPane tab = new JScrollPane(new ProofEnvironmentPanel(app, environment));
-		tab.setBorder(null);
-		tab.setOpaque(false);
-		tab.getViewport().setOpaque(false);
+		ProofEnvironmentPanel view = new ProofEnvironmentPanel(app, environment);
+		String name = "Beweis " + environmentCounter++;
 
-		String name = "Beweis " + (environmentViews.size()+1);
-		proofContainer.add(tab, name);
+		environmentNameMap.put(environment, name);
+		environmentViewMap.put(name, view);
+
+		proofContainer.add(view, name);
 		proofList.addItem(name);
-		environmentViews.add(tab);
+
+		activateEnvironmentView(name);
+	}
+
+	private void activateEnvironmentView(String name) {
+		((CardLayout)proofContainer.getLayout()).show(proofContainer, name);
+		proofList.setSelectedItem(name);
+		activeEnvironment = environmentViewMap.get(name).getModel();
 	}
 
 	@Override
@@ -107,6 +124,15 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 
 	@Override
 	public void environmentRemoved(ProofEnvironment environment) {
-		// TODO
+		String name = environmentNameMap.get(environment);
+		ProofEnvironmentPanel view = environmentViewMap.get(name);
+		if (name != null && view != null) {
+			proofContainer.remove(view);
+			proofList.removeItem(name);
+
+			// first remove from UI so that any reactions to UI modification still know the objects.
+			environmentNameMap.remove(environment);
+			environmentViewMap.remove(name);
+		}
 	}
 }

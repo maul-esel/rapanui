@@ -48,4 +48,21 @@ public class Parser {
 		}
 		return result.getRootASTElement();
 	}
+
+	public boolean canParseRuleSystem(String input) {
+		return canParse(input, grammar.getRuleSystemRule());
+	}
+
+	public boolean canParseFormula(String input) {
+		return canParse(input, grammar.getFormulaRule());
+	}
+
+	public boolean canParseTerm(String input) {
+		return canParse(input, grammar.getTermRule());
+	}
+
+	private boolean canParse(String input, ParserRule rule) {
+		IParseResult result = internalParser.parse(rule, new StringReader(input));
+		return !result.hasSyntaxErrors();
+	}
 }
