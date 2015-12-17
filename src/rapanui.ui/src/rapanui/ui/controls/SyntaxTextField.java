@@ -1,4 +1,4 @@
-package rapanui.ui;
+package rapanui.ui.controls;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -31,7 +31,7 @@ public class SyntaxTextField extends JTextField implements DocumentListener {
 		defaultBorder = getBorder();
 	}
 
-	static enum ParsingMode {
+	public static enum ParsingMode {
 		Term,
 		Formula
 	}

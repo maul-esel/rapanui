@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 import rapanui.core.ProofEnvironment;
+import rapanui.ui.controls.SimpleLink;
 
 class MainWindow extends JFrame implements PropertyChangeListener, ApplicationObserver {
 	private static final long serialVersionUID = 1L;

@@ -13,6 +13,7 @@ import rapanui.core.ProofJustification;
 import rapanui.core.RuleApplication;
 import rapanui.core.SubtermEqualityJustification;
 import rapanui.core.Transformation;
+import rapanui.ui.controls.CollapseButton;
 
 class ConclusionProcessView extends JPanel implements ConclusionProcessObserver {
 	private static final long serialVersionUID = 1L;

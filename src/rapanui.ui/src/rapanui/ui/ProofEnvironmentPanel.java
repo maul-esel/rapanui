@@ -13,6 +13,9 @@ import rapanui.core.ProofEnvironment;
 import rapanui.core.ProofEnvironmentObserver;
 import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.Formula;
+import rapanui.ui.controls.CollapseButton;
+import rapanui.ui.controls.SimpleLink;
+import rapanui.ui.controls.SyntaxTextField;
 
 class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 	private static final long serialVersionUID = 1L;
