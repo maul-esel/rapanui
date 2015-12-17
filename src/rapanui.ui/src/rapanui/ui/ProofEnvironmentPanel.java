@@ -9,13 +9,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rapanui.core.ConclusionProcess;
-import rapanui.core.ProofEnvironment;
 import rapanui.core.ProofEnvironmentObserver;
 import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.Formula;
 import rapanui.ui.controls.CollapseButton;
 import rapanui.ui.controls.SimpleLink;
 import rapanui.ui.controls.SyntaxTextField;
+import rapanui.ui.models.ProofEnvironmentModel;
 
 class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 	private static final long serialVersionUID = 1L;
@@ -25,8 +25,7 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 
 	private static final Font mathFont = new Font("Courier New", Font.PLAIN, 14);
 
-	private final Application app;
-	private final ProofEnvironment model;
+	private final ProofEnvironmentModel model;
 
 	private final JPanel premisePanel = new JPanel(new GridLayout(0, 4));
 	private ConclusionProcessView activeConclusion;
@@ -35,11 +34,9 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 	private final Map<ConclusionProcess, JPanel> conclusionViewMap
 		= new HashMap<ConclusionProcess, JPanel>();
 
-	public ProofEnvironmentPanel(Application app, ProofEnvironment model) {
-		assert app != null;
+	public ProofEnvironmentPanel(ProofEnvironmentModel model) {
 		assert model != null;
 
-		this.app = app;
 		this.model = model;
 		initializeContent();
 
@@ -51,7 +48,7 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		model.addObserver(this);
 	}
 
-	public ProofEnvironment getModel() {
+	public ProofEnvironmentModel getModel() {
 		return model;
 	}
 
@@ -69,12 +66,10 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		newPremisePanel.setOpaque(false);
 		newPremisePanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5)));
 
-		JTextField formulaInput = new SyntaxTextField(SyntaxTextField.ParsingMode.Formula);
-
-		JTextField termInput = new SyntaxTextField(SyntaxTextField.ParsingMode.Term);
+		JTextField termInput = new SyntaxTextField(SyntaxTextField.ParsingMode.Term, model.definitionPremiseInputModel);
 		termInput.setMaximumSize(new Dimension(MAX_WIDTH, termInput.getMaximumSize().height));
 
-		JComboBox<String> definitionSelection = new JComboBox<String>(app.getRuleSystems().getDefinitionNames());
+		JComboBox<String> definitionSelection = new JComboBox<String>(model.definitionSelectionModel);
 		definitionSelection.setMaximumSize(new Dimension(MAX_WIDTH, definitionSelection.getMaximumSize().height));
 
 		JLabel newPremiseLabel = new JLabel("Neue Voraussetzung:");
@@ -84,15 +79,13 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		newPremisePanel.add(new JSeparator(), (Integer)1);
 
 		newPremisePanel.add(new JLabel("Sei "), (Integer)2);
-		newPremisePanel.add(formulaInput);
-		newPremisePanel.add(new SimpleLink("\u2714", "Neue Voraussetzung erstellen",
-				UICommand.createFormulaPremise(model, formulaInput)));
+		newPremisePanel.add(new SyntaxTextField(SyntaxTextField.ParsingMode.Formula, model.formulaPremiseInputModel));
+		newPremisePanel.add(new SimpleLink(model.createFormulaPremiseCommand));
 
 		newPremisePanel.add(new JLabel("Sei "), (Integer)3);
 		newPremisePanel.add(termInput);
 		newPremisePanel.add(definitionSelection);
-		newPremisePanel.add(new SimpleLink("\u2714", "Neue Voraussetzung erstellen",
-				UICommand.createDefinitionReferencePremise(model, termInput, definitionSelection)));
+		newPremisePanel.add(new SimpleLink(model.createDefinitionReferencePremiseCommand));
 
 		/* premise header */
 		JPanel premiseHeader = new JPanel();
@@ -123,14 +116,11 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		newConclusionPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5)));
 		newConclusionPanel.setOpaque(false);
 
-		JTextField startTermInput = new  SyntaxTextField(SyntaxTextField.ParsingMode.Term);
-
 		newConclusionPanel.add(new JLabel("Neue Folgerung:"), (Integer)0);
 		newConclusionPanel.add(new JSeparator(), (Integer)1);
 		newConclusionPanel.add(new JLabel("Startterm: "), (Integer)2);
-		newConclusionPanel.add(startTermInput);
-		newConclusionPanel.add(new SimpleLink("\u2714", "Neue Folgerung erstellen",
-				UICommand.createConclusionProcess(model, startTermInput)));
+		newConclusionPanel.add(new SyntaxTextField(SyntaxTextField.ParsingMode.Term, model.conclusionTermInputModel));
+		newConclusionPanel.add(new SimpleLink(model.createConclusionCommand));
 
 		/* complete panel layout */
 		add(premiseHeader, (Integer)0);

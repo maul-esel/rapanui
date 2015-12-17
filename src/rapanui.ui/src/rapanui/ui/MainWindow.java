@@ -12,12 +12,13 @@ import javax.swing.border.EmptyBorder;
 
 import rapanui.core.ProofEnvironment;
 import rapanui.ui.controls.SimpleLink;
+import rapanui.ui.models.ProofEnvironmentModel;
 
 class MainWindow extends JFrame implements PropertyChangeListener, ApplicationObserver {
 	private static final long serialVersionUID = 1L;
 
 	private final Application app;
-	private ProofEnvironment activeEnvironment;
+	private ProofEnvironmentModel activeEnvironment;
 
 	private final SymbolKeyboard keyboard = new SymbolKeyboard();
 
@@ -26,7 +27,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 
 	// use a counter instead of counting existing ones so there are no duplicates after a deletion
 	private int environmentCounter = 1;
-	private final Map<ProofEnvironment, String> environmentNameMap = new HashMap<ProofEnvironment, String>();
+	private final Map<ProofEnvironmentModel, String> environmentNameMap = new HashMap<ProofEnvironmentModel, String>();
 	private final Map<String, ProofEnvironmentPanel> environmentViewMap = new HashMap<String, ProofEnvironmentPanel>();
 
 	public MainWindow(Application app) {
@@ -39,7 +40,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 		setExtendedState(MAXIMIZED_BOTH);
 
 		for (ProofEnvironment environment : app.getEnvironments())
-			createEnvironmentView(environment);
+			createEnvironmentView(new ProofEnvironmentModel(environment, app));
 		app.addObserver(this);
 
 		pack();
@@ -93,8 +94,8 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 		KeyboardFocusManager.getCurrentKeyboardFocusManager().addPropertyChangeListener(this);
 	}
 
-	private void createEnvironmentView(ProofEnvironment environment) {
-		ProofEnvironmentPanel view = new ProofEnvironmentPanel(app, environment);
+	private void createEnvironmentView(ProofEnvironmentModel environment) {
+		ProofEnvironmentPanel view = new ProofEnvironmentPanel(environment);
 		String name = "Beweis " + environmentCounter++;
 
 		environmentNameMap.put(environment, name);
@@ -120,7 +121,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 
 	@Override
 	public void environmentAdded(ProofEnvironment environment) {
-		createEnvironmentView(environment);
+		createEnvironmentView(new ProofEnvironmentModel(environment, app));
 	}
 
 	@Override

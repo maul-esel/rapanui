@@ -4,13 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.function.Supplier;
 
-import javax.swing.JComboBox;
-import javax.swing.text.JTextComponent;
-
-import rapanui.core.ProofEnvironment;
-import rapanui.dsl.DefinitionReference;
-import rapanui.dsl.DslFactory;
-import rapanui.dsl.Parser;
+import rapanui.ui.models.ProofEnvironmentModel;
 
 public abstract class UICommand implements ActionListener {
 	public abstract void execute();
@@ -33,40 +27,13 @@ public abstract class UICommand implements ActionListener {
 		}
 	}
 
-	public static UICommand createConclusionProcess(ProofEnvironment environment, JTextComponent input) {
-		return new RunnableUICommand(() -> {
-			environment.addConclusion(Parser.getInstance().parseTerm(input.getText()));
-			input.setText(null);
-		});
-	}
-
-	public static UICommand createFormulaPremise(ProofEnvironment environment, JTextComponent input) {
-		return new RunnableUICommand(() -> {
-			environment.addPremise(Parser.getInstance().parseFormula(input.getText()));
-			input.setText(null);
-		});
-	}
-
-	public static UICommand createDefinitionReferencePremise(ProofEnvironment environment, JTextComponent input,
-			JComboBox<String> definitionSelection) {
-		return new RunnableUICommand(() -> {
-			DefinitionReference reference = DslFactory.eINSTANCE.createDefinitionReference();
-			reference.setTarget(Parser.getInstance().parseTerm(input.getText()));
-			reference.setDefinition(environment.getRuleSystems()
-					.resolveDefinition(definitionSelection.getSelectedItem().toString())
-			);
-			environment.addPremise(reference);
-			input.setText(null);
-		});
-	}
-
 	public static UICommand createProofEnvironment(Application app) {
 		return new RunnableUICommand(app::createEnvironment);
 	}
 
-	public static UICommand removeProofEnvironment(Application app, Supplier<ProofEnvironment> environment) {
+	public static UICommand removeProofEnvironment(Application app, Supplier<ProofEnvironmentModel> environment) {
 		return new RunnableUICommand(() -> {
-			app.removeEnvironment(environment.get());
+			app.removeEnvironment(environment.get().getUnderlyingModel());
 		});
 	}
 }
