@@ -9,6 +9,7 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 
 import rapanui.dsl.Parser;
 
@@ -24,7 +25,11 @@ public class SyntaxTextField extends JTextField implements DocumentListener {
 	private final Border defaultBorder;
 
 	public SyntaxTextField(ParsingMode mode) {
-		super();
+		this(mode, null);
+	}
+
+	public SyntaxTextField(ParsingMode mode, Document model /* may be null */) {
+		super(model, null, 0);
 		setFont(mathFont);
 		this.parsingMode = mode;
 		getDocument().addDocumentListener(this);
