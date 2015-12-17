@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 
+import javax.swing.Action;
 import javax.swing.JButton;
 
 public class SimpleLink extends JButton {
@@ -21,9 +22,17 @@ public class SimpleLink extends JButton {
 	}
 
 	public SimpleLink(String text, String tooltip) {
+		this();
 		setText(text);
 		setToolTipText(tooltip);
+	}
 
+	public SimpleLink(Action action) {
+		this();
+		setAction(action);
+	}
+
+	protected SimpleLink() {
 		// styling
 		setMargin(new Insets(0,0,0,0));
 		setBorderPainted(false);
