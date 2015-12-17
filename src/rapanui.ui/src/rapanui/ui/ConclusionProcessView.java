@@ -14,8 +14,9 @@ import rapanui.core.RuleApplication;
 import rapanui.core.SubtermEqualityJustification;
 import rapanui.core.Transformation;
 import rapanui.ui.controls.CollapseButton;
+import rapanui.ui.views.ProofEnvironmentView;
 
-class ConclusionProcessView extends JPanel implements ConclusionProcessObserver {
+public class ConclusionProcessView extends JPanel implements ConclusionProcessObserver {
 	private static final long serialVersionUID = 1L;
 
 	private final ConclusionProcess model;
@@ -73,7 +74,7 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessObserver 
 		JSeparator separator = new JSeparator();
 
 		header.add(new CollapseButton(longForm, separator));
-		header.add(titleLabel = ProofEnvironmentPanel.createMathematicalLabel(shortForm));
+		header.add(titleLabel = ProofEnvironmentView.createMathematicalLabel(shortForm));
 		header.add(Box.createHorizontalGlue());
 
 		/*
@@ -91,7 +92,7 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessObserver 
 		c.ipadx = 5;
 		c.anchor = GridBagConstraints.EAST;
 		c.weightx = 0.3;
-		longForm.add(ProofEnvironmentPanel.createMathematicalLabel("R "), c);
+		longForm.add(ProofEnvironmentView.createMathematicalLabel("R "), c);
 
 		add(header);
 		add(separator);
@@ -105,7 +106,7 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessObserver 
 		c.anchor = GridBagConstraints.WEST;
 		c.gridy = displayedTransformations;
 		c.weightx = 0.35;
-		longForm.add(ProofEnvironmentPanel.createMathematicalLabel(
+		longForm.add(ProofEnvironmentView.createMathematicalLabel(
 				(transformation.getType() == FormulaType.Equality ? "= " : "⊆ ")
 				+ transformation.getOutput().serialize()),
 				c);

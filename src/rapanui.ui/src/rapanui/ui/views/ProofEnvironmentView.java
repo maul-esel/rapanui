@@ -1,4 +1,4 @@
-package rapanui.ui;
+package rapanui.ui.views;
 
 import java.awt.*;
 
@@ -12,12 +12,14 @@ import rapanui.core.ConclusionProcess;
 import rapanui.core.ProofEnvironmentObserver;
 import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.Formula;
+import rapanui.ui.ConclusionProcessView;
+import rapanui.ui.MultilineLayout;
 import rapanui.ui.controls.CollapseButton;
 import rapanui.ui.controls.SimpleLink;
 import rapanui.ui.controls.SyntaxTextField;
 import rapanui.ui.models.ProofEnvironmentModel;
 
-class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
+public class ProofEnvironmentView extends JPanel implements ProofEnvironmentObserver {
 	private static final long serialVersionUID = 1L;
 
 	// ugly hack: use this instead of Integer.MAX_VALUE to avoid integer overflow
@@ -34,7 +36,7 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 	private final Map<ConclusionProcess, JPanel> conclusionViewMap
 		= new HashMap<ConclusionProcess, JPanel>();
 
-	public ProofEnvironmentPanel(ProofEnvironmentModel model) {
+	public ProofEnvironmentView(ProofEnvironmentModel model) {
 		assert model != null;
 
 		this.model = model;
@@ -176,7 +178,7 @@ class ProofEnvironmentPanel extends JPanel implements ProofEnvironmentObserver {
 		}
 	}
 
-	static JLabel createMathematicalLabel(String text) {
+	public static JLabel createMathematicalLabel(String text) {
 		JLabel label = new JLabel(text);
 		label.setFont(mathFont);
 		label.setAlignmentX(LEFT_ALIGNMENT);

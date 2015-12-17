@@ -13,6 +13,7 @@ import javax.swing.border.EmptyBorder;
 import rapanui.core.ProofEnvironment;
 import rapanui.ui.controls.SimpleLink;
 import rapanui.ui.models.ProofEnvironmentModel;
+import rapanui.ui.views.ProofEnvironmentView;
 
 class MainWindow extends JFrame implements PropertyChangeListener, ApplicationObserver {
 	private static final long serialVersionUID = 1L;
@@ -28,7 +29,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	// use a counter instead of counting existing ones so there are no duplicates after a deletion
 	private int environmentCounter = 1;
 	private final Map<ProofEnvironmentModel, String> environmentNameMap = new HashMap<ProofEnvironmentModel, String>();
-	private final Map<String, ProofEnvironmentPanel> environmentViewMap = new HashMap<String, ProofEnvironmentPanel>();
+	private final Map<String, ProofEnvironmentView> environmentViewMap = new HashMap<String, ProofEnvironmentView>();
 
 	public MainWindow(Application app) {
 		assert app != null;
@@ -95,7 +96,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	}
 
 	private void createEnvironmentView(ProofEnvironmentModel environment) {
-		ProofEnvironmentPanel view = new ProofEnvironmentPanel(environment);
+		ProofEnvironmentView view = new ProofEnvironmentView(environment);
 		String name = "Beweis " + environmentCounter++;
 
 		environmentNameMap.put(environment, name);
@@ -127,7 +128,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 	@Override
 	public void environmentRemoved(ProofEnvironment environment) {
 		String name = environmentNameMap.get(environment);
-		ProofEnvironmentPanel view = environmentViewMap.get(name);
+		ProofEnvironmentView view = environmentViewMap.get(name);
 		if (name != null && view != null) {
 			proofContainer.remove(view);
 			proofList.removeItem(name);
