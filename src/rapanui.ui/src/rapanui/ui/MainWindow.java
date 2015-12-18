@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 
 import rapanui.core.ProofEnvironment;
 import rapanui.ui.controls.SimpleLink;
+import rapanui.ui.models.ApplicationModel;
 import rapanui.ui.models.ProofEnvironmentModel;
 import rapanui.ui.views.ProofEnvironmentView;
 
@@ -41,7 +42,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 		setExtendedState(MAXIMIZED_BOTH);
 
 		for (ProofEnvironment environment : app.getEnvironments())
-			createEnvironmentView(new ProofEnvironmentModel(environment, app));
+			createEnvironmentView(new ProofEnvironmentModel(new ApplicationModel(app), environment));
 		app.addObserver(this);
 
 		pack();
@@ -122,7 +123,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationOb
 
 	@Override
 	public void environmentAdded(ProofEnvironment environment) {
-		createEnvironmentView(new ProofEnvironmentModel(environment, app));
+		createEnvironmentView(new ProofEnvironmentModel(new ApplicationModel(app), environment));
 	}
 
 	@Override

@@ -15,18 +15,19 @@ import rapanui.core.ConclusionProcess;
 import rapanui.core.ProofEnvironment;
 import rapanui.core.ProofEnvironmentObserver;
 import rapanui.dsl.Formula;
-import rapanui.ui.Application;
 import rapanui.ui.commands.*;
 
 public class ProofEnvironmentModel implements ProofEnvironmentObserver {
+	private final ApplicationModel container;
 	private final ProofEnvironment env;
 
 	private final List<Observer> observers = new LinkedList<Observer>();
 	private final List<ConclusionProcessModel> conclusions = new LinkedList<ConclusionProcessModel>();
 
-	public ProofEnvironmentModel(ProofEnvironment env, Application app) {
+	public ProofEnvironmentModel(ApplicationModel container, ProofEnvironment env) {
 		assert env != null;
 		this.env = env;
+		this.container = container;
 
 		conclusions.addAll(
 				Arrays.stream(env.getConclusions())
@@ -35,11 +36,11 @@ public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 		);
 		env.addObserver(this);
 
-		definitionSelectionModel = new DefaultComboBoxModel<String>(app.getRuleSystems().getDefinitionNames());
+		definitionSelectionModel = new DefaultComboBoxModel<String>(container.getRuleSystems().getDefinitionNames());
 
 		createFormulaPremiseCommand = new CreateFormulaPremiseCommand(env, formulaPremiseInputModel);
 		createDefinitionReferencePremiseCommand = new CreateDefinitionReferencePremiseCommand(
-				env, app, definitionPremiseInputModel, definitionSelectionModel);
+				env, container, definitionPremiseInputModel, definitionSelectionModel);
 		createConclusionCommand = new CreateConclusionCommand(env, conclusionTermInputModel);
 	}
 
@@ -56,7 +57,7 @@ public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 	}
 
 	void loadSuggestions(ConclusionProcess conclusion) {
-		// container.loadSuggestions(env, conclusion);
+		container.loadSuggestions(env, conclusion);
 	}
 
 	@Deprecated

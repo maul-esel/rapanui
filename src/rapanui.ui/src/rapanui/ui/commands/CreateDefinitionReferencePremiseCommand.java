@@ -5,7 +5,7 @@ import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.DslFactory;
 import rapanui.dsl.Parser;
 import rapanui.dsl.Term;
-import rapanui.ui.Application;
+import rapanui.ui.models.ApplicationModel;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.text.BadLocationException;
@@ -15,11 +15,11 @@ public class CreateDefinitionReferencePremiseCommand extends AbstractCommand {
 	private static final long serialVersionUID = 1L;
 
 	private final ProofEnvironment env;
-	private final Application app;
+	private final ApplicationModel app;
 	private final Document inputModel;
 	private final ComboBoxModel<String> definitionModel;
 
-	public CreateDefinitionReferencePremiseCommand(ProofEnvironment env, Application app, Document inputModel, ComboBoxModel<String> definitionModel) {
+	public CreateDefinitionReferencePremiseCommand(ProofEnvironment env, ApplicationModel app, Document inputModel, ComboBoxModel<String> definitionModel) {
 		super("\u2714", "Neue Voraussetzung erstellen");
 
 		this.env = env;
