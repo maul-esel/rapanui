@@ -1,35 +1,32 @@
 package rapanui.ui.commands;
 
-import rapanui.core.ProofEnvironment;
 import rapanui.core.Transformation;
 import rapanui.ui.Application;
 import rapanui.ui.models.ApplicationModel;
 import rapanui.ui.models.ProofEnvironmentModel;
 
-import java.util.function.Supplier;
-
 public class DeleteEnvironmentCommand extends AbstractCommand implements ApplicationModel.Observer {
 	private static final long serialVersionUID = 1L;
 
 	private final Application app;
-	private final Supplier<ProofEnvironment> targetEnvironment;
+	private final ApplicationModel appModel;
 
 	public DeleteEnvironmentCommand(ApplicationModel appModel, Application app) {
 		super("\u2718", "Aktuellen Beweis löschen");
 		this.app = app;
-		targetEnvironment = () -> appModel.getActiveEnvironment().getUnderlyingModel();
+		this.appModel = appModel;
 
 		appModel.addObserver(this);		
 	}
 
 	@Override
 	public void execute() {
-		app.removeEnvironment(targetEnvironment.get());
+		app.removeEnvironment(appModel.getActiveEnvironment().getUnderlyingModel());
 	}
 
 	@Override
 	public boolean isEnabled() {
-		return targetEnvironment.get() != null;
+		return appModel.getActiveEnvironment() != null;
 	}
 
 	@Override
