@@ -1,4 +1,4 @@
-package rapanui.ui;
+package rapanui.ui.views;
 
 import java.awt.*;
 import javax.swing.*;
@@ -13,9 +13,8 @@ import rapanui.core.SubtermEqualityJustification;
 import rapanui.core.Transformation;
 import rapanui.ui.controls.CollapseButton;
 import rapanui.ui.models.ConclusionProcessModel;
-import rapanui.ui.views.ProofEnvironmentView;
 
-public class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Observer {
+class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Observer {
 	private static final long serialVersionUID = 1L;
 
 	private final ConclusionProcessModel model;
@@ -28,7 +27,7 @@ public class ConclusionProcessView extends JPanel implements ConclusionProcessMo
 
 	private int displayedTransformations = 0;
 
-	public ConclusionProcessView(ConclusionProcessModel model) {
+	ConclusionProcessView(ConclusionProcessModel model) {
 		assert model != null;
 		this.model = model;
 

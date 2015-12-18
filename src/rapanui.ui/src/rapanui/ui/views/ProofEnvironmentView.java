@@ -10,7 +10,6 @@ import java.util.Map;
 
 import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.Formula;
-import rapanui.ui.ConclusionProcessView;
 import rapanui.ui.MultilineLayout;
 import rapanui.ui.controls.CollapseButton;
 import rapanui.ui.controls.SimpleLink;
@@ -178,7 +177,7 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentMode
 		}
 	}
 
-	public static JLabel createMathematicalLabel(String text) {
+	static JLabel createMathematicalLabel(String text) {
 		JLabel label = new JLabel(text);
 		label.setFont(mathFont);
 		label.setAlignmentX(LEFT_ALIGNMENT);
