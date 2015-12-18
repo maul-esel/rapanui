@@ -8,8 +8,6 @@ import javax.swing.border.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import rapanui.core.ConclusionProcess;
-import rapanui.core.ProofEnvironmentObserver;
 import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.Formula;
 import rapanui.ui.ConclusionProcessView;
@@ -17,9 +15,10 @@ import rapanui.ui.MultilineLayout;
 import rapanui.ui.controls.CollapseButton;
 import rapanui.ui.controls.SimpleLink;
 import rapanui.ui.controls.SyntaxTextField;
+import rapanui.ui.models.ConclusionProcessModel;
 import rapanui.ui.models.ProofEnvironmentModel;
 
-public class ProofEnvironmentView extends JPanel implements ProofEnvironmentObserver {
+public class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Observer {
 	private static final long serialVersionUID = 1L;
 
 	// ugly hack: use this instead of Integer.MAX_VALUE to avoid integer overflow
@@ -33,8 +32,8 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentObse
 	private ConclusionProcessView activeConclusion;
 
 	private final Map<Formula, JPanel> premiseViewMap = new HashMap<Formula, JPanel>();
-	private final Map<ConclusionProcess, JPanel> conclusionViewMap
-		= new HashMap<ConclusionProcess, JPanel>();
+	private final Map<ConclusionProcessModel, JPanel> conclusionViewMap
+		= new HashMap<ConclusionProcessModel, JPanel>();
 
 	public ProofEnvironmentView(ProofEnvironmentModel model) {
 		assert model != null;
@@ -44,7 +43,7 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentObse
 
 		for (Formula premise : model.getPremises())
 			displayPremise(premise);
-		for (ConclusionProcess conclusion : model.getConclusions())
+		for (ConclusionProcessModel conclusion : model.getConclusions())
 			displayConclusion(conclusion);
 
 		model.addObserver(this);
@@ -160,21 +159,22 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentObse
 		validate(); // make sure new premise is actually shown
 	}
 
-	private void displayConclusion(ConclusionProcess conclusion) {
+	private void displayConclusion(ConclusionProcessModel conclusionModel) {
 		((MultilineLayout)getLayout()).newLine();
-		ConclusionProcessView view = new ConclusionProcessView(conclusion);
+		ConclusionProcessView view = new ConclusionProcessView(conclusionModel);
 		add(view);
-		conclusionViewMap.put(conclusion, view);
+		conclusionViewMap.put(conclusionModel, view);
 
 		validate(); // make sure new conclusion is actually shown
 	}
 
+	@Deprecated
 	private void activate(ConclusionProcessView conclusion) {
 		if (activeConclusion != conclusion) {
 			if (activeConclusion != null)
-				activeConclusion.deactivate();
+				activeConclusion.deactivated();
 			activeConclusion = conclusion;
-			conclusion.activate();
+			conclusion.activated();
 		}
 	}
 
@@ -191,28 +191,7 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentObse
 	}
 
 	@Override
-	public void premiseRemoved(Formula premise) {
-		if (premiseViewMap.containsKey(premise)) {
-			premisePanel.remove(premiseViewMap.get(premise));
-			premiseViewMap.remove(premise);
-		}
-	}
-
-	@Override
-	public void conclusionStarted(ConclusionProcess conclusion) {
+	public void conclusionStarted(ConclusionProcessModel conclusion) {
 		displayConclusion(conclusion);
-	}
-
-	@Override
-	public void conclusionRemoved(ConclusionProcess conclusion) {
-		if (conclusionViewMap.containsKey(conclusion)) {
-			remove(conclusionViewMap.get(conclusion));
-			conclusionViewMap.remove(conclusion);
-		}
-	}
-
-	@Override
-	public void conclusionMoved(ConclusionProcess conclusion) {
-		// currently not used
 	}
 }

@@ -4,8 +4,6 @@ import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import rapanui.core.ConclusionProcess;
-import rapanui.core.ConclusionProcessObserver;
 import rapanui.core.EnvironmentPremiseJustification;
 import rapanui.core.FormulaType;
 import rapanui.core.Justification;
@@ -14,12 +12,13 @@ import rapanui.core.RuleApplication;
 import rapanui.core.SubtermEqualityJustification;
 import rapanui.core.Transformation;
 import rapanui.ui.controls.CollapseButton;
+import rapanui.ui.models.ConclusionProcessModel;
 import rapanui.ui.views.ProofEnvironmentView;
 
-public class ConclusionProcessView extends JPanel implements ConclusionProcessObserver {
+public class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Observer {
 	private static final long serialVersionUID = 1L;
 
-	private final ConclusionProcess model;
+	private final ConclusionProcessModel model;
 
 	private final JPanel longForm = new JPanel(new GridBagLayout());
 	private JLabel titleLabel;
@@ -29,7 +28,7 @@ public class ConclusionProcessView extends JPanel implements ConclusionProcessOb
 
 	private int displayedTransformations = 0;
 
-	public ConclusionProcessView(ConclusionProcess model) {
+	public ConclusionProcessView(ConclusionProcessModel model) {
 		assert model != null;
 		this.model = model;
 
@@ -41,29 +40,12 @@ public class ConclusionProcessView extends JPanel implements ConclusionProcessOb
 		model.addObserver(this);
 	}
 
-	public void activate() {
-		borderColor = Color.ORANGE;
-		borderWidth = 2;
-		updateBorder();
-	}
-
-	public void deactivate() {
-		borderColor = Color.BLACK;
-		borderWidth = 1;
-		updateBorder();
-	}
-
-	private void updateBorder() {
-		setBorder(new CompoundBorder(new EmptyBorder(5,0,5,0),
-				new CompoundBorder(new LineBorder(borderColor, borderWidth), new EmptyBorder(5,5,5,5))));
-	}
-
 	private void initializeContent() {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setOpaque(false);
 		updateBorder();
 
-		String shortForm = getTitle();
+		String shortForm = model.getTitle();
 
 		JPanel header = new JPanel();
 		header.setBackground(Color.WHITE);
@@ -92,11 +74,16 @@ public class ConclusionProcessView extends JPanel implements ConclusionProcessOb
 		c.ipadx = 5;
 		c.anchor = GridBagConstraints.EAST;
 		c.weightx = 0.3;
-		longForm.add(ProofEnvironmentView.createMathematicalLabel("R "), c);
+		longForm.add(ProofEnvironmentView.createMathematicalLabel(model.getStartTerm().serialize()), c);
 
 		add(header);
 		add(separator);
 		add(longForm);
+	}
+
+	private void updateBorder() {
+		setBorder(new CompoundBorder(new EmptyBorder(5,0,5,0),
+				new CompoundBorder(new LineBorder(borderColor, borderWidth), new EmptyBorder(5,5,5,5))));
 	}
 
 	private void displayTransformation(Transformation transformation) {
@@ -117,14 +104,6 @@ public class ConclusionProcessView extends JPanel implements ConclusionProcessOb
 		displayedTransformations++;
 	}
 
-	private String getTitle() {
-		return model.getStartTerm().serialize()
-		+ " "
-		+ (model.getType() == FormulaType.Equality ? "=" : "⊆")
-		+ " "
-		+ model.getLastTerm().serialize();
-	}
-
 	private String justificationText(Justification justification) {
 		if (justification instanceof EnvironmentPremiseJustification)
 			return "(nach Voraussetzung)";
@@ -141,12 +120,25 @@ public class ConclusionProcessView extends JPanel implements ConclusionProcessOb
 
 	@Override
 	public void transformationAdded(Transformation transformation) {
-		titleLabel.setText(getTitle());
 		displayTransformation(transformation);
 	}
 
 	@Override
-	public void transformationRemoved(Transformation transformation) {
-		titleLabel.setText(getTitle());
+	public void titleChanged(String newTitle) {
+		titleLabel.setText(newTitle);
+	}
+
+	@Override
+	public void activated() {
+		borderColor = Color.ORANGE;
+		borderWidth = 2;
+		updateBorder();
+	}
+
+	@Override
+	public void deactivated() {
+		borderColor = Color.BLACK;
+		borderWidth = 1;
+		updateBorder();
 	}
 }
