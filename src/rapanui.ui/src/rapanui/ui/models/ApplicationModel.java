@@ -78,18 +78,33 @@ public class ApplicationModel implements ApplicationObserver {
 		return activeEnvironment;
 	}
 
+	public void removeEnvironment(ProofEnvironmentModel environmentModel) {
+		assert environmentModel != null;
+		app.removeEnvironment(environmentModel.getUnderlyingModel());
+	}
+
 	void loadSuggestions(ProofEnvironment environment, ConclusionProcess conclusion) {
 		// TODO
 	}
 
+	/* ****************************************** *
+	 * private helper methods                     *
+	 * ****************************************** */
+
 	private void activateSelectedEnvironment() {
 		String name = (String)environmentNameModel.getSelectedItem();
-		activeEnvironment = nameModelMap.get(name);
+		activateEnvironment(nameModelMap.get(name));
+	}
+
+	private void activateEnvironment(ProofEnvironmentModel environmentModel) {
+		activeEnvironment = environmentModel;
+		environmentNameModel.setSelectedItem(environmentModel == null ? null : environmentModel.getName());
+
 		for (Observer observer : observers)
 			observer.environmentActivated(activeEnvironment);
 	}
 
-	private ProofEnvironmentModel addEnvironment(ProofEnvironment environment) {
+	private void addEnvironment(ProofEnvironment environment) {
 		String name = "Beweis " + environmentCounter++;
 		ProofEnvironmentModel model = new ProofEnvironmentModel(this, environment, name);
 
@@ -99,12 +114,12 @@ public class ApplicationModel implements ApplicationObserver {
 		environmentModelMap.put(environment, model);
 		nameModelMap.put(name, model);
 
-		return model;
-	}
+		// notify observers about new model
+		for (Observer observer : observers)
+			observer.environmentCreated(model);
 
-	public void removeEnvironment(ProofEnvironmentModel environmentModel) {
-		assert environmentModel != null;
-		app.removeEnvironment(environmentModel.getUnderlyingModel());
+		// activate the newly created model
+		activateEnvironment(model);
 	}
 
 	/* ****************************************** *
@@ -129,10 +144,7 @@ public class ApplicationModel implements ApplicationObserver {
 
 	@Override
 	public void environmentAdded(ProofEnvironment environment) {
-		ProofEnvironmentModel model = addEnvironment(environment);
-		for (Observer observer : observers)
-			observer.environmentCreated(model);
-		// TODO: activate!
+		addEnvironment(environment);
 	}
 
 	@Override
