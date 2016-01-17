@@ -22,9 +22,6 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 	private final JPanel longForm = new JPanel(new GridBagLayout());
 	private JLabel titleLabel;
 
-	private Color borderColor = Color.BLACK;
-	private int borderWidth = 1;
-
 	private int displayedTransformations = 0;
 
 	ConclusionProcessView(ConclusionProcessModel model) {
@@ -81,6 +78,9 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 	}
 
 	private void updateBorder() {
+		Color borderColor = model.isActive() ? Color.ORANGE : Color.BLACK;
+		int borderWidth = model.isActive() ? 2 : 1;
+
 		setBorder(new CompoundBorder(new EmptyBorder(5,0,5,0),
 				new CompoundBorder(new LineBorder(borderColor, borderWidth), new EmptyBorder(5,5,5,5))));
 	}
@@ -129,15 +129,11 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 
 	@Override
 	public void activated() {
-		borderColor = Color.ORANGE;
-		borderWidth = 2;
 		updateBorder();
 	}
 
 	@Override
 	public void deactivated() {
-		borderColor = Color.BLACK;
-		borderWidth = 1;
 		updateBorder();
 	}
 }

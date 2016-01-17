@@ -28,7 +28,6 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentMode
 	private final ProofEnvironmentModel model;
 
 	private final JPanel premisePanel = new JPanel(new GridLayout(0, 4));
-	private ConclusionProcessView activeConclusion;
 
 	private final Map<Formula, JPanel> premiseViewMap = new HashMap<Formula, JPanel>();
 	private final Map<ConclusionProcessModel, ConclusionProcessView> conclusionViewMap
@@ -161,16 +160,6 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentMode
 		conclusionViewMap.put(conclusionModel, view);
 
 		validate(); // make sure new conclusion is actually shown
-	}
-
-	@Deprecated
-	private void activate(ConclusionProcessView conclusion) {
-		if (activeConclusion != conclusion) {
-			if (activeConclusion != null)
-				activeConclusion.deactivated();
-			activeConclusion = conclusion;
-			conclusion.activated();
-		}
 	}
 
 	static JLabel createMathematicalLabel(String text) {

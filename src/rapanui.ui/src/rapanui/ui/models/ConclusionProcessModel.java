@@ -38,7 +38,7 @@ public class ConclusionProcessModel implements ConclusionProcessObserver {
 	}
 
 	public boolean isActive() {
-		return false; // container.getActiveConclusion() == this
+		return container.getActiveConclusion() == this;
 	}
 
 	void onActivate() {

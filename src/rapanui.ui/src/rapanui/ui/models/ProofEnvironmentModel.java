@@ -1,9 +1,7 @@
 package rapanui.ui.models;
 
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.Action;
 import javax.swing.ComboBoxModel;
@@ -24,6 +22,7 @@ public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 
 	private final List<Observer> observers = new LinkedList<Observer>();
 	private final List<ConclusionProcessModel> conclusions = new LinkedList<ConclusionProcessModel>();
+	private ConclusionProcessModel activeConclusion = null;
 
 	public ProofEnvironmentModel(ApplicationModel container, ProofEnvironment env, String name) {
 		assert env != null;
@@ -34,11 +33,8 @@ public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 		this.name = name;
 		this.container = container;
 
-		conclusions.addAll(
-				Arrays.stream(env.getConclusions())
-				.map(conclusion -> new ConclusionProcessModel(this, conclusion))
-				.collect(Collectors.toList())
-		);
+		for (ConclusionProcess conclusion : env.getConclusions())
+			conclusionStarted(conclusion);
 		env.addObserver(this);
 
 		definitionSelectionModel = new DefaultComboBoxModel<String>(container.getRuleSystems().getDefinitionNames());
@@ -65,6 +61,10 @@ public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 		return conclusions.toArray(new ConclusionProcessModel[conclusions.size()]);
 	}
 
+	public ConclusionProcessModel getActiveConclusion() {
+		return activeConclusion;
+	}
+
 	void loadSuggestions(ConclusionProcess conclusion) {
 		container.loadSuggestions(env, conclusion);
 	}
@@ -75,6 +75,16 @@ public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 
 	ProofEnvironment getUnderlyingModel() {
 		return env;
+	}
+
+	void activateConclusion(ConclusionProcessModel conclusionModel) {
+		ConclusionProcessModel previous = activeConclusion;
+		activeConclusion = conclusionModel;
+
+		if (previous != null)
+			previous.onDeactivate();
+		if (activeConclusion != null)
+			activeConclusion.onActivate();
 	}
 
 	/* ****************************************** *
@@ -124,6 +134,8 @@ public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 
 		for (Observer observer : observers)
 			observer.conclusionStarted(model);
+
+		activateConclusion(model);
 	}
 
 	@Override
