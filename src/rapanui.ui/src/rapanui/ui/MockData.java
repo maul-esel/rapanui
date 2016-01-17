@@ -2,6 +2,7 @@ package rapanui.ui;
 
 import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Parser;
+import rapanui.dsl.Builder;
 import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.DslFactory;
 import rapanui.dsl.RuleSystem;
@@ -15,13 +16,10 @@ final class MockData {
 	}
 
 	static DefinitionReference createDefinitionReference(Application app, String term, String defName) {
-		DefinitionReference ref = DslFactory.eINSTANCE.createDefinitionReference();
-		ref.setTarget(Parser.getInstance().parseTerm(term));
-
-		ref.setDefinition(
+		return Builder.createDefinitionReference(
+			Parser.getInstance().parseTerm(term),
 			getRuleSystem(app).getDefinitions().stream().filter(p -> p.getName().equals(defName)).findFirst().orElse(null)
 		);
-		return ref;
 	}
 
 	static void createAndMockConclusionProcess(ProofEnvironment env, String term) {

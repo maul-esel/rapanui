@@ -2,6 +2,8 @@ package rapanui.dsl;
 
 import java.util.Map;
 
+import org.eclipse.emf.ecore.util.EcoreUtil;
+
 public class Translator {
 	private final Map<String, Term> dictionary;
 
@@ -22,22 +24,19 @@ public class Translator {
 	}
 
 	public BinaryOperation translate(BinaryOperation input) {
-		BinaryOperation output = DslFactory.eINSTANCE.createBinaryOperation();
-		output.setLeft(translate(input.getLeft()));
-		output.setOperator(input.getOperator());
-		output.setRight(translate(input.getRight()));
-		return output;
+		return Builder.createBinaryOperation(
+			translate(input.getLeft()),
+			input.getOperator(),
+			translate(input.getRight())
+		);
 	}
 
 	public UnaryOperation translate(UnaryOperation input) {
-		UnaryOperation output = DslFactory.eINSTANCE.createUnaryOperation();
-		output.setOperand(translate(input.getOperand()));
-		output.setOperator(input.getOperator());
-		return output;
+		return Builder.createUnaryOperation(translate(input.getOperand()), input.getOperator());
 	}
 
 	public Term translate(VariableReference input) {
-		return dictionary.get(input.getVariable());
+		return EcoreUtil.copy(dictionary.get(input.getVariable()));
 	}
 
 	public Formula translate(Formula input) {
@@ -51,23 +50,14 @@ public class Translator {
 	}
 
 	public Equation translate(Equation input){
-		Equation output = DslFactory.eINSTANCE.createEquation();
-		output.setLeft(translate(input.getLeft()));
-		output.setRight(translate(input.getRight()));
-		return output;
+		return Builder.createEquation(translate(input.getLeft()), translate(input.getRight()));
 	}
 
 	public Inclusion translate(Inclusion input) {
-		Inclusion output = DslFactory.eINSTANCE.createInclusion();
-		output.setLeft(translate(input.getLeft()));
-		output.setRight(translate(input.getRight()));
-		return output;
+		return Builder.createInclusion(translate(input.getLeft()), translate(input.getRight()));
 	}
 
 	public DefinitionReference translate(DefinitionReference input) {
-		DefinitionReference output = DslFactory.eINSTANCE.createDefinitionReference();
-		output.setTarget(translate(input.getTarget()));
-		output.setDefinition(input.getDefinition());
-		return output;
+		return Builder.createDefinitionReference(translate(input.getTarget()), input.getDefinition());
 	}
 }

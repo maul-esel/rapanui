@@ -1,6 +1,7 @@
 package rapanui.ui.commands;
 
 import rapanui.core.ProofEnvironment;
+import rapanui.dsl.Builder;
 import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.DslFactory;
 import rapanui.dsl.Parser;
@@ -46,10 +47,7 @@ public class CreateDefinitionReferencePremiseCommand extends AbstractCommand {
 			Term target = Parser.getInstance().parseTerm(input);
 			String definitionName = definitionModel.getSelectedItem().toString();
 
-			DefinitionReference reference = DslFactory.eINSTANCE.createDefinitionReference();
-			reference.setTarget(target);
-			reference.setDefinition(app.getRuleSystems().resolveDefinition(definitionName));
-			env.addPremise(reference);
+			env.addPremise(Builder.createDefinitionReference(target, app.getRuleSystems().resolveDefinition(definitionName)));
 
 			inputModel.remove(0, inputModel.getLength());
 		} catch (BadLocationException | IllegalArgumentException e) {
