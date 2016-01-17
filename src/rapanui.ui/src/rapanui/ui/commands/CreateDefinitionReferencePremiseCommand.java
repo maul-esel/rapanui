@@ -2,8 +2,6 @@ package rapanui.ui.commands;
 
 import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Builder;
-import rapanui.dsl.DefinitionReference;
-import rapanui.dsl.DslFactory;
 import rapanui.dsl.Parser;
 import rapanui.dsl.Term;
 import rapanui.ui.models.ApplicationModel;

@@ -4,7 +4,6 @@ import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Parser;
 import rapanui.dsl.Builder;
 import rapanui.dsl.DefinitionReference;
-import rapanui.dsl.DslFactory;
 import rapanui.dsl.RuleSystem;
 
 final class MockData {
