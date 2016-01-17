@@ -1,14 +1,28 @@
 package rapanui.core;
 
+import java.util.Arrays;
+
 import rapanui.dsl.*;
 
 public class SuggestionFinder {
 	private final JustificationFinder justificationFinder;
 	private static final int MAX_RECURSION = 2;
 
+	private static SuggestionFinder defaultInstance;
+
 	public SuggestionFinder(JustificationFinder justificationFinder) {
 		assert justificationFinder != null;
 		this.justificationFinder = justificationFinder;
+	}
+
+	public static SuggestionFinder getDefaultInstance() {
+		if (defaultInstance == null) {
+			AggregateJustificationFinder finder = new AggregateJustificationFinder(Arrays.asList(
+				new PremiseJustificationFinder()
+			));
+			defaultInstance = new SuggestionFinder(finder);
+		}
+		return defaultInstance;
 	}
 
 	public Emitter<Transformation> makeSuggestionsAsync(ConclusionProcess target, FormulaType suggestionType) {
