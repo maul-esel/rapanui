@@ -15,6 +15,10 @@ public class AggregateJustificationFinder implements JustificationFinder {
 		this.finders.addAll(finders);
 	}
 
+	public void addJustificationFinder(JustificationFinder finder) {
+		finders.add(finder);
+	}
+
 	@Override
 	public Emitter<Justification> justifyAsync(ProofEnvironment environment, JustificationRequest request, int recursionDepth) {
 		return Emitter.combine(
