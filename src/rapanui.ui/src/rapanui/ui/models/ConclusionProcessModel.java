@@ -53,7 +53,7 @@ public class ConclusionProcessModel implements ConclusionProcessObserver {
 		clearSuggestions();
 	}
 
-	protected void loadSuggestions() {
+	void loadSuggestions() {
 		container.loadSuggestions(conclusion);
 	}
 
