@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 
 import rapanui.core.ProofEnvironment;
 import rapanui.dsl.RuleSystemCollection;
+import rapanui.ui.models.ApplicationModel;
 
 public class Application {
 	private final List<ApplicationObserver> observers = new ArrayList<ApplicationObserver>();
@@ -15,7 +16,8 @@ public class Application {
 
 	public static void main(String[] args) {
 		Application instance = new Application();
-		new MainWindow(instance);
+		ApplicationModel model = new ApplicationModel(instance);
+		new MainWindow(model);
 	}
 
 	public Application() {

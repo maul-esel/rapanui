@@ -1,11 +1,11 @@
-package rapanui.ui;
+package rapanui.ui.controls;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JComponent;
 
-class CollapseButton extends SimpleLink implements ActionListener {
+public class CollapseButton extends SimpleLink implements ActionListener {
 	private static final long serialVersionUID = 1L;
 
 	boolean isCollapsed;

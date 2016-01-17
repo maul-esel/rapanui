@@ -1,4 +1,4 @@
-package rapanui.ui;
+package rapanui.ui.controls;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -9,6 +9,7 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.Document;
 
 import rapanui.dsl.Parser;
 
@@ -24,30 +25,34 @@ public class SyntaxTextField extends JTextField implements DocumentListener {
 	private final Border defaultBorder;
 
 	public SyntaxTextField(ParsingMode mode) {
-		super();
+		this(mode, null);
+	}
+
+	public SyntaxTextField(ParsingMode mode, Document model /* may be null */) {
+		super(model, null, 0);
 		setFont(mathFont);
 		this.parsingMode = mode;
 		getDocument().addDocumentListener(this);
 		defaultBorder = getBorder();
 	}
 
-	static enum ParsingMode {
+	public static enum ParsingMode {
 		Term,
 		Formula
 	}
 
 	protected void verify() {
-		try {
-			if (parsingMode == ParsingMode.Term)
-				Parser.getInstance().parseTerm(getText());
-			else if (parsingMode == ParsingMode.Formula)
-				Parser.getInstance().parseFormula(getText());
-			isValid = true;
-			setBorder(defaultBorder);
-		} catch (IllegalArgumentException e) {
-			isValid = false;
-			setBorder(getText().isEmpty() ? defaultBorder : invalidBorder);
+		switch (parsingMode) {
+			case Term:
+				isValid = Parser.getInstance().canParseTerm(getText());
+				break;
+			case Formula:
+				isValid = Parser.getInstance().canParseFormula(getText());
+				break;
+			default:
+				isValid = false;
 		}
+		setBorder(getText().isEmpty() || isValid ? defaultBorder : invalidBorder);
 	}
 
 	public boolean isValid() {
