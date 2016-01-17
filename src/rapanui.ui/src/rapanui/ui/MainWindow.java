@@ -126,8 +126,11 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationMo
 
 	@Override
 	public void environmentActivated(ProofEnvironmentModel environmentModel) {
-		String name = environmentModel.getName();
-		((CardLayout)proofContainer.getLayout()).show(proofContainer, name);
+		proofContainer.setVisible(environmentModel != null);
+		if (environmentModel != null) {
+			String name = environmentModel.getName();
+			((CardLayout)proofContainer.getLayout()).show(proofContainer, name);
+		}
 	}
 
 	@Override

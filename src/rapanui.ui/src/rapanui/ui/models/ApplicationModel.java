@@ -138,7 +138,12 @@ public class ApplicationModel implements ApplicationObserver {
 	public static interface Observer {
 		void environmentCreated(ProofEnvironmentModel environmentModel);
 		void environmentDeleted(ProofEnvironmentModel environmentModel);
+
+		/***
+		 * @param environmentModel (may be null)
+		 */
 		void environmentActivated(ProofEnvironmentModel environmentModel);
+
 		void suggestionsLoaded(Transformation[] suggestions);
 	}
 
