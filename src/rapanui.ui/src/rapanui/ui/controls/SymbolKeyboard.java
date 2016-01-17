@@ -1,4 +1,4 @@
-package rapanui.ui;
+package rapanui.ui.controls;
 
 import java.awt.Component;
 import java.awt.GridLayout;
@@ -10,13 +10,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-class SymbolKeyboard extends JPanel {
+public class SymbolKeyboard extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private static final int keyboardLines = 3;
 	private static final char[] keyboardSymbols = { 'I', '˘', '*', '⁺', 'ᶜ', 'Π', '∩', '∪', ';', '\\', '∅', '⊆', '=', '(', ')' };
 
-	SymbolKeyboard() {
+	public SymbolKeyboard() {
 		initializeContent();
 	}
 

@@ -10,11 +10,12 @@ import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import rapanui.ui.controls.*;
+import rapanui.ui.models.*;
+import rapanui.ui.views.*;
+
 import rapanui.core.Transformation;
-import rapanui.ui.controls.SimpleLink;
-import rapanui.ui.models.ApplicationModel;
-import rapanui.ui.models.ProofEnvironmentModel;
-import rapanui.ui.views.ProofEnvironmentView;
+
 
 class MainWindow extends JFrame implements PropertyChangeListener, ApplicationModel.Observer {
 	private static final long serialVersionUID = 1L;
