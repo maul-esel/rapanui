@@ -5,6 +5,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -92,6 +93,15 @@ public abstract class Emitter<T> {
 	 */
 	@SafeVarargs
 	public static <T> Emitter<T> combine(Emitter<? extends T>... emitters) {
+		return combine(Arrays.asList(emitters));
+	}
+
+	/**
+	 * Creates an emitter that collects results from all given emitters.
+	 *
+	 * @param emitters The sources for the combined emitter
+	 */
+	public static <T> Emitter<T> combine(Collection<Emitter<? extends T>> emitters) {
 		return new AggregateEmitter<T>(emitters);
 	}
 
@@ -148,9 +158,9 @@ public abstract class Emitter<T> {
 	}
 
 	protected static class AggregateEmitter<T> extends Emitter<T> {
-		private final Emitter<? extends T>[] generators;
+		private final Collection<Emitter<? extends T>> generators;
 
-		public AggregateEmitter(Emitter<? extends T>[] generators) {
+		public AggregateEmitter(Collection<Emitter<? extends T>> generators) {
 			this.generators = generators;
 			for (Emitter<? extends T> generator : generators)
 				generator.onEmit(this::acceptResult);
@@ -165,7 +175,7 @@ public abstract class Emitter<T> {
 
 		@Override
 		public Iterable<T> getResults() {
-			return Arrays.stream(generators)
+			return generators.stream()
 				.<T>flatMap(generator -> StreamSupport.stream(generator.getResults().spliterator(), false)) // explicit type parameter necessary in OracleJDK
 				.collect(Collectors.toList());
 		}
