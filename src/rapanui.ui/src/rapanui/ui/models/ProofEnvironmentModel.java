@@ -69,6 +69,10 @@ public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 		container.loadSuggestions(env, conclusion);
 	}
 
+	void clearSuggestions() {
+		container.clearSuggestions();
+	}
+
 	ProofEnvironment getUnderlyingModel() {
 		return env;
 	}

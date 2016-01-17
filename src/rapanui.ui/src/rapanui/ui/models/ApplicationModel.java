@@ -87,6 +87,10 @@ public class ApplicationModel implements ApplicationObserver {
 		// TODO
 	}
 
+	void clearSuggestions() {
+		// TODO
+	}
+
 	/* ****************************************** *
 	 * private helper methods                     *
 	 * ****************************************** */

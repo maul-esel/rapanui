@@ -50,10 +50,15 @@ public class ConclusionProcessModel implements ConclusionProcessObserver {
 	void onDeactivate() {
 		for (Observer observer : observers)
 			observer.deactivated();
+		clearSuggestions();
 	}
 
 	protected void loadSuggestions() {
 		container.loadSuggestions(conclusion);
+	}
+
+	void clearSuggestions() {
+		container.clearSuggestions();
 	}
 
 	/* ****************************************** *
