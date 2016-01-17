@@ -16,10 +16,10 @@ public class AggregateJustificationFinder implements JustificationFinder {
 	}
 
 	@Override
-	public Emitter<Justification> justifyAsync(JustificationRequest request) {
+	public Emitter<Justification> justifyAsync(ProofEnvironment environment, JustificationRequest request) {
 		return Emitter.combine(
 			finders.stream()
-			.map(finder -> finder.justifyAsync(request))
+			.map(finder -> finder.justifyAsync(environment, request))
 			.collect(Collectors.toList())
 		);
 	}
