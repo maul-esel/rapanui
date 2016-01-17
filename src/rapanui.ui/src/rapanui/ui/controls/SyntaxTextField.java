@@ -42,17 +42,17 @@ public class SyntaxTextField extends JTextField implements DocumentListener {
 	}
 
 	protected void verify() {
-		try {
-			if (parsingMode == ParsingMode.Term)
-				Parser.getInstance().parseTerm(getText());
-			else if (parsingMode == ParsingMode.Formula)
-				Parser.getInstance().parseFormula(getText());
-			isValid = true;
-			setBorder(defaultBorder);
-		} catch (IllegalArgumentException e) {
-			isValid = false;
-			setBorder(getText().isEmpty() ? defaultBorder : invalidBorder);
+		switch (parsingMode) {
+			case Term:
+				isValid = Parser.getInstance().canParseTerm(getText());
+				break;
+			case Formula:
+				isValid = Parser.getInstance().canParseFormula(getText());
+				break;
+			default:
+				isValid = false;
 		}
+		setBorder(getText().isEmpty() || isValid ? defaultBorder : invalidBorder);
 	}
 
 	public boolean isValid() {
