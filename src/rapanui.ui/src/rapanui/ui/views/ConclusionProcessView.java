@@ -1,6 +1,9 @@
 package rapanui.ui.views;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.*;
 import javax.swing.border.*;
 
@@ -29,6 +32,11 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		this.model = model;
 
 		initializeContent();
+		addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				model.activate();
+			}
+		});
 
 		for (Transformation transformation : model.getTransformations())
 			displayTransformation(transformation);
