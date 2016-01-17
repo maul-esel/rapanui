@@ -20,13 +20,18 @@ import rapanui.ui.commands.*;
 public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 	private final ApplicationModel container;
 	private final ProofEnvironment env;
+	private final String name;
 
 	private final List<Observer> observers = new LinkedList<Observer>();
 	private final List<ConclusionProcessModel> conclusions = new LinkedList<ConclusionProcessModel>();
 
-	public ProofEnvironmentModel(ApplicationModel container, ProofEnvironment env) {
+	public ProofEnvironmentModel(ApplicationModel container, ProofEnvironment env, String name) {
 		assert env != null;
+		assert name!= null;
+		assert container != null;
+
 		this.env = env;
+		this.name = name;
 		this.container = container;
 
 		conclusions.addAll(
@@ -42,6 +47,10 @@ public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 		createDefinitionReferencePremiseCommand = new CreateDefinitionReferencePremiseCommand(
 				env, container, definitionPremiseInputModel, definitionSelectionModel);
 		createConclusionCommand = new CreateConclusionCommand(env, conclusionTermInputModel);
+	}
+
+	public String getName() {
+		return name;
 	}
 
 	/* ****************************************** *
@@ -60,8 +69,7 @@ public class ProofEnvironmentModel implements ProofEnvironmentObserver {
 		container.loadSuggestions(env, conclusion);
 	}
 
-	@Deprecated
-	public ProofEnvironment getUnderlyingModel() {
+	ProofEnvironment getUnderlyingModel() {
 		return env;
 	}
 

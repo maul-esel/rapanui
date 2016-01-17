@@ -28,10 +28,13 @@ public class ApplicationModel implements ApplicationObserver {
 	private final List<ProofEnvironmentModel> environments = new LinkedList<ProofEnvironmentModel>();
 	private ProofEnvironmentModel activeEnvironment = null;
 
-	private final Map<ProofEnvironment, String> environmentNameMap = new HashMap<ProofEnvironment, String>();
-	private final Map<String, ProofEnvironmentModel> environmentModelMap = new HashMap<String, ProofEnvironmentModel>();
+	// needed to proxy environment removals
+	private final Map<ProofEnvironment, ProofEnvironmentModel> environmentModelMap = new HashMap<ProofEnvironment, ProofEnvironmentModel>();
 
-	// use a counter instead of counting existing ones so there are no duplicates after a deletion
+	// needed to activate the environment with the selected name
+	private final Map<String, ProofEnvironmentModel> nameModelMap = new HashMap<String, ProofEnvironmentModel>();
+
+	// needed for environment names (use a counter instead of counting existing ones so there are no duplicates after a deletion)
 	private int environmentCounter = 1;
 
 	public ApplicationModel(Application app) {
@@ -39,7 +42,7 @@ public class ApplicationModel implements ApplicationObserver {
 		this.app = app;
 
 		createEnvironmentCommand = new CreateEnvironmentCommand(app);
-		deleteEnvironmentCommand = new DeleteEnvironmentCommand(this, app);
+		deleteEnvironmentCommand = new DeleteEnvironmentCommand(this);
 
 		environmentNameModel = new DefaultComboBoxModel<String>();
 		environmentNameModel.addListDataListener(new ListDataListener() {
@@ -81,22 +84,27 @@ public class ApplicationModel implements ApplicationObserver {
 
 	private void activateSelectedEnvironment() {
 		String name = (String)environmentNameModel.getSelectedItem();
-		activeEnvironment = environmentModelMap.get(name);
+		activeEnvironment = nameModelMap.get(name);
 		for (Observer observer : observers)
 			observer.environmentActivated(activeEnvironment);
 	}
 
 	private ProofEnvironmentModel addEnvironment(ProofEnvironment environment) {
-		ProofEnvironmentModel model = new ProofEnvironmentModel(this, environment);
 		String name = "Beweis " + environmentCounter++;
+		ProofEnvironmentModel model = new ProofEnvironmentModel(this, environment, name);
 
 		environments.add(model);
 		environmentNameModel.addElement(name);
 
-		environmentNameMap.put(environment, name);
-		environmentModelMap.put(name, model);
+		environmentModelMap.put(environment, model);
+		nameModelMap.put(name, model);
 
 		return model;
+	}
+
+	public void removeEnvironment(ProofEnvironmentModel environmentModel) {
+		assert environmentModel != null;
+		app.removeEnvironment(environmentModel.getUnderlyingModel());
 	}
 
 	/* ****************************************** *
@@ -124,17 +132,18 @@ public class ApplicationModel implements ApplicationObserver {
 		ProofEnvironmentModel model = addEnvironment(environment);
 		for (Observer observer : observers)
 			observer.environmentCreated(model);
+		// TODO: activate!
 	}
 
 	@Override
 	public void environmentRemoved(ProofEnvironment environment) {
-		String name = environmentNameMap.get(environment);
-		ProofEnvironmentModel model = environmentModelMap.get(name);
+		ProofEnvironmentModel model = environmentModelMap.get(environment);
 
-		environmentNameModel.removeElement(name);
+		// update list model before maps in case this triggers any events
+		environmentNameModel.removeElement(model.getName());
 
-		environmentNameMap.remove(environment);
-		environmentModelMap.remove(name);
+		environmentModelMap.remove(environment);
+		nameModelMap.remove(model.getName());
 
 		for (Observer observer : observers)
 			observer.environmentDeleted(model);

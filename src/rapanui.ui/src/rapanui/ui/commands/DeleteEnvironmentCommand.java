@@ -1,27 +1,24 @@
 package rapanui.ui.commands;
 
 import rapanui.core.Transformation;
-import rapanui.ui.Application;
 import rapanui.ui.models.ApplicationModel;
 import rapanui.ui.models.ProofEnvironmentModel;
 
 public class DeleteEnvironmentCommand extends AbstractCommand implements ApplicationModel.Observer {
 	private static final long serialVersionUID = 1L;
 
-	private final Application app;
 	private final ApplicationModel appModel;
 
-	public DeleteEnvironmentCommand(ApplicationModel appModel, Application app) {
+	public DeleteEnvironmentCommand(ApplicationModel appModel) {
 		super("\u2718", "Aktuellen Beweis löschen");
-		this.app = app;
 		this.appModel = appModel;
 
-		appModel.addObserver(this);		
+		appModel.addObserver(this);
 	}
 
 	@Override
 	public void execute() {
-		app.removeEnvironment(appModel.getActiveEnvironment().getUnderlyingModel());
+		appModel.removeEnvironment(appModel.getActiveEnvironment());
 	}
 
 	@Override
@@ -29,19 +26,25 @@ public class DeleteEnvironmentCommand extends AbstractCommand implements Applica
 		return appModel.getActiveEnvironment() != null;
 	}
 
+	/* ****************************************** *
+	 * ApplicationModel.Observer                  *
+	 * ****************************************** */
+
 	@Override
 	public void environmentDeleted(ProofEnvironmentModel environmentModel) {
 		updateEnabled();
 	}
 
 	@Override
-	public void environmentCreated(ProofEnvironmentModel environmentModel) {}
+	public void environmentCreated(ProofEnvironmentModel environmentModel) {
+		updateEnabled();
+	}
 
 	@Override
-	public void environmentActivated(ProofEnvironmentModel environmentModel) {}
+	public void environmentActivated(ProofEnvironmentModel environmentModel) {
+		updateEnabled();
+	}
 
 	@Override
 	public void suggestionsLoaded(Transformation[] suggestions) {}
-
-	
 }
