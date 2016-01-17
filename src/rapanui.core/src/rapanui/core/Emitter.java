@@ -95,13 +95,19 @@ public abstract class Emitter<T> {
 	}
 
 	/**
+	 * Creates an emitter that only relays the first object emitted by its source
+	 */
+	public Emitter<T> first() {
+		return first(1);
+	}
+
+	/**
 	 * Creates an emitter that only relays the first few objects emitted by its source
 	 *
-	 * @param source The source emitter
 	 * @param count How many objects emitted by the source should be emitted by the new emitter
 	 */
-	public static <T> Emitter<T> first(Emitter<T> source, int count) {
-		return new HeadEmitter<T>(source, count);
+	public Emitter<T> first(int count) {
+		return new HeadEmitter<T>(this, count);
 	}
 
 	protected static class HeadEmitter<T> extends Emitter<T> {
