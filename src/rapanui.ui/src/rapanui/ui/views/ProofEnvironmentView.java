@@ -31,8 +31,8 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentMode
 	private ConclusionProcessView activeConclusion;
 
 	private final Map<Formula, JPanel> premiseViewMap = new HashMap<Formula, JPanel>();
-	private final Map<ConclusionProcessModel, JPanel> conclusionViewMap
-		= new HashMap<ConclusionProcessModel, JPanel>();
+	private final Map<ConclusionProcessModel, ConclusionProcessView> conclusionViewMap
+		= new HashMap<ConclusionProcessModel, ConclusionProcessView>();
 
 	public ProofEnvironmentView(ProofEnvironmentModel model) {
 		assert model != null;
