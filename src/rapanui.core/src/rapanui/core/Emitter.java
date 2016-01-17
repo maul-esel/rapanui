@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -110,6 +111,15 @@ public abstract class Emitter<T> {
 		return new HeadEmitter<T>(this, count);
 	}
 
+	/**
+	 * Creates an emitter that applies the given conversion on each emitted object
+	 *
+	 * @param conversion A function that is applied to objects emitted by this instance before they are re-emitted
+	 */
+	public <R> Emitter<R> map(Function<T,R> conversion) {
+		return new MapEmitter<T,R>(this, conversion);
+	}
+
 	protected static class HeadEmitter<T> extends Emitter<T> {
 		private int count;
 		private final Emitter<T> source;
@@ -128,6 +138,12 @@ public abstract class Emitter<T> {
 				if (count <= 0)
 					source.stop();
 			}
+		}
+	}
+
+	protected static class MapEmitter<T,R> extends Emitter<R> {
+		public MapEmitter(Emitter<T> source, Function<T,R> converter) {
+			source.onEmit(s -> acceptResult(converter.apply(s)));
 		}
 	}
 
