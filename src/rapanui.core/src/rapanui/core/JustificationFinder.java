@@ -9,8 +9,9 @@ public interface JustificationFinder {
 	 *
 	 * @param environment The environment which can be used for justifications
 	 * @param request Describes the kind of formulas that should be justified
+	 * @param recursionDepth The maximum number of recursion levels
 	 *
 	 * @return An emitter that emits a new justification whenever it finds one.
 	 */
-	Emitter<Justification> justifyAsync(ProofEnvironment environment, JustificationRequest request);
+	Emitter<Justification> justifyAsync(ProofEnvironment environment, JustificationRequest request, int recursionDepth);
 }

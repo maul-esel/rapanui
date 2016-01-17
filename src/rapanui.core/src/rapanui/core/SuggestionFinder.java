@@ -4,6 +4,7 @@ import rapanui.dsl.*;
 
 public class SuggestionFinder {
 	private final JustificationFinder justificationFinder;
+	private static final int MAX_RECURSION = 2;
 
 	public SuggestionFinder(JustificationFinder justificationFinder) {
 		assert justificationFinder != null;
@@ -12,7 +13,7 @@ public class SuggestionFinder {
 
 	public Emitter<Transformation> makeSuggestionsAsync(ConclusionProcess target, FormulaType suggestionType) {
 		JustificationRequest request = new JustificationRequest(target.getLastTerm(), suggestionType, null);
-		return justificationFinder.justifyAsync(target.getEnvironment(), request)
+		return justificationFinder.justifyAsync(target.getEnvironment(), request, MAX_RECURSION)
 			.map(justification -> createTransformation(target, justification));
 	}
 
