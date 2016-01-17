@@ -144,7 +144,7 @@ public abstract class Emitter<T> {
 		@Override
 		public Iterable<T> getResults() {
 			return Arrays.stream(generators)
-				.flatMap(generator -> StreamSupport.stream(generator.getResults().spliterator(), false))
+				.<T>flatMap(generator -> StreamSupport.stream(generator.getResults().spliterator(), false)) // explicit type parameter necessary in OracleJDK
 				.collect(Collectors.toList());
 		}
 	}
