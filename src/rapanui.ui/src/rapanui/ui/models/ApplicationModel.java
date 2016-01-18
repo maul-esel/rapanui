@@ -13,6 +13,7 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import rapanui.core.ConclusionProcess;
+import rapanui.core.Emitter;
 import rapanui.core.ProofEnvironment;
 import rapanui.core.Transformation;
 import rapanui.dsl.RuleSystemCollection;
@@ -28,6 +29,8 @@ public class ApplicationModel implements ApplicationObserver {
 
 	private final List<ProofEnvironmentModel> environments = new LinkedList<ProofEnvironmentModel>();
 	private ProofEnvironmentModel activeEnvironment = null;
+
+	private Emitter<Transformation> activeSuggestionSource = null;
 
 	// needed to proxy environment removals
 	private final Map<ProofEnvironment, ProofEnvironmentModel> environmentModelMap = new HashMap<ProofEnvironment, ProofEnvironmentModel>();
@@ -89,11 +92,23 @@ public class ApplicationModel implements ApplicationObserver {
 	}
 
 	void loadSuggestions(ProofEnvironment environment, ConclusionProcess conclusion) {
-		// TODO
+		if (activeSuggestionSource != null)
+			clearSuggestions();
+
+		activeSuggestionSource = app.loadSuggestions(conclusion, null); // TODO: make suggestionType configurable via UI
+		activeSuggestionSource.onEmit(this::displaySuggestion);
 	}
 
 	void clearSuggestions() {
-		// TODO
+		if (activeSuggestionSource != null) {
+			activeSuggestionSource.removeListener(this::displaySuggestion);
+			activeSuggestionSource = null;
+		}
+		suggestionListModel.clear();
+	}
+
+	private void displaySuggestion(Transformation suggestion) {
+		suggestionListModel.addElement(suggestion);
 	}
 
 	/* ****************************************** *
