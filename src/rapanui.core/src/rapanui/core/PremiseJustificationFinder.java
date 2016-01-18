@@ -16,8 +16,11 @@ public class PremiseJustificationFinder implements JustificationFinder {
 		for (Formula premise : environment.getPremises()) { // TODO: resolved premises
 			if (matchesRequest(request, premise))
 				acceptor.accept(new EnvironmentPremiseJustification(premise));
-			else if (premise instanceof Equation && matchesRequest(request, Builder.reverse((Equation)premise)))
-				acceptor.accept(new EnvironmentPremiseJustification(premise));
+			else if (premise instanceof Equation) {
+				Formula reversedPremise = Builder.reverse((Equation)premise);
+				if (matchesRequest(request, reversedPremise))
+					acceptor.accept(new EnvironmentPremiseJustification(reversedPremise));
+			}
 		}
 	}
 
