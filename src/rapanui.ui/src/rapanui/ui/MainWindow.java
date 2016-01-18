@@ -26,6 +26,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationMo
 	private final SymbolKeyboard keyboard = new SymbolKeyboard();
 	private final JPanel proofContainer = new JPanel(new CardLayout());
 	private final JComboBox<String> proofList = new JComboBox<String>();
+	private final JList<Transformation> suggestionList = new JList<Transformation>();
 
 	private final Map<ProofEnvironmentModel, ProofEnvironmentView> environmentViewMap = new HashMap<ProofEnvironmentModel, ProofEnvironmentView>();
 
@@ -81,9 +82,12 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationMo
 		leftPanel.add(scrollContainer, BorderLayout.CENTER);
 		leftPanel.add(keyboard, BorderLayout.SOUTH);
 
-		JPanel suggestionPanel = new JPanel();
+		suggestionList.setModel(appModel.suggestionListModel);
+
+		JPanel suggestionPanel = new JPanel(new BorderLayout());
 		suggestionPanel.setBackground(Color.WHITE);
 		suggestionPanel.add(new JLabel("Vorschläge"), BorderLayout.NORTH);
+		suggestionPanel.add(suggestionList, BorderLayout.CENTER);
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, suggestionPanel);
 		rootPane.getContentPane().add(splitter, BorderLayout.CENTER);

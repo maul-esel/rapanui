@@ -7,6 +7,7 @@ import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.MutableComboBoxModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
@@ -56,6 +57,9 @@ public class ApplicationModel implements ApplicationObserver {
 			public void intervalRemoved(ListDataEvent e) {}
 		});
 
+		suggestionListModel = new DefaultListModel<Transformation>();
+		// TODO: add event listeners (?)
+
 		for (ProofEnvironment env : app.getEnvironments())
 			addEnvironment(env);
 		app.addObserver(this);
@@ -65,6 +69,7 @@ public class ApplicationModel implements ApplicationObserver {
 	public final Action deleteEnvironmentCommand;
 
 	public final MutableComboBoxModel<String> environmentNameModel;
+	public final DefaultListModel<Transformation> suggestionListModel;
 
 	public RuleSystemCollection getRuleSystems() {
 		return app.getRuleSystems();
