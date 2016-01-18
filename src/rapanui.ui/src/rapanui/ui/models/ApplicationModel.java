@@ -111,6 +111,15 @@ public class ApplicationModel implements ApplicationObserver {
 		suggestionListModel.addElement(suggestion);
 	}
 
+	public void applySuggestion(Transformation suggestion) {
+		assert suggestion != null;
+
+		clearSuggestions();
+		app.applySuggestion(suggestion.getContainer(), suggestion);
+
+		loadSuggestions(suggestion.getContainer().getEnvironment(), suggestion.getContainer());
+	}
+
 	/* ****************************************** *
 	 * private helper methods                     *
 	 * ****************************************** */
