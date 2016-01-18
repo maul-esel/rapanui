@@ -152,8 +152,16 @@ public abstract class Emitter<T> {
 	}
 
 	protected static class MapEmitter<T,R> extends Emitter<R> {
+		private final Emitter<T> source;
+
 		public MapEmitter(Emitter<T> source, Function<T,R> converter) {
+			this.source = source;
 			source.onEmit(s -> acceptResult(converter.apply(s)));
+		}
+
+		@Override
+		public synchronized void stop() {
+			source.stop();
 		}
 	}
 
