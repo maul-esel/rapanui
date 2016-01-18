@@ -132,9 +132,4 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationMo
 			((CardLayout)proofContainer.getLayout()).show(proofContainer, name);
 		}
 	}
-
-	@Override
-	public void suggestionsLoaded(Transformation[] suggestions) {
-		// TODO
-	}
 }

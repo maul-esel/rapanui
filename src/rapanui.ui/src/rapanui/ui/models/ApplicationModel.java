@@ -147,8 +147,6 @@ public class ApplicationModel implements ApplicationObserver {
 		 * @param environmentModel (may be null)
 		 */
 		void environmentActivated(ProofEnvironmentModel environmentModel);
-
-		void suggestionsLoaded(Transformation[] suggestions);
 	}
 
 	@Override
