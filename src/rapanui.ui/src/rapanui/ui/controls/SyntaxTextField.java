@@ -16,7 +16,7 @@ import rapanui.dsl.Parser;
 public class SyntaxTextField extends JTextField implements DocumentListener {
 	private static final long serialVersionUID = 1L;
 
-	private static final Font mathFont = new Font("DejaVu Sans", Font.PLAIN, 14);
+	private static final Font mathFont = new Font("DejaVu Sans Mono", Font.PLAIN, 14);
 	private static final Border invalidBorder = new LineBorder(Color.red);
 
 	private boolean isValid = true;
