@@ -61,7 +61,6 @@ public class ApplicationModel implements ApplicationObserver {
 		});
 
 		suggestionListModel = new DefaultListModel<Transformation>();
-		// TODO: add event listeners (?)
 
 		for (ProofEnvironment env : app.getEnvironments())
 			addEnvironment(env);

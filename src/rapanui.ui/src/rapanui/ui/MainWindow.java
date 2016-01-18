@@ -1,6 +1,8 @@
 package rapanui.ui;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -83,6 +85,17 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationMo
 		leftPanel.add(keyboard, BorderLayout.SOUTH);
 
 		suggestionList.setModel(appModel.suggestionListModel);
+		suggestionList.setCellRenderer(new SuggestionListCellRenderer());
+		suggestionList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
+					int index = suggestionList.locationToIndex(e.getPoint());
+					Transformation suggestion = suggestionList.getModel().getElementAt(index);
+					appModel.applySuggestion(suggestion);
+				}
+			}
+		});
 
 		JPanel suggestionPanel = new JPanel(new BorderLayout());
 		suggestionPanel.setBackground(Color.WHITE);
