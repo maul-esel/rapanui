@@ -23,7 +23,7 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentMode
 	// ugly hack: use this instead of Integer.MAX_VALUE to avoid integer overflow
 	private static final int MAX_WIDTH = 5000;
 
-	private static final Font mathFont = new Font("Courier New", Font.PLAIN, 14);
+	private static final Font mathFont = new Font("DejaVu Sans", Font.PLAIN, 14);
 
 	private final ProofEnvironmentModel model;
 
