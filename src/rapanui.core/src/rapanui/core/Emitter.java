@@ -102,6 +102,15 @@ public abstract class Emitter<T> {
 	}
 
 	/**
+	 * Creates an empty emitter that emits no items.
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 */
+	public static <T> Emitter<T> empty() {
+		return new Emitter<T>() {};
+	}
+
+	/**
 	 * Creates an emitter that collects results from all given emitters.
 	 *
 	 * @param emitters The sources for the combined emitter. Must not be null nor contain null-values.
