@@ -19,7 +19,7 @@ import rapanui.core.Transformation;
 
 class MainWindow extends JFrame implements PropertyChangeListener, ApplicationModel.Observer {
 	private static final long serialVersionUID = 1L;
-	private static final String TITLE = "RAPA nui – Relational Algebra Proof Assistant";
+	private static final String TITLE = "RAPA NUI – Relational Algebra Proof Assistant 'N User Interface";
 
 	private final ApplicationModel appModel;
 
