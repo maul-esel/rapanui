@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil
 import java.util.stream.Collectors
 
 type StringArray wraps String[]
+type Visitor wraps rapanui.dsl.Visitor
 
 class RuleSystem {
 	contains Rule[] rules
@@ -14,6 +15,12 @@ class RuleSystem {
 
 	op StringArray getDefinitionNames() {
 		definitions.stream().map[ name ].collect(Collectors.toList())
+	}
+
+	op void accept(Visitor v) {
+		definitions.forEach[ accept(v) ]
+		rules.forEach[ accept(v) ]
+		v.visit(this);
 	}
 }
 
@@ -41,10 +48,19 @@ interface PremiseContainer {
 class Rule extends PremiseContainer {
 	String name
 	contains Formula[] conclusions
+
+	op void accept(Visitor v) {
+		premises.forEach[ accept(v) ]
+		conclusions.forEach[ accept(v) ]
+	}
 }
 class Definition extends PremiseContainer {
 	String name
 	String target
+
+	op void accept(Visitor v) {
+		premises.forEach[ accept(v) ]
+	}
 }
 
 abstract class Formula {
@@ -55,18 +71,39 @@ abstract class Formula {
 	op String serialize() {
 		Serializer.getInstance().serialize(this);
 	}
+
+	op void accept(Visitor v) {
+		v.visit(this)
+	}
 }
 class Equation extends Formula {
 	contains Term left
 	contains Term right
+
+	op void accept(Visitor v) {
+		left.accept(v)
+		right.accept(v)
+		v.visit(this)
+	}
 }
 class Inclusion extends Formula {
 	contains Term left
 	contains Term right
+
+	op void accept(Visitor v) {
+		left.accept(v)
+		right.accept(v)
+		v.visit(this)
+	}
 }
 class DefinitionReference extends Formula {
 	contains Term target
 	refers Definition definition
+
+	op void accept(Visitor v) {
+		target.accept(v)
+		v.visit(this)
+	}
 }
 
 
@@ -78,21 +115,44 @@ abstract class Term {
 	op String serialize() {
 		Serializer.getInstance().serialize(this);
 	}
+
+	op void accept(Visitor v) {
+		v.visit(this)
+	}
 }
 class VariableReference extends Term {
 	String variable
+
+	op void accept(Visitor v) {
+		v.visit(this)
+	}
 }
 class ConstantReference extends Term {
 	String constant
+
+	op void accept(Visitor v) {
+		v.visit(this)
+	}
 }
 class UnaryOperation extends Term {
 	contains Term operand
 	POSTFIX_UNARY_OPERATOR operator
+
+	op void accept(Visitor v) {
+		operand.accept(v)
+		v.visit(this)
+	}
 }
 class BinaryOperation extends Term {
 	contains Term left
 	contains Term right
 	BINARY_OPERATOR operator
+
+	op void accept(Visitor v) {
+		left.accept(v)
+		right.accept(v)
+		v.visit(this)
+	}
 }
 
 enum POSTFIX_UNARY_OPERATOR {
