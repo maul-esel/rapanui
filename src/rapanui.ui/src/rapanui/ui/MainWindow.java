@@ -40,6 +40,7 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationMo
 
 		for (ProofEnvironmentModel environment : appModel.getEnvironments())
 			createEnvironmentView(environment);
+		environmentActivated(appModel.getActiveEnvironment());
 		appModel.addObserver(this);
 
 		pack();
