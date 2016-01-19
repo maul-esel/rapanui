@@ -6,13 +6,13 @@ public interface Visitor {
 	default void visit(Definition definition) {}
 
 	default void visit(Formula formula) {};
-	default void visit(Equation equation) {};
-	default void visit(Inclusion inclusion) {};
-	default void visit(DefinitionReference reference) {};
+	default void visit(Equation equation) { visit((Formula)equation); }
+	default void visit(Inclusion inclusion) { visit((Inclusion)inclusion); }
+	default void visit(DefinitionReference reference) { visit((DefinitionReference)reference); }
 
 	default void visit(Term term) {};
-	default void visit(VariableReference variable) {};
-	default void visit(ConstantReference constant) {};
-	default void visit(BinaryOperation operation) {};
-	default void visit(UnaryOperation operation) {};
+	default void visit(VariableReference variable) { visit((Term)variable); }
+	default void visit(ConstantReference constant) { visit((Term)constant); }
+	default void visit(BinaryOperation operation) { visit((Term)operation); }
+	default void visit(UnaryOperation operation) { visit((Term)operation); }
 }
