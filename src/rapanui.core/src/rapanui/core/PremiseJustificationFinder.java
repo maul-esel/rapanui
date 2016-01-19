@@ -4,14 +4,19 @@ import java.util.function.Consumer;
 
 import rapanui.dsl.*;
 
+/**
+ * A @see JustificationFinder implementation that searches the environment's premises.
+ */
 public class PremiseJustificationFinder implements JustificationFinder {
-
 	@Override
 	public Emitter<Justification> justifyAsync(ProofEnvironment environment, JustificationRequest request,
 			int recursionDepth) {
 		return Emitter.fromResultComputation(acceptor -> searchPremises(environment, request, acceptor));
 	}
 
+	/**
+	 * Internal method that does the actual search (called asynchronously).
+	 */
 	protected void searchPremises(ProofEnvironment environment, JustificationRequest request, Consumer<Justification> acceptor) {
 		for (Formula premise : environment.getPremises()) { // TODO: resolved premises
 			if (matchesRequest(request, premise))
@@ -21,6 +26,9 @@ public class PremiseJustificationFinder implements JustificationFinder {
 		}
 	}
 
+	/**
+	 * Helper method to determine if a formula matches a given @see JustificationRequest.
+	 */
 	private boolean matchesRequest(JustificationRequest request, Formula premise) {
 		if (premise instanceof Inclusion) {
 			Inclusion inclusion = (Inclusion) premise;

@@ -18,10 +18,11 @@ public class ProofEnvironment {
 	private final List<Formula> premises;
 	private final List<ConclusionProcess> conclusions;
 	private final List<ProofEnvironmentObserver> observers;
+
 	/**
 	 * Create a new environment.
 	 *
-	 * @param ruleSystems The rule systems upon which any conclusions in the environment are based (must not be null)
+	 * @param ruleSystems The rule systems upon which any conclusions in the environment are based. Mmust not be null.
 	 */
 	public ProofEnvironment(RuleSystemCollection ruleSystems) {
 		assert ruleSystems != null;
@@ -39,7 +40,7 @@ public class ProofEnvironment {
 	/**
 	 * Add a new premise to the environment so it can be used in conclusions.
 	 *
-	 * @param premise The formula to add as premise (must not be null)
+	 * @param premise The formula to add as premise. Must not be null.
 	 *
 	 * If the premise already exists in the environment, it will not be added again.
 	 */
@@ -49,6 +50,9 @@ public class ProofEnvironment {
 			notifyObservers(observers, ProofEnvironmentObserver::premiseAdded, premise);
 	}
 
+	/**
+	 * @return An array of premises. Guaranteed to be non-null.
+	 */
 	public Formula[] getPremises() {
 		return listToArray(premises, Formula[]::new);
 	}
@@ -56,7 +60,7 @@ public class ProofEnvironment {
 	/**
 	 * Starts a new conclusion process in the environment.
 	 *
-	 * @param startTerm The initial term of the conclusion (must not be null)
+	 * @param startTerm The initial term of the conclusion. Must not be null.
 	 */
 	public void addConclusion(Term startTerm) {
 		assert startTerm != null;
