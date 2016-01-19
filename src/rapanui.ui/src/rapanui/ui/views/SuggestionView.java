@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.border.LineBorder;
 
 import rapanui.core.*;
-import rapanui.ui.controls.SimpleLink;
 
 public class SuggestionView extends JPanel {
 	private static final long serialVersionUID = 1L;
