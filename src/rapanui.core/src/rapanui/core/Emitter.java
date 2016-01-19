@@ -214,16 +214,16 @@ public abstract class Emitter<T> {
 	protected static class ThreadedEmitter<T> extends Emitter<T> {
 		protected static final ExecutorService executor = Executors.newCachedThreadPool();
 
-		protected final Future<?> underlyingPromise;
+		protected final Future<?> underlyingFuture;
 
 		public ThreadedEmitter(Consumer<Consumer<T>> generator) {
-			underlyingPromise = executor.submit(() -> generator.accept(this::acceptResult));
+			underlyingFuture = executor.submit(() -> generator.accept(this::acceptResult));
 		}
 
 		@Override
 		public void stop() {
-			if (!underlyingPromise.isDone())
-				underlyingPromise.cancel(true);
+			if (!underlyingFuture.isDone())
+				underlyingFuture.cancel(true);
 			super.stop();
 		}
 	}
