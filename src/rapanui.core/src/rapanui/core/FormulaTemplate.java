@@ -1,5 +1,8 @@
 package rapanui.core;
 
+import rapanui.dsl.Equation;
+import rapanui.dsl.Formula;
+import rapanui.dsl.Inclusion;
 import rapanui.dsl.Term;
 
 /**
@@ -64,5 +67,27 @@ public class FormulaTemplate {
 	 */
 	public boolean hasRightTerm() {
 		return rightTerm != null;
+	}
+
+	/**
+	 * @return True if the given formula matches the template, false otherwise.
+	 */
+	public boolean isTemplateFor(Formula instance) {
+		Term left, right;
+		FormulaType type;
+
+		if (instance instanceof Inclusion) {
+			left = ((Inclusion)instance).getLeft();
+			right = ((Inclusion)instance).getRight();
+			type = FormulaType.Inclusion;
+		} else if (instance instanceof Equation) {
+			left = ((Equation)instance).getLeft();
+			right = ((Equation)instance).getRight();
+			type = FormulaType.Equality;
+		} else
+			return false; // TODO: maybe log a warning?
+
+		return (!hasFormulaType() || getFormulaType() == type) && (!hasLeftTerm() || getLeftTerm().structurallyEquals(left))
+				&& (!hasRightTerm() || getRightTerm().structurallyEquals(right));
 	}
 }

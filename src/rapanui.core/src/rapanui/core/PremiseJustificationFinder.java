@@ -19,28 +19,10 @@ public class PremiseJustificationFinder implements JustificationFinder {
 	 */
 	protected void searchPremises(ProofEnvironment environment, FormulaTemplate formulaTemplate, Consumer<Justification> acceptor) {
 		for (Formula premise : environment.getPremises()) { // TODO: resolved premises
-			if (matchesTemplate(formulaTemplate, premise))
+			if (formulaTemplate.isTemplateFor(premise))
 				acceptor.accept(new EnvironmentPremiseJustification(premise));
-			else if (premise instanceof Equation && matchesTemplate(formulaTemplate, Builder.reverse((Equation)premise)))
+			else if (premise instanceof Equation && formulaTemplate.isTemplateFor(Builder.reverse((Equation)premise)))
 				acceptor.accept(new EnvironmentPremiseJustification(premise));
 		}
-	}
-
-	/**
-	 * Helper method to determine if a formula matches a given @see FormulaTemplate.
-	 */
-	private boolean matchesTemplate(FormulaTemplate template, Formula formula) {
-		if (formula instanceof Inclusion) {
-			Inclusion inclusion = (Inclusion) formula;
-			return (!template.hasFormulaType() || template.getFormulaType() == FormulaType.Inclusion)
-					&& (!template.hasLeftTerm() || template.getLeftTerm().structurallyEquals(inclusion.getLeft()))
-					&& (!template.hasRightTerm() || template.getRightTerm().structurallyEquals(inclusion.getRight()));
-		} else if (formula instanceof Equation) {
-			Equation equation = (Equation) formula;
-			return (!template.hasFormulaType() || template.getFormulaType() == FormulaType.Equality)
-					&& (!template.hasLeftTerm() || template.getLeftTerm().structurallyEquals(equation.getLeft()))
-					&& (!template.hasRightTerm() || template.getRightTerm().structurallyEquals(equation.getRight()));
-		}
-		return false;
 	}
 }
