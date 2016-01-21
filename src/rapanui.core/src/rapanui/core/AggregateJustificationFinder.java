@@ -44,10 +44,10 @@ public class AggregateJustificationFinder implements JustificationFinder {
 	 * @return An emitter that combines the emitters returned by all the employed instances.
 	 */
 	@Override
-	public Emitter<Justification> justifyAsync(ProofEnvironment environment, JustificationRequest request, int recursionDepth) {
+	public Emitter<Justification> justifyAsync(ProofEnvironment environment, FormulaTemplate formulaTemplate, int recursionDepth) {
 		return Emitter.combine(
 			finders.stream()
-			.map(finder -> finder.justifyAsync(environment, request, recursionDepth))
+			.map(finder -> finder.justifyAsync(environment, formulaTemplate, recursionDepth))
 			.collect(Collectors.toList())
 		);
 	}

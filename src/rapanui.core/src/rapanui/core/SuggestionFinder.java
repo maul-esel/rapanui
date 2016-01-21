@@ -26,8 +26,8 @@ public class SuggestionFinder {
 	}
 
 	public Emitter<Transformation> makeSuggestionsAsync(ConclusionProcess target, FormulaType suggestionType) {
-		JustificationRequest request = new JustificationRequest(target.getLastTerm(), suggestionType, null);
-		return justificationFinder.justifyAsync(target.getEnvironment(), request, MAX_RECURSION)
+		FormulaTemplate template = new FormulaTemplate(target.getLastTerm(), suggestionType, null);
+		return justificationFinder.justifyAsync(target.getEnvironment(), template, MAX_RECURSION)
 			.map(justification -> createTransformation(target, justification));
 	}
 

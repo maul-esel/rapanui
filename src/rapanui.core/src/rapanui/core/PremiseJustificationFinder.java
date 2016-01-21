@@ -9,37 +9,37 @@ import rapanui.dsl.*;
  */
 public class PremiseJustificationFinder implements JustificationFinder {
 	@Override
-	public Emitter<Justification> justifyAsync(ProofEnvironment environment, JustificationRequest request,
+	public Emitter<Justification> justifyAsync(ProofEnvironment environment, FormulaTemplate formulaTemplate,
 			int recursionDepth) {
-		return Emitter.fromResultComputation(acceptor -> searchPremises(environment, request, acceptor));
+		return Emitter.fromResultComputation(acceptor -> searchPremises(environment, formulaTemplate, acceptor));
 	}
 
 	/**
 	 * Internal method that does the actual search (called asynchronously).
 	 */
-	protected void searchPremises(ProofEnvironment environment, JustificationRequest request, Consumer<Justification> acceptor) {
+	protected void searchPremises(ProofEnvironment environment, FormulaTemplate formulaTemplate, Consumer<Justification> acceptor) {
 		for (Formula premise : environment.getPremises()) { // TODO: resolved premises
-			if (matchesRequest(request, premise))
+			if (matchesTemplate(formulaTemplate, premise))
 				acceptor.accept(new EnvironmentPremiseJustification(premise));
-			else if (premise instanceof Equation && matchesRequest(request, Builder.reverse((Equation)premise)))
+			else if (premise instanceof Equation && matchesTemplate(formulaTemplate, Builder.reverse((Equation)premise)))
 				acceptor.accept(new EnvironmentPremiseJustification(premise));
 		}
 	}
 
 	/**
-	 * Helper method to determine if a formula matches a given @see JustificationRequest.
+	 * Helper method to determine if a formula matches a given @see FormulaTemplate.
 	 */
-	private boolean matchesRequest(JustificationRequest request, Formula premise) {
-		if (premise instanceof Inclusion) {
-			Inclusion inclusion = (Inclusion) premise;
-			return (request.getType() == FormulaType.Inclusion || request.getType() == null)
-					&& (request.getLeft() == null || request.getLeft().structurallyEquals(inclusion.getLeft()))
-					&& (request.getRight() == null || request.getRight().structurallyEquals(inclusion.getRight()));
-		} else if (premise instanceof Equation) {
-			Equation equation = (Equation) premise;
-			return (request.getType() == null || request.getType() == FormulaType.Equality)
-					&& (request.getLeft() == null || request.getLeft().structurallyEquals(equation.getLeft()))
-					&& (request.getRight() == null || request.getRight().structurallyEquals(equation.getRight()));
+	private boolean matchesTemplate(FormulaTemplate template, Formula formula) {
+		if (formula instanceof Inclusion) {
+			Inclusion inclusion = (Inclusion) formula;
+			return (!template.hasFormulaType() || template.getFormulaType() == FormulaType.Inclusion)
+					&& (!template.hasLeftTerm() || template.getLeftTerm().structurallyEquals(inclusion.getLeft()))
+					&& (!template.hasRightTerm() || template.getRightTerm().structurallyEquals(inclusion.getRight()));
+		} else if (formula instanceof Equation) {
+			Equation equation = (Equation) formula;
+			return (!template.hasFormulaType() || template.getFormulaType() == FormulaType.Equality)
+					&& (!template.hasLeftTerm() || template.getLeftTerm().structurallyEquals(equation.getLeft()))
+					&& (!template.hasRightTerm() || template.getRightTerm().structurallyEquals(equation.getRight()));
 		}
 		return false;
 	}
