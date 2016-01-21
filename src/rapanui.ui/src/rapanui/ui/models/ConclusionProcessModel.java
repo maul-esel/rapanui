@@ -25,7 +25,7 @@ public class ConclusionProcessModel implements ConclusionProcessObserver {
 	public String getTitle() {
 		return String.format("%s %s %s",
 				conclusion.getStartTerm().serialize(),
-				(conclusion.getType() == FormulaType.Equality ? "=" : "⊆"),
+				(conclusion.getType() == FormulaType.EQUATION ? "=" : "⊆"),
 				conclusion.getLastTerm().serialize());
 	}
 

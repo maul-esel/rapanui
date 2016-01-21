@@ -85,7 +85,7 @@ public class ConclusionProcess {
 			throw new IllegalArgumentException("endRange");
 
 		if (startRange == endRange)
-			return FormulaType.Equality;
+			return FormulaType.EQUATION;
 
 		List<FormulaType> transformationTypes = transformations
 				.subList(Math.max(startRange - 1, 0), endRange)
@@ -93,9 +93,9 @@ public class ConclusionProcess {
 				.map(Transformation::getType)
 				.collect(Collectors.toList());
 
-		if (transformationTypes.contains(FormulaType.Inclusion))
-			return FormulaType.Inclusion;
-		return FormulaType.Equality;
+		if (transformationTypes.contains(FormulaType.INCLUSION))
+			return FormulaType.INCLUSION;
+		return FormulaType.EQUATION;
 	}
 
 	public Transformation[] getTransformations() {

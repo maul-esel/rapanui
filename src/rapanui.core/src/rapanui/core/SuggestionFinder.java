@@ -39,11 +39,11 @@ public class SuggestionFinder {
 		if (formula instanceof Equation) {
 			left = ((Equation)formula).getLeft();
 			right = ((Equation)formula).getRight();
-			type = FormulaType.Equality;
+			type = FormulaType.EQUATION;
 		} else if (formula instanceof Inclusion) {
 			left = ((Inclusion)formula).getLeft();
 			right = ((Inclusion)formula).getRight();
-			type = FormulaType.Inclusion;
+			type = FormulaType.INCLUSION;
 		} else {
 			throw new IllegalStateException("Unsupported formula type in justification");
 		}
