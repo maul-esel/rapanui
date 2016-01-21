@@ -58,6 +58,21 @@ public class ConclusionProcess {
 	}
 
 	/**
+	 * Computes the list of all terms occurring in the transformation chain.
+	 * @return The terms in the conclusion, in order. Guaranteed to be non-null.
+	 */
+	public Term[] getTerms() {
+		Transformation[] transformations = getTransformations();
+		Term[] terms = new Term[1+transformations.length];
+
+		terms[0] = getStartTerm();
+		for (int i = 0; i < transformations.length; ++i)
+			terms[i+1] = transformations[i].getOutput();
+
+		return terms;
+	}
+
+	/**
 	 * Computes the type of the conclusion, i.e. equality or inclusion.
 	 *
 	 * @return @see FormulaType.INCLUSION if any transformation is an inclusion, @see FormulaType.EQUATION otherwise. Guaranteed to be non-null.
