@@ -1,3 +1,20 @@
+# Gleichheit/Inklusion: allgemeine Eigenschaften
+
+rule "Transitivität der Gleichheit"
+  if L = M
+  and M = N
+  then L = N
+
+rule "Transitivität der Inklusion"
+  if L ⊆ M
+  and M ⊆ N
+  then L ⊆ N
+
+rule "Antisymmetrie der Inklusion"
+  if M ⊆ N
+  and N ⊆ M
+  then M = N
+
 # Vereinigung: allgemeine mengentheoretische Eigenschaften
 
 axiom "Kommutativität der Vereinigung"
