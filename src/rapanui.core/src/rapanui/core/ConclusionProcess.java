@@ -60,10 +60,10 @@ public class ConclusionProcess {
 	/**
 	 * Computes the type of the conclusion, i.e. equality or inclusion.
 	 *
-	 * @return @see ConclusionType.Inclusion if any transformation is an inclusion, @see ConclusionType.Equality otherwise. Guaranteed to be non-null.
+	 * @return @see FormulaType.INCLUSION if any transformation is an inclusion, @see FormulaType.EQUATION otherwise. Guaranteed to be non-null.
 	 */
-	public FormulaType getType() {
-		return getType(0, transformations.size());
+	public FormulaType getFormulaType() {
+		return getFormulaType(0, transformations.size());
 	}
 
 	/**
@@ -72,13 +72,13 @@ public class ConclusionProcess {
 	 * @param startRange The index of the first term (not transformation!) to include in the range
 	 * @param endRange The index of the last term (not transformation!) to include in the range
 	 *
-	 * @return @see ConclusionType.Inclusion if any transformation in the range is an inclusion, @see ConclusionType.Equality otherwise.
-	 * 	If startIndex == endIndex, there is no transformation in the range and @see ConclusionType.Equality is returned.
+	 * @return @see FormulaType.INCLUSION if any transformation in the range is an inclusion, @see FormulaType.EQUATION otherwise.
+	 * 	If startIndex == endIndex, there is no transformation in the range and @see FormulaType.EQUATION is returned.
 	 * 	Guaranteed to be non-null.
 	 *
 	 * @throws IllegalArgumentException if the arguments do not specify a valid range
 	 */
-	public FormulaType getType(int startRange, int endRange) {
+	public FormulaType getFormulaType(int startRange, int endRange) {
 		if (startRange < 0 || startRange > transformations.size())
 			throw new IllegalArgumentException("startRange");
 		else if (endRange < startRange || endRange > transformations.size())
