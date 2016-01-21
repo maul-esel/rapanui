@@ -18,7 +18,8 @@ public class SuggestionFinder {
 	public static SuggestionFinder getDefaultInstance() {
 		if (defaultInstance == null) {
 			AggregateJustificationFinder finder = new AggregateJustificationFinder(Arrays.asList(
-				new PremiseJustificationFinder()
+				new PremiseJustificationFinder(),
+				new ProofJustificationFinder()
 			));
 			defaultInstance = new SuggestionFinder(finder);
 		}
