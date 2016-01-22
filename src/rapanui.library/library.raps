@@ -1,16 +1,16 @@
 # Gleichheit/Inklusion: allgemeine Eigenschaften
 
-rule "Transitivität der Gleichheit"
+theorem "Transitivität der Gleichheit"
   if L = M
   and M = N
   then L = N
 
-rule "Transitivität der Inklusion"
+theorem "Transitivität der Inklusion"
   if L ⊆ M
   and M ⊆ N
   then L ⊆ N
 
-rule "Antisymmetrie der Inklusion"
+theorem "Antisymmetrie der Inklusion"
   if M ⊆ N
   and N ⊆ M
   then M = N
