@@ -14,7 +14,7 @@ import java.util.stream.StreamSupport;
 
 /**
  * Represents a source that asynchronously emits objects. This is used by asynchronous
- * methods that, if they were synchronous, would return an array or Iterable.
+ * methods that, if they were synchronous, would return an array or @see Iterable.
  *
  * It is similar to a "promise" in other languages or a Java @see java.util.concurrent.Future,
  * but differs in that it produces multiple instances and in that it cannot be determined if
@@ -31,9 +31,10 @@ public abstract class Emitter<T> {
 	 * Executes a given action for each emitted object. The action may (and most likely will)
 	 * be executed in another thread.
 	 *
-	 * @param action The action to perform. As parameter, it receives the emitted object.
+	 * @param action The action to perform. As parameter, it receives the emitted object. Must not be null.
 	 */
 	public synchronized void onEmit(Consumer<T> action) {
+		assert action != null;
 		for (T result : results)
 			action.accept(result);
 		actions.add(action);
@@ -51,15 +52,17 @@ public abstract class Emitter<T> {
 
 	/**
 	 * Retrieve all results that have been produced so far.
+	 *
+	 * @return All previous results. The return value must not be modified. Guaranteed to be non-null.
 	 */
 	public Iterable<T> getResults() {
-		return null;
+		return results;
 	}
 
 	/**
 	 * Used by subclasses to insert new objects that are then emitted.
 	 *
-	 * @param result The object to emit
+	 * @param result The object to emit. May be null.
 	 */
 	protected synchronized void acceptResult(T result) {
 		if (!isStopped()) {
@@ -88,9 +91,9 @@ public abstract class Emitter<T> {
 	/**
 	 * Creates a new emitter that executes code in a new thread.
 	 *
-	 * @param computation A consumer that computes objects to emit and passes them to its argument.
+	 * @param computation A consumer that computes objects to emit and passes them to its argument. Must not be null.
 	 *
-	 * @return A new Emitter instance that emits objects from the computation
+	 * @return A new Emitter instance that emits objects from the computation. Guaranteed to be non-null.
 	 */
 	public static <T> Emitter<T> fromResultComputation(Consumer<Consumer<T>> computation) {
 		return new ThreadedEmitter<T>(computation);
@@ -99,7 +102,9 @@ public abstract class Emitter<T> {
 	/**
 	 * Creates an emitter that collects results from all given emitters.
 	 *
-	 * @param emitters The sources for the combined emitter
+	 * @param emitters The sources for the combined emitter. Must not be null nor contain null-values.
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
 	 */
 	@SafeVarargs
 	public static <T> Emitter<T> combine(Emitter<? extends T>... emitters) {
@@ -107,9 +112,20 @@ public abstract class Emitter<T> {
 	}
 
 	/**
+	 * Creates an empty emitter that emits no items.
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 */
+	public static <T> Emitter<T> empty() {
+		return new Emitter<T>() {};
+	}
+
+	/**
 	 * Creates an emitter that collects results from all given emitters.
 	 *
-	 * @param emitters The sources for the combined emitter
+	 * @param emitters The sources for the combined emitter. Must not be null nor contain null-values.
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
 	 */
 	public static <T> Emitter<T> combine(Collection<Emitter<? extends T>> emitters) {
 		return new AggregateEmitter<T>(emitters);
@@ -117,6 +133,8 @@ public abstract class Emitter<T> {
 
 	/**
 	 * Creates an emitter that only relays the first object emitted by its source
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
 	 */
 	public Emitter<T> first() {
 		return first(1);
@@ -125,7 +143,9 @@ public abstract class Emitter<T> {
 	/**
 	 * Creates an emitter that only relays the first few objects emitted by its source
 	 *
-	 * @param count How many objects emitted by the source should be emitted by the new emitter
+	 * @param count How many objects emitted by the source should be emitted by the new emitter.
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
 	 */
 	public Emitter<T> first(int count) {
 		return new HeadEmitter<T>(this, count);
@@ -134,7 +154,9 @@ public abstract class Emitter<T> {
 	/**
 	 * Creates an emitter that applies the given conversion on each emitted object
 	 *
-	 * @param conversion A function that is applied to objects emitted by this instance before they are re-emitted
+	 * @param conversion A function that is applied to objects emitted by this instance before they are re-emitted. Must not be null.
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
 	 */
 	public <R> Emitter<R> map(Function<T,R> conversion) {
 		return new MapEmitter<T,R>(this, conversion);
@@ -202,16 +224,16 @@ public abstract class Emitter<T> {
 	protected static class ThreadedEmitter<T> extends Emitter<T> {
 		protected static final ExecutorService executor = Executors.newCachedThreadPool();
 
-		protected final Future<?> underlyingPromise;
+		protected final Future<?> underlyingFuture;
 
 		public ThreadedEmitter(Consumer<Consumer<T>> generator) {
-			underlyingPromise = executor.submit(() -> generator.accept(this::acceptResult));
+			underlyingFuture = executor.submit(() -> generator.accept(this::acceptResult));
 		}
 
 		@Override
 		public void stop() {
-			if (!underlyingPromise.isDone())
-				underlyingPromise.cancel(true);
+			if (!underlyingFuture.isDone())
+				underlyingFuture.cancel(true);
 			super.stop();
 		}
 	}

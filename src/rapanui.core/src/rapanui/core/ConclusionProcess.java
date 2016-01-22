@@ -20,8 +20,8 @@ public class ConclusionProcess {
 	/**
 	 * Creates a new conclusion process
 	 *
-	 * @param environment The environment containing the process (must not be null)
-	 * @param startTerm The initial term of the process (must not be null)
+	 * @param environment The environment containing the process. Must not be null.
+	 * @param startTerm The initial term of the process. Must not be null.
 	 */
 	ConclusionProcess(ProofEnvironment environment, Term startTerm) {
 		assert environment != null;
@@ -33,17 +33,23 @@ public class ConclusionProcess {
 		this.observers = new ArrayList<ConclusionProcessObserver>();
 	}
 
+	/**
+	 * @return The environment containing the conclusion. Guaranteed to be non-null.
+	 */
 	public ProofEnvironment getEnvironment() {
 		return environment;
 	}
 
+	/**
+	 * @return The conclusion's start term. Guaranteed to be non-null.
+	 */
 	public Term getStartTerm() {
 		return startTerm;
 	}
 
 	/**
 	 * Retrieves the (current) last term in the transformation chain.
-	 * @return The output term of the last transformation, or if there are none, the initial term
+	 * @return The output term of the last transformation, or if there are none, the initial term. Guaranteed to be non-null.
 	 */
 	public Term getLastTerm() {
 		if (transformations.size() == 0)
@@ -52,12 +58,27 @@ public class ConclusionProcess {
 	}
 
 	/**
+	 * Computes the list of all terms occurring in the transformation chain.
+	 * @return The terms in the conclusion, in order. Guaranteed to be non-null.
+	 */
+	public Term[] getTerms() {
+		Transformation[] transformations = getTransformations();
+		Term[] terms = new Term[1+transformations.length];
+
+		terms[0] = getStartTerm();
+		for (int i = 0; i < transformations.length; ++i)
+			terms[i+1] = transformations[i].getOutput();
+
+		return terms;
+	}
+
+	/**
 	 * Computes the type of the conclusion, i.e. equality or inclusion.
 	 *
-	 * @return @see ConclusionType.Inclusion if any transformation is an inclusion, @see ConclusionType.Equality otherwise
+	 * @return @see FormulaType.INCLUSION if any transformation is an inclusion, @see FormulaType.EQUATION otherwise. Guaranteed to be non-null.
 	 */
-	public FormulaType getType() {
-		return getType(0, transformations.size());
+	public FormulaType getFormulaType() {
+		return getFormulaType(0, transformations.size());
 	}
 
 	/**
@@ -66,19 +87,20 @@ public class ConclusionProcess {
 	 * @param startRange The index of the first term (not transformation!) to include in the range
 	 * @param endRange The index of the last term (not transformation!) to include in the range
 	 *
-	 * @return @see ConclusionType.Inclusion if any transformation in the range is an inclusion, @see ConclusionType.Equality otherwise.
-	 * 	If startIndex == endIndex, there is no transformation in the range and @see ConclusionType.Equality is returned.
+	 * @return @see FormulaType.INCLUSION if any transformation in the range is an inclusion, @see FormulaType.EQUATION otherwise.
+	 * 	If startIndex == endIndex, there is no transformation in the range and @see FormulaType.EQUATION is returned.
+	 * 	Guaranteed to be non-null.
 	 *
 	 * @throws IllegalArgumentException if the arguments do not specify a valid range
 	 */
-	public FormulaType getType(int startRange, int endRange) {
+	public FormulaType getFormulaType(int startRange, int endRange) {
 		if (startRange < 0 || startRange > transformations.size())
 			throw new IllegalArgumentException("startRange");
 		else if (endRange < startRange || endRange > transformations.size())
 			throw new IllegalArgumentException("endRange");
 
 		if (startRange == endRange)
-			return FormulaType.Equality;
+			return FormulaType.EQUATION;
 
 		List<FormulaType> transformationTypes = transformations
 				.subList(Math.max(startRange - 1, 0), endRange)
@@ -86,9 +108,9 @@ public class ConclusionProcess {
 				.map(Transformation::getType)
 				.collect(Collectors.toList());
 
-		if (transformationTypes.contains(FormulaType.Inclusion))
-			return FormulaType.Inclusion;
-		return FormulaType.Equality;
+		if (transformationTypes.contains(FormulaType.INCLUSION))
+			return FormulaType.INCLUSION;
+		return FormulaType.EQUATION;
 	}
 
 	public Transformation[] getTransformations() {
@@ -98,7 +120,7 @@ public class ConclusionProcess {
 	/**
 	 * Appends a new transformation to the chain.
 	 *
-	 * @param transformation The transformation to append
+	 * @param transformation The transformation to append. Must not be null.
 	 *
 	 * The new transformation's input term must equal the current last term on the conclusion process.
 	 */
@@ -115,9 +137,10 @@ public class ConclusionProcess {
 	/**
 	 * Adds an observer to the process. Observers are notified upon changes.
 	 *
-	 * @param observer The new observer
+	 * @param observer The new observer. Must not be null.
 	 */
 	public void addObserver(ConclusionProcessObserver observer) {
+		assert observer != null;
 		observers.add(observer);
 	}
 

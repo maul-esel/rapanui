@@ -15,8 +15,9 @@ public class ProofJustification extends Justification {
 		super(justifiedFormula);
 
 		assert conclusion != null;
-		assert 0 <= startTermIndex && startTermIndex <= endTermIndex;
-		assert endTermIndex < conclusion.getTransformations().length;
+		// allow inverted ranges (endTermIndex < startTermIndex)
+		assert 0 <= startTermIndex && startTermIndex < conclusion.getTransformations().length;
+		assert 0 <= endTermIndex && endTermIndex < conclusion.getTransformations().length;
 
 		this.conclusion = conclusion;
 		this.startTermIndex = startTermIndex;

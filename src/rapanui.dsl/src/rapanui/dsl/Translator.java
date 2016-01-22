@@ -1,42 +1,41 @@
 package rapanui.dsl;
 
 import java.util.Map;
+import java.util.Stack;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
-public class Translator {
+public class Translator implements Visitor {
 	private final Map<String, Term> dictionary;
+	private final Stack<Term> termResult = new Stack<Term>();
 
 	public Translator(Map<String, Term> dictionary) {
 		this.dictionary = dictionary;
 	}
 
 	public Term translate(Term input) {
-		if (input instanceof BinaryOperation)
-			return translate((BinaryOperation)input);
-		else if (input instanceof UnaryOperation)
-			return translate((UnaryOperation)input);
-		else if (input instanceof VariableReference)
-			return translate((VariableReference)input);
-		else if (input instanceof ConstantReference)
-			return input;
-		throw new IllegalStateException("Unknown term type: " + input.getClass());
+		termResult.clear();
+		input.accept(this);
+
+		assert termResult.size() == 1;
+		return termResult.pop();
 	}
 
-	public BinaryOperation translate(BinaryOperation input) {
-		return Builder.createBinaryOperation(
-			translate(input.getLeft()),
-			input.getOperator(),
-			translate(input.getRight())
-		);
+	@Override public void visit(BinaryOperation input) {
+		Term right = termResult.pop(), left = termResult.pop();
+		termResult.push(Builder.createBinaryOperation(left, input.getOperator(), right));
 	}
 
-	public UnaryOperation translate(UnaryOperation input) {
-		return Builder.createUnaryOperation(translate(input.getOperand()), input.getOperator());
+	@Override public void visit(UnaryOperation input) {
+		termResult.push(Builder.createUnaryOperation(termResult.pop(), input.getOperator()));
 	}
 
-	public Term translate(VariableReference input) {
-		return EcoreUtil.copy(dictionary.get(input.getVariable()));
+	@Override public void visit(VariableReference input) {
+		termResult.push(EcoreUtil.copy(dictionary.get(input.getVariable())));
+	}
+
+	@Override public void visit(ConstantReference input) {
+		termResult.push(EcoreUtil.copy(input));
 	}
 
 	public Formula translate(Formula input) {

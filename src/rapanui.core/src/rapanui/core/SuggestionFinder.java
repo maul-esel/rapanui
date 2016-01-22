@@ -18,7 +18,8 @@ public class SuggestionFinder {
 	public static SuggestionFinder getDefaultInstance() {
 		if (defaultInstance == null) {
 			AggregateJustificationFinder finder = new AggregateJustificationFinder(Arrays.asList(
-				new PremiseJustificationFinder()
+				new PremiseJustificationFinder(),
+				new ProofJustificationFinder()
 			));
 			defaultInstance = new SuggestionFinder(finder);
 		}
@@ -26,8 +27,8 @@ public class SuggestionFinder {
 	}
 
 	public Emitter<Transformation> makeSuggestionsAsync(ConclusionProcess target, FormulaType suggestionType) {
-		JustificationRequest request = new JustificationRequest(target.getLastTerm(), suggestionType, null);
-		return justificationFinder.justifyAsync(target.getEnvironment(), request, MAX_RECURSION)
+		FormulaTemplate template = new FormulaTemplate(target.getLastTerm(), suggestionType, null);
+		return justificationFinder.justifyAsync(target.getEnvironment(), template, MAX_RECURSION)
 			.map(justification -> createTransformation(target, justification));
 	}
 
@@ -39,11 +40,11 @@ public class SuggestionFinder {
 		if (formula instanceof Equation) {
 			left = ((Equation)formula).getLeft();
 			right = ((Equation)formula).getRight();
-			type = FormulaType.Equality;
+			type = FormulaType.EQUATION;
 		} else if (formula instanceof Inclusion) {
 			left = ((Inclusion)formula).getLeft();
 			right = ((Inclusion)formula).getRight();
-			type = FormulaType.Inclusion;
+			type = FormulaType.INCLUSION;
 		} else {
 			throw new IllegalStateException("Unsupported formula type in justification");
 		}
