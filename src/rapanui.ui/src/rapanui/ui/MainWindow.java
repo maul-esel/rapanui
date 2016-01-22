@@ -91,8 +91,10 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationMo
 			public void mouseClicked(MouseEvent e) {
 				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
 					int index = suggestionList.locationToIndex(e.getPoint());
-					Transformation suggestion = suggestionList.getModel().getElementAt(index);
-					appModel.applySuggestion(suggestion);
+					if (index >= 0 && suggestionList.getCellBounds(index, index).contains(e.getPoint())) {
+						Transformation suggestion = suggestionList.getModel().getElementAt(index);
+						appModel.applySuggestion(suggestion);
+					}
 				}
 			}
 		});
