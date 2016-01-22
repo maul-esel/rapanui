@@ -23,7 +23,11 @@ public class SuggestionView extends JPanel {
 		setBorder(new LineBorder(Color.DARK_GRAY));
 		setLayout(new BorderLayout());
 
-		String shortForm = String.format("<html><pre>\t%s %s\t\t(%s)</pre></html>", model.getType() == FormulaType.EQUATION ? "=" : "⊆", model.getOutput().serialize(), shortJustification(model.getJustification()));
+		String shortForm = String.format("<html><pre>\t%s %s\t\t(%s)</pre></html>",
+			DisplayStringHelper.toSymbol(model.getType()),
+			model.getOutput().serialize(),
+			DisplayStringHelper.shortDescription(model.getJustification())
+		);
 		// TODO: use math font
 		add(new JLabel(shortForm), BorderLayout.NORTH);
 	}
@@ -33,11 +37,5 @@ public class SuggestionView extends JPanel {
 			setOpaque(true); //setBackground(Color.PINK);
 		else
 			setOpaque(false);
-	}
-
-	private static String shortJustification(Justification justification) {
-		if (justification instanceof EnvironmentPremiseJustification)
-			return "nach Voraussetzung";
-		return ""; // TODO
 	}
 }

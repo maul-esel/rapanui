@@ -7,16 +7,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import java.util.Arrays;
-import java.util.Objects;
-
-import rapanui.core.ConclusionProcess;
-import rapanui.core.EnvironmentPremiseJustification;
-import rapanui.core.FormulaType;
-import rapanui.core.Justification;
-import rapanui.core.ProofJustification;
-import rapanui.core.RuleApplication;
-import rapanui.core.SubtermEqualityJustification;
 import rapanui.core.Transformation;
 import rapanui.ui.controls.CollapseButton;
 import rapanui.ui.models.ConclusionProcessModel;
@@ -105,30 +95,14 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		c.gridy = displayedTransformations;
 		c.weightx = 0.35;
 		longForm.add(ProofEnvironmentView.createMathematicalLabel(
-				(transformation.getType() == FormulaType.EQUATION ? "= " : "⊆ ")
+				DisplayStringHelper.toSymbol(transformation.getType())
 				+ transformation.getOutput().serialize()),
 				c);
 
 		c.gridx = 2;
 		c.weightx = 0;
-		longForm.add(new JLabel(justificationText(transformation.getJustification())), c);
+		longForm.add(new JLabel("(" + DisplayStringHelper.shortDescription(transformation.getJustification()) + ")"), c);
 		displayedTransformations++;
-	}
-
-	private String justificationText(Justification justification) {
-		if (justification instanceof EnvironmentPremiseJustification)
-			return "(nach Voraussetzung)";
-		else if (justification instanceof RuleApplication)
-			return "(" + ((RuleApplication)justification).getAppliedRule().getName() + ")";
-		else if (justification instanceof ProofJustification) {
-			ConclusionProcess conclusion = ((ProofJustification)justification).getConclusion();
-			int conclusionIndex = Arrays.asList(conclusion.getEnvironment().getConclusions()).indexOf(conclusion);
-			return "(siehe Folgerung #" + (conclusionIndex + 1) + ")";
-		} else if (justification instanceof SubtermEqualityJustification)
-			return "(" + ((SubtermEqualityJustification) justification).getOriginalSubTerm().serialize()
-					+ " = "
-					+ ((SubtermEqualityJustification) justification).getNewSubTerm().serialize() + ")";
-		return Objects.toString(justification);
 	}
 
 	@Override
