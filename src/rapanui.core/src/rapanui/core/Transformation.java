@@ -13,17 +13,17 @@ public class Transformation {
 	private final Term input;
 	private final Term output;
 	private final Justification justification;
-	private final FormulaType type;
+	private final FormulaType formulaType;
 
 	/**
 	 * Creates a new transformation from the given parameters.
 	 *
 	 * @param input The original term which is transformed
 	 * @param output The result of the transformation
-	 * @param type The type of transformation
+	 * @param formulaType The type of transformation
 	 * @param justification A justification why this transformation is allowed
 	 */
-	Transformation(ConclusionProcess container, Term input, Term output, FormulaType type, Justification justification) {
+	Transformation(ConclusionProcess container, Term input, Term output, FormulaType formulaType, Justification justification) {
 		// TODO: validate parameters? Or rely on valid input?
 
 		assert container != null;
@@ -36,7 +36,7 @@ public class Transformation {
 		this.container = container;
 		this.input = input;
 		this.output = output;
-		this.type = type;
+		this.formulaType = formulaType;
 		this.justification = justification;
 	}
 
@@ -52,8 +52,8 @@ public class Transformation {
 		return output;
 	}
 
-	public FormulaType getType() {
-		return type;
+	public FormulaType getFormulaType() {
+		return formulaType;
 	}
 
 	public Justification getJustification() {

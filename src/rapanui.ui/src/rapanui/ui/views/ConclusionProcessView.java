@@ -101,7 +101,7 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		c.gridy = displayedTransformations;
 		c.weightx = 0.35;
 		longForm.add(ProofEnvironmentView.createMathematicalLabel(
-				(transformation.getType() == FormulaType.EQUATION ? "= " : "⊆ ")
+				(transformation.getFormulaType() == FormulaType.EQUATION ? "= " : "⊆ ")
 				+ transformation.getOutput().serialize()),
 				c);
 
