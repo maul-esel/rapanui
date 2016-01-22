@@ -31,12 +31,7 @@ public class Application {
 
 	public Application() {
 		ruleSystems.load("../rapanui.library/library.raps");
-
 		createEnvironment(); // always create initial environment
-
-		// TODO: remove dummy data
-		createEnvironment();
-		createEnvironment();
 	}
 
 	public ProofEnvironment[] getEnvironments() {
@@ -50,12 +45,6 @@ public class Application {
 	public void createEnvironment() {
 		ProofEnvironment environment = new ProofEnvironment(ruleSystems);
 		environments.add(environment);
-
-		// TODO: remove mock data
-		MockData.mockPremises(this, environment);
-		MockData.createAndMockConclusionProcess(environment, "R");
-		MockData.createAndMockConclusionProcess(environment, "R");
-
 		notifyObservers(o -> o.environmentAdded(environment));
 	}
 

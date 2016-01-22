@@ -105,7 +105,7 @@ public class ConclusionProcess {
 		List<FormulaType> transformationTypes = transformations
 				.subList(Math.max(startRange - 1, 0), endRange)
 				.stream()
-				.map(Transformation::getType)
+				.map(Transformation::getFormulaType)
 				.collect(Collectors.toList());
 
 		if (transformationTypes.contains(FormulaType.INCLUSION))
