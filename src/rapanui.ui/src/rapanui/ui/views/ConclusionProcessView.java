@@ -7,6 +7,10 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.*;
 
+import java.util.Arrays;
+import java.util.Objects;
+
+import rapanui.core.ConclusionProcess;
 import rapanui.core.EnvironmentPremiseJustification;
 import rapanui.core.FormulaType;
 import rapanui.core.Justification;
@@ -116,13 +120,15 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 			return "(nach Voraussetzung)";
 		else if (justification instanceof RuleApplication)
 			return "(" + ((RuleApplication)justification).getAppliedRule().getName() + ")";
-		else if (justification instanceof ProofJustification)
-			return "(siehe oben)";
-		else if (justification instanceof SubtermEqualityJustification)
+		else if (justification instanceof ProofJustification) {
+			ConclusionProcess conclusion = ((ProofJustification)justification).getConclusion();
+			int conclusionIndex = Arrays.asList(conclusion.getEnvironment().getConclusions()).indexOf(conclusion);
+			return "(siehe Folgerung #" + (conclusionIndex + 1) + ")";
+		} else if (justification instanceof SubtermEqualityJustification)
 			return "(" + ((SubtermEqualityJustification) justification).getOriginalSubTerm().serialize()
 					+ " = "
 					+ ((SubtermEqualityJustification) justification).getNewSubTerm().serialize() + ")";
-		return "";
+		return Objects.toString(justification);
 	}
 
 	@Override
