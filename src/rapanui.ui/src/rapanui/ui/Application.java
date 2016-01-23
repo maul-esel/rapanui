@@ -12,6 +12,7 @@ import rapanui.core.SuggestionFinder;
 import rapanui.core.Transformation;
 import rapanui.dsl.RuleSystemCollection;
 import rapanui.ui.models.ApplicationModel;
+import rapanui.ui.views.MainWindow;
 
 public class Application {
 	private final List<ApplicationObserver> observers = new ArrayList<ApplicationObserver>();

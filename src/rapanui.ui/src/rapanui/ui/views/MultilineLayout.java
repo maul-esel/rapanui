@@ -1,4 +1,4 @@
-package rapanui.ui;
+package rapanui.ui.views;
 
 import java.awt.Component;
 import java.awt.Container;
@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 import javax.swing.SwingConstants;
 
-public class MultilineLayout implements LayoutManager2 {
+class MultilineLayout implements LayoutManager2 {
 	private final int orientation;
 	private int currentLine = 0;
 	private Map<Component, Integer> componentPosition = new HashMap<Component, Integer>();

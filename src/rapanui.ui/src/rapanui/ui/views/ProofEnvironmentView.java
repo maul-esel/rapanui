@@ -10,14 +10,13 @@ import java.util.Map;
 
 import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.Formula;
-import rapanui.ui.MultilineLayout;
 import rapanui.ui.controls.CollapseButton;
 import rapanui.ui.controls.SimpleLink;
 import rapanui.ui.controls.SyntaxTextField;
 import rapanui.ui.models.ConclusionProcessModel;
 import rapanui.ui.models.ProofEnvironmentModel;
 
-public class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Observer {
+class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Observer {
 	private static final long serialVersionUID = 1L;
 
 	// ugly hack: use this instead of Integer.MAX_VALUE to avoid integer overflow

@@ -1,4 +1,4 @@
-package rapanui.ui;
+package rapanui.ui.views;
 
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -14,12 +14,10 @@ import javax.swing.border.EmptyBorder;
 
 import rapanui.ui.controls.*;
 import rapanui.ui.models.*;
-import rapanui.ui.views.*;
 
 import rapanui.core.Transformation;
 
-
-class MainWindow extends JFrame implements PropertyChangeListener, ApplicationModel.Observer {
+public class MainWindow extends JFrame implements PropertyChangeListener, ApplicationModel.Observer {
 	private static final long serialVersionUID = 1L;
 	private static final String TITLE = "RAPA NUI – Relational Algebra Proof Assistant 'N User Interface";
 
