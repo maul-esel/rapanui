@@ -184,6 +184,7 @@ public abstract class Emitter<T> {
 		@Override
 		public synchronized void stop() {
 			source.stop();
+			super.stop();
 		}
 	}
 
