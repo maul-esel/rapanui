@@ -35,12 +35,9 @@ interface PremiseContainer {
 	// See also https://www.eclipse.org/forums/index.php?t=msg&th=552590&goto=1140023&#msg_1140023
 	op Formula[] getResolvedPremises() {
 		premises.map[ premise |
-			var resolved = #[premise]
-			if (premise instanceof DefinitionReference) {
-				val translator = new Translator(#{ premise.definition.target -> premise.target})
-				resolved = premise.definition.resolvedPremises.map[ p | translator.translate(p) ]
-			}
-			resolved
+			if (premise instanceof DefinitionReference)
+				premise.resolveToFormulas()
+			else #[premise]
 		].flatten.toEList
 	}
 }
@@ -103,6 +100,11 @@ class DefinitionReference extends Formula {
 	op void accept(Visitor v) {
 		target.accept(v)
 		v.visit(this)
+	}
+
+	op Formula[] resolveToFormulas() {
+		val translator = new Translator(#{ definition.target -> target})
+		return definition.resolvedPremises.map[ p | translator.translate(p) ]
 	}
 }
 
