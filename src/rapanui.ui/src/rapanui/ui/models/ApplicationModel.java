@@ -100,7 +100,7 @@ public class ApplicationModel implements ApplicationObserver {
 
 	void clearSuggestions() {
 		if (activeSuggestionSource != null) {
-			activeSuggestionSource.removeListener(this::displaySuggestion);
+			activeSuggestionSource.stop();
 			activeSuggestionSource = null;
 		}
 		suggestionListModel.clear();
