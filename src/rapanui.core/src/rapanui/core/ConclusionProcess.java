@@ -2,7 +2,6 @@ package rapanui.core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import rapanui.dsl.Term;
 
@@ -99,17 +98,11 @@ public class ConclusionProcess {
 		else if (endRange < startRange || endRange > transformations.size())
 			throw new IllegalArgumentException("endRange");
 
-		if (startRange == endRange)
-			return FormulaType.EQUATION;
-
-		List<FormulaType> transformationTypes = transformations
-				.subList(Math.max(startRange - 1, 0), endRange)
-				.stream()
+		if (transformations.subList(startRange, endRange).stream()
 				.map(Transformation::getFormulaType)
-				.collect(Collectors.toList());
-
-		if (transformationTypes.contains(FormulaType.INCLUSION))
+				.anyMatch(FormulaType.INCLUSION::equals))
 			return FormulaType.INCLUSION;
+
 		return FormulaType.EQUATION;
 	}
 
