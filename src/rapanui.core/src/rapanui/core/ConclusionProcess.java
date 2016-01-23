@@ -14,7 +14,7 @@ public class ConclusionProcess {
 	private final ProofEnvironment environment;
 	private final Term startTerm;
 	private final List<Transformation> transformations;
-	private final List<ConclusionProcessObserver> observers;
+	private final List<Observer> observers;
 
 	/**
 	 * Creates a new conclusion process
@@ -29,7 +29,7 @@ public class ConclusionProcess {
 		this.environment = environment;
 		this.startTerm = startTerm;
 		this.transformations = new ArrayList<Transformation>();
-		this.observers = new ArrayList<ConclusionProcessObserver>();
+		this.observers = new ArrayList<Observer>();
 	}
 
 	/**
@@ -124,7 +124,23 @@ public class ConclusionProcess {
 		if (!getLastTerm().structurallyEquals(transformation.getInput()))
 			throw new IllegalArgumentException();
 		transformations.add(transformation);
-		notifyObservers(observers, ConclusionProcessObserver::transformationAdded, transformation);
+		notifyObservers(observers, Observer::transformationAdded, transformation);
+	}
+
+	public interface Observer {
+		/**
+		 * Called when a new @see Transformation is appended to the @see ConclusionProcess
+		 *
+		 * @param transformation The newly appended @see Transformation. Guaranteed to be non-null.
+		 */
+		void transformationAdded(Transformation transformation);
+
+		/**
+		 * Called when a @see Transformation is removed from the conclusion. Currently unused.
+		 *
+		 * @param transformation The removed @see Transformation. Guaranteed to be non-null.
+		 */
+		void transformationRemoved(Transformation transformation);
 	}
 
 	/**
@@ -132,7 +148,7 @@ public class ConclusionProcess {
 	 *
 	 * @param observer The new observer. Must not be null.
 	 */
-	public void addObserver(ConclusionProcessObserver observer) {
+	public void addObserver(Observer observer) {
 		assert observer != null;
 		observers.add(observer);
 	}
@@ -142,7 +158,7 @@ public class ConclusionProcess {
 	 *
 	 * @param observer The observer to remove
 	 */
-	public void deleteObserver(ConclusionProcessObserver observer) {
+	public void deleteObserver(Observer observer) {
 		observers.remove(observer);
 	}
 }

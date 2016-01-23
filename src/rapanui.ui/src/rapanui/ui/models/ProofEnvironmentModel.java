@@ -11,11 +11,10 @@ import javax.swing.text.PlainDocument;
 
 import rapanui.core.ConclusionProcess;
 import rapanui.core.ProofEnvironment;
-import rapanui.core.ProofEnvironmentObserver;
 import rapanui.dsl.Formula;
 import rapanui.ui.commands.*;
 
-public class ProofEnvironmentModel implements ProofEnvironmentObserver {
+public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	private final ApplicationModel container;
 	private final ProofEnvironment env;
 	private final String name;
