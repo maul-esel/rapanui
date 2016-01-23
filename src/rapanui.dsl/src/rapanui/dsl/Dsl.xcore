@@ -34,7 +34,9 @@ interface PremiseContainer {
 	// results in NullPointerExceptions.
 	// See also https://www.eclipse.org/forums/index.php?t=msg&th=552590&goto=1140023&#msg_1140023
 	op Formula[] getResolvedPremises() {
-		premises.map[ resolve ].flatten.toEList
+		premises.map[ resolve ].flatten
+			.toMap [ serialize ].values // should be unique (not by equals(), but by structure/syntax)
+			.toEList
 	}
 }
 
@@ -49,7 +51,9 @@ class Rule extends PremiseContainer {
 
 	// see comments in PremiseContainer.getResolvedPremises()
 	op Formula[] getResolvedConclusions() {
-		conclusions.map[ resolve ].flatten.toEList
+		conclusions.map[ resolve ].flatten
+			.toMap [ serialize ].values // should be unique (not by equals(), but by structure/syntax)
+			.toEList
 	}
 }
 class Definition extends PremiseContainer {
