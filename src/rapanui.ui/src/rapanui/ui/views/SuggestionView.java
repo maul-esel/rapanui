@@ -14,6 +14,7 @@ public class SuggestionView extends JPanel {
 	private final Transformation model;
 
 	SuggestionView(Transformation model) {
+		assert model != null;
 		this.model = model;
 		initializeContent();
 	}
