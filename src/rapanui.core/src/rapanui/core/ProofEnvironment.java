@@ -2,6 +2,7 @@ package rapanui.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import rapanui.dsl.Formula;
 import rapanui.dsl.RuleSystemCollection;
@@ -55,6 +56,16 @@ public class ProofEnvironment {
 	 */
 	public Formula[] getPremises() {
 		return listToArray(premises, Formula[]::new);
+	}
+
+	/**
+	 * @return An array of resolved premises (contains only @see Equation and @see Inclusion instances). Guaranteed to be non-null.
+	 */
+	public Formula[] getResolvedPremises() {
+		return listToArray(
+			premises.stream().flatMap(premise -> premise.resolve().stream())
+				.collect(Collectors.toMap(Formula::serialize, x -> x)).values(), // remove syntactic duplicates
+			Formula[]::new);
 	}
 
 	/**
