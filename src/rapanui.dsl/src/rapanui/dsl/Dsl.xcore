@@ -50,6 +50,15 @@ class Rule extends PremiseContainer {
 		premises.forEach[ accept(v) ]
 		conclusions.forEach[ accept(v) ]
 	}
+
+	// see comments in PremiseContainer.getResolvedPremises()
+	op Formula[] getResolvedConclusions() {
+		conclusions.map[ conclusion |
+			if (conclusion instanceof DefinitionReference)
+				conclusion.resolveToFormulas()
+			else #[conclusion]
+		].flatten.toEList
+	}
 }
 class Definition extends PremiseContainer {
 	String name
