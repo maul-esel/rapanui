@@ -35,7 +35,7 @@ public class SuggestionView extends JPanel {
 
 	public void setSelected(boolean isSelected) {
 		if (isSelected)
-			setOpaque(true); //setBackground(Color.PINK);
+			setOpaque(true);
 		else
 			setOpaque(false);
 	}
