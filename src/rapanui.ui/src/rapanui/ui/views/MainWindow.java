@@ -11,6 +11,7 @@ import java.util.HashMap;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
 
 import rapanui.ui.controls.*;
 import rapanui.ui.models.*;
@@ -24,6 +25,7 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 	private final ApplicationModel appModel;
 
 	private final SymbolKeyboard keyboard = new SymbolKeyboard();
+	private final JustificationViewer justificationViewer = new JustificationViewer();
 	private final JPanel proofContainer = new JPanel(new CardLayout());
 	private final JComboBox<String> proofList = new JComboBox<String>();
 	private final JList<Transformation> suggestionList = new JList<Transformation>();
@@ -97,11 +99,11 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 				}
 			}
 		});
+		suggestionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		suggestionList.addListSelectionListener(this::onSuggestionSelected);
 
-		JPanel suggestionPanel = new JPanel(new BorderLayout());
+		JSplitPane suggestionPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, suggestionList, justificationViewer);
 		suggestionPanel.setBackground(Color.WHITE);
-		suggestionPanel.add(new JLabel("Vorschläge"), BorderLayout.NORTH);
-		suggestionPanel.add(suggestionList, BorderLayout.CENTER);
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, suggestionPanel);
 		rootPane.getContentPane().add(splitter, BorderLayout.CENTER);
@@ -114,6 +116,14 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 
 		environmentViewMap.put(model, view);
 		proofContainer.add(view, model.getName());
+	}
+
+	private void onSuggestionSelected(ListSelectionEvent e) {
+		Transformation suggestion = suggestionList.getSelectedValue();
+		if (suggestion != null)
+			justificationViewer.loadJustification(suggestion.getJustification());
+		else
+			justificationViewer.clear();
 	}
 
 	/* ****************************************** *
