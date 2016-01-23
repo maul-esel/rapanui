@@ -41,16 +41,6 @@ public abstract class Emitter<T> {
 	}
 
 	/**
-	 * Removes a listener that was attached by @see onEmit.
-	 * If the listener is not known, the operation does nothing.
-	 *
-	 * @param action
-	 */
-	public synchronized void removeListener(Consumer<T> action) {
-		actions.remove(action);
-	}
-
-	/**
 	 * Retrieve all results that have been produced so far.
 	 *
 	 * @return All previous results. The return value must not be modified. Guaranteed to be non-null.
