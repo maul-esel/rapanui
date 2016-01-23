@@ -20,13 +20,13 @@ class DisplayStringHelper {
 		if (justification instanceof EnvironmentPremiseJustification)
 			return "nach Voraussetzung";
 		else if (justification instanceof RuleApplication)
-			return ((RuleApplication)justification).getAppliedRule().getName();
+			return "nach " + ((RuleApplication)justification).getAppliedRule().getName();
 		else if (justification instanceof ProofJustification) {
 			ConclusionProcess conclusion = ((ProofJustification)justification).getConclusion();
 			int conclusionIndex = Arrays.asList(conclusion.getEnvironment().getConclusions()).indexOf(conclusion);
-			return "siehe Folgerung #" + (conclusionIndex + 1);
+			return "nach Folgerung #" + (conclusionIndex + 1);
 		} else if (justification instanceof SubtermEqualityJustification)
-			return ((SubtermEqualityJustification) justification).getOriginalSubTerm().serialize()
+			return "weil " + ((SubtermEqualityJustification) justification).getOriginalSubTerm().serialize()
 					+ " = "
 					+ ((SubtermEqualityJustification) justification).getNewSubTerm().serialize();
 		return Objects.toString(justification);
