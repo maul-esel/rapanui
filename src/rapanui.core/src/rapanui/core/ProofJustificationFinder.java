@@ -104,7 +104,7 @@ public class ProofJustificationFinder implements JustificationFinder {
 		for (int j = indexLeft + 1; j < terms.length; ++j)
 			emit.accept(conclusion, terms, indexLeft,  j);
 		// emit also those that are left of it, but are equal (equality is symmetric)
-		for (int j = indexLeft - 1; j > 0 && conclusion.getFormulaType(j, indexLeft) == FormulaType.EQUATION; --j)
+		for (int j = indexLeft - 1; j >= 0 && conclusion.getFormulaType(j, indexLeft) == FormulaType.EQUATION; --j)
 			emit.accept(conclusion, terms, indexLeft, j);
 	}
 

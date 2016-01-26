@@ -184,7 +184,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 			@Override public void visit(Term term) { subterms.add(term); }
 		});
 
-		subterms.pop(); // do not include input term itself
+		subterms.removeLast(); // do not include input term itself
 		return subterms.toArray(new Term[subterms.size()]);
 	}
 }

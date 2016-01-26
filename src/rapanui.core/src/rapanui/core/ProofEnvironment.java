@@ -2,6 +2,7 @@ package rapanui.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import rapanui.dsl.Formula;
 import rapanui.dsl.RuleSystemCollection;
@@ -17,7 +18,7 @@ public class ProofEnvironment {
 	private final RuleSystemCollection ruleSystems;
 	private final List<Formula> premises;
 	private final List<ConclusionProcess> conclusions;
-	private final List<ProofEnvironmentObserver> observers;
+	private final List<Observer> observers;
 
 	/**
 	 * Create a new environment.
@@ -30,7 +31,7 @@ public class ProofEnvironment {
 		this.ruleSystems = ruleSystems;
 		this.premises = new ArrayList<Formula>();
 		this.conclusions = new ArrayList<ConclusionProcess>();
-		this.observers = new ArrayList<ProofEnvironmentObserver>();
+		this.observers = new ArrayList<Observer>();
 	}
 
 	public RuleSystemCollection getRuleSystems() {
@@ -47,7 +48,7 @@ public class ProofEnvironment {
 	public void addPremise(Formula premise) {
 		assert premise != null;
 		if (addToSet(premises, premise))
-			notifyObservers(observers, ProofEnvironmentObserver::premiseAdded, premise);
+			notifyObservers(observers, Observer::premiseAdded, premise);
 	}
 
 	/**
@@ -55,6 +56,16 @@ public class ProofEnvironment {
 	 */
 	public Formula[] getPremises() {
 		return listToArray(premises, Formula[]::new);
+	}
+
+	/**
+	 * @return An array of resolved premises (contains only @see Equation and @see Inclusion instances). Guaranteed to be non-null.
+	 */
+	public Formula[] getResolvedPremises() {
+		return listToArray(
+			premises.stream().flatMap(premise -> premise.resolve().stream())
+				.collect(Collectors.toMap(Formula::serialize, x -> x)).values(), // remove syntactic duplicates
+			Formula[]::new);
 	}
 
 	/**
@@ -66,11 +77,20 @@ public class ProofEnvironment {
 		assert startTerm != null;
 		ConclusionProcess conclusion = new ConclusionProcess(this, startTerm);
 		conclusions.add(conclusion);
-		notifyObservers(observers, ProofEnvironmentObserver::conclusionStarted, conclusion);
+		notifyObservers(observers, Observer::conclusionStarted, conclusion);
 	}
 
 	public ConclusionProcess[] getConclusions() {
 		return listToArray(conclusions, ConclusionProcess[]::new);
+	}
+
+	public interface Observer {
+		void premiseAdded(Formula premise);
+		void premiseRemoved(Formula premise); // unused for now
+
+		void conclusionStarted(ConclusionProcess conclusion);
+		void conclusionRemoved(ConclusionProcess conclusion); // unused for now
+		void conclusionMoved(ConclusionProcess conclusion); // unused for now
 	}
 
 	/**
@@ -78,7 +98,7 @@ public class ProofEnvironment {
 	 *
 	 * @param observer The new observer
 	 */
-	public void addObserver(ProofEnvironmentObserver observer) {
+	public void addObserver(Observer observer) {
 		observers.add(observer);
 	}
 
@@ -87,7 +107,7 @@ public class ProofEnvironment {
 	 *
 	 * @param observer The observer to remove
 	 */
-	public void deleteObserver(ProofEnvironmentObserver observer) {
+	public void deleteObserver(Observer observer) {
 		observers.remove(observer);
 	}
 }

@@ -9,8 +9,6 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Represents a source that asynchronously emits objects. This is used by asynchronous
@@ -184,6 +182,7 @@ public abstract class Emitter<T> {
 		@Override
 		public synchronized void stop() {
 			source.stop();
+			super.stop();
 		}
 	}
 
@@ -201,13 +200,6 @@ public abstract class Emitter<T> {
 			for (Emitter<? extends T> generator : generators)
 				generator.stop();
 			super.stop();
-		}
-
-		@Override
-		public Iterable<T> getResults() {
-			return generators.stream()
-				.<T>flatMap(generator -> StreamSupport.stream(generator.getResults().spliterator(), false)) // explicit type parameter necessary in OracleJDK
-				.collect(Collectors.toList());
 		}
 	}
 

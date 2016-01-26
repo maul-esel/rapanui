@@ -18,7 +18,7 @@ public class PremiseJustificationFinder implements JustificationFinder {
 	 * Internal method that does the actual search (called asynchronously).
 	 */
 	protected void searchPremises(ProofEnvironment environment, FormulaTemplate formulaTemplate, Consumer<Justification> acceptor) {
-		for (Formula premise : environment.getPremises()) { // TODO: resolved premises
+		for (Formula premise : environment.getResolvedPremises()) {
 			if (formulaTemplate.isTemplateFor(premise))
 				acceptor.accept(new EnvironmentPremiseJustification(premise));
 			else if (premise instanceof Equation) {

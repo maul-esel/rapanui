@@ -1,7 +1,6 @@
 package rapanui.ui.models;
 
 import rapanui.core.ConclusionProcess;
-import rapanui.core.ConclusionProcessObserver;
 import rapanui.core.FormulaType;
 import rapanui.core.Transformation;
 import rapanui.dsl.Term;
@@ -9,7 +8,7 @@ import rapanui.dsl.Term;
 import java.util.List;
 import java.util.LinkedList;
 
-public class ConclusionProcessModel implements ConclusionProcessObserver {
+public class ConclusionProcessModel implements ConclusionProcess.Observer {
 	private final ProofEnvironmentModel container;
 	private final ConclusionProcess conclusion;
 

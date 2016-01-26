@@ -34,14 +34,9 @@ interface PremiseContainer {
 	// results in NullPointerExceptions.
 	// See also https://www.eclipse.org/forums/index.php?t=msg&th=552590&goto=1140023&#msg_1140023
 	op Formula[] getResolvedPremises() {
-		premises.map[ premise |
-			var resolved = #[premise]
-			if (premise instanceof DefinitionReference) {
-				val translator = new Translator(#{ premise.definition.target -> premise.target})
-				resolved = premise.definition.resolvedPremises.map[ p | translator.translate(p) ]
-			}
-			resolved
-		].flatten.toEList
+		premises.map[ resolve ].flatten
+			.toMap [ serialize ].values // should be unique (not by equals(), but by structure/syntax)
+			.toEList
 	}
 }
 
@@ -52,6 +47,13 @@ class Rule extends PremiseContainer {
 	op void accept(Visitor v) {
 		premises.forEach[ accept(v) ]
 		conclusions.forEach[ accept(v) ]
+	}
+
+	// see comments in PremiseContainer.getResolvedPremises()
+	op Formula[] getResolvedConclusions() {
+		conclusions.map[ resolve ].flatten
+			.toMap [ serialize ].values // should be unique (not by equals(), but by structure/syntax)
+			.toEList
 	}
 }
 class Definition extends PremiseContainer {
@@ -74,6 +76,10 @@ abstract class Formula {
 
 	op void accept(Visitor v) {
 		v.visit(this)
+	}
+
+	op Formula[] resolve() {
+		return #[this].toEList
 	}
 }
 class Equation extends Formula {
@@ -103,6 +109,11 @@ class DefinitionReference extends Formula {
 	op void accept(Visitor v) {
 		target.accept(v)
 		v.visit(this)
+	}
+
+	op Formula[] resolve() {
+		val translator = new Translator(#{ definition.target -> target})
+		return definition.resolvedPremises.map[ p | translator.translate(p) ]
 	}
 }
 
