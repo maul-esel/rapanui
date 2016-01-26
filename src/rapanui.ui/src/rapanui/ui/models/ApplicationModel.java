@@ -129,9 +129,14 @@ public class ApplicationModel implements ApplicationObserver {
 	}
 
 	private void activateEnvironment(ProofEnvironmentModel environmentModel) {
+		if (activeEnvironment != environmentModel)
+			clearSuggestions();
+
 		activeEnvironment = environmentModel;
 		environmentNameModel.setSelectedItem(environmentModel == null ? null : environmentModel.getName());
 
+		if (activeEnvironment != null)
+			activeEnvironment.onActivate();
 		for (Observer observer : observers)
 			observer.environmentActivated(activeEnvironment);
 	}
