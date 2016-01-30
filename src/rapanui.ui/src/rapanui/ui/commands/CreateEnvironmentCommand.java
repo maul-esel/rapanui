@@ -16,4 +16,7 @@ public class CreateEnvironmentCommand extends AbstractCommand {
 	public void execute() {
 		app.createEnvironment();
 	}
+
+	@Override
+	protected boolean canExecute() { return true; }
 }

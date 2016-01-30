@@ -20,10 +20,11 @@ public class CreateConclusionCommand extends AbstractCommand {
 		this.inputModel = inputModel;
 
 		inputModel.addDocumentListener(new RunnableDocumentListener(this::updateEnabled));
+		updateEnabled();
 	}
 
 	@Override
-	public boolean isEnabled() {
+	protected boolean canExecute() {
 		try {
 			return Parser.getInstance().canParseTerm(inputModel.getText(0, inputModel.getLength()));
 		} catch (BadLocationException e) {

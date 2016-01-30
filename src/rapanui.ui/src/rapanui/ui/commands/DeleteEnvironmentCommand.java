@@ -14,6 +14,7 @@ public class DeleteEnvironmentCommand extends AbstractCommand implements Applica
 		this.appModel = appModel;
 
 		appModel.addObserver(this);
+		updateEnabled();
 	}
 
 	@Override
@@ -22,7 +23,7 @@ public class DeleteEnvironmentCommand extends AbstractCommand implements Applica
 	}
 
 	@Override
-	public boolean isEnabled() {
+	protected boolean canExecute() {
 		return appModel.getActiveEnvironment() != null;
 	}
 

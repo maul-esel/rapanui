@@ -13,9 +13,10 @@ abstract class AbstractCommand extends AbstractAction {
 	}
 
 	public abstract void execute();
+	protected abstract boolean canExecute();
 
 	protected void updateEnabled() {
-		setEnabled(isEnabled());
+		setEnabled(canExecute());
 	}
 
 	@Override

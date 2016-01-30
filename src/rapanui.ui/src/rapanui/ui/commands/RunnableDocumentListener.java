@@ -12,6 +12,7 @@ class RunnableDocumentListener implements DocumentListener {
 
 	@Override
 	public void changedUpdate(DocumentEvent e) {
+		runnable.run();
 	}
 
 	@Override

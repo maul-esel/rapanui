@@ -27,10 +27,11 @@ public class CreateDefinitionReferencePremiseCommand extends AbstractCommand {
 		this.definitionModel = definitionModel;
 
 		inputModel.addDocumentListener(new RunnableDocumentListener(this::updateEnabled));
+		updateEnabled();
 	}
 
 	@Override
-	public boolean isEnabled() {
+	protected boolean canExecute() {
 		try {
 			return Parser.getInstance().canParseTerm(inputModel.getText(0, inputModel.getLength()));
 		} catch (BadLocationException e) {
