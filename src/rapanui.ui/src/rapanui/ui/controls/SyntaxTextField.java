@@ -63,6 +63,7 @@ public class SyntaxTextField extends JTextField implements DocumentListener {
 	protected void processFocusEvent(FocusEvent e) {
 		if (!e.isTemporary() && e.getID() == FocusEvent.FOCUS_LOST)
 			verify();
+		super.processFocusEvent(e);
 	}
 
 	@Override
