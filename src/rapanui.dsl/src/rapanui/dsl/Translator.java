@@ -31,7 +31,10 @@ public class Translator implements Visitor {
 	}
 
 	@Override public void visit(VariableReference input) {
-		termResult.push(EcoreUtil.copy(dictionary.get(input.getVariable())));
+		String variable = input.getVariable();
+		if (!dictionary.containsKey(variable))
+			throw new IncompleteDictionaryException(variable);
+		termResult.push(EcoreUtil.copy(dictionary.get(variable)));
 	}
 
 	@Override public void visit(ConstantReference input) {
@@ -58,5 +61,13 @@ public class Translator implements Visitor {
 
 	public DefinitionReference translate(DefinitionReference input) {
 		return Builder.createDefinitionReference(translate(input.getTarget()), input.getDefinition());
+	}
+
+	public static class IncompleteDictionaryException extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+
+		public IncompleteDictionaryException(String variable) {
+			super("Unknown variable '" + variable + "'");
+		}
 	}
 }
