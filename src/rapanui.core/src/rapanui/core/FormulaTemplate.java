@@ -1,8 +1,7 @@
 package rapanui.core;
 
-import rapanui.dsl.Equation;
+import rapanui.dsl.BINARY_RELATION;
 import rapanui.dsl.Formula;
-import rapanui.dsl.Inclusion;
 import rapanui.dsl.Term;
 
 /**
@@ -73,16 +72,12 @@ public class FormulaTemplate {
 	 * @return True if the given formula matches the template, false otherwise.
 	 */
 	public boolean isTemplateFor(Formula instance) {
-		Term left, right;
+		Term left = instance.getLeft(), right = instance.getRight();
 		FormulaType type;
 
-		if (instance instanceof Inclusion) {
-			left = ((Inclusion)instance).getLeft();
-			right = ((Inclusion)instance).getRight();
+		if (instance.getFormulaType() == BINARY_RELATION.INCLUSION) {
 			type = FormulaType.INCLUSION;
-		} else if (instance instanceof Equation) {
-			left = ((Equation)instance).getLeft();
-			right = ((Equation)instance).getRight();
+		} else if (instance.getFormulaType() == BINARY_RELATION.EQUATION) {
 			type = FormulaType.EQUATION;
 		} else
 			return false; // TODO: maybe log a warning?

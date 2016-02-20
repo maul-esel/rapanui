@@ -51,7 +51,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 					 if (subJustification instanceof SubtermEqualityJustification)
 						 return;
 
-					 Equation subEquation = (Equation)subJustification.getJustifiedFormula();
+					 Formula subEquation = subJustification.getJustifiedFormula();
 					 Term newSubterm = subEquation.getRight();
 					 Term newTerm = replaceSubterm(originalTerm, originalSubterm, newSubterm);
 
@@ -108,7 +108,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 						return;
 					subEmitter.stop(); // one justification suffices – but do not use first() because of previous condition
 
-					Equation subEquation = (Equation)subJustification.getJustifiedFormula();
+					Formula subEquation = subJustification.getJustifiedFormula();
 					Term subLeft = subEquation.getLeft(), subRight = subEquation.getRight();
 					// should be equal to currentLeft, currentRight (but can't use those in lambda)
 

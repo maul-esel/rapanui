@@ -34,17 +34,12 @@ public class SuggestionFinder {
 	}
 
 	protected Transformation createTransformation(ConclusionProcess target, Justification justification) {
-		Term left, right;
-		FormulaType type;
-
 		Formula formula = justification.getJustifiedFormula();
-		if (formula instanceof Equation) {
-			left = ((Equation)formula).getLeft();
-			right = ((Equation)formula).getRight();
+		Term left = formula.getLeft(), right = formula.getRight();
+		FormulaType type;
+		if (formula.getFormulaType() == BINARY_RELATION.EQUATION) {
 			type = FormulaType.EQUATION;
-		} else if (formula instanceof Inclusion) {
-			left = ((Inclusion)formula).getLeft();
-			right = ((Inclusion)formula).getRight();
+		} else if (formula.getFormulaType() == BINARY_RELATION.INCLUSION) {
 			type = FormulaType.INCLUSION;
 		} else {
 			throw new IllegalStateException("Unsupported formula type in justification");
