@@ -7,8 +7,8 @@ public interface Visitor {
 
 	default void visit(Formula formula) {};
 	default void visit(Equation equation) { visit((Formula)equation); }
-	default void visit(Inclusion inclusion) { visit((Inclusion)inclusion); }
-	default void visit(DefinitionReference reference) { visit((DefinitionReference)reference); }
+	default void visit(Inclusion inclusion) { visit((Formula)inclusion); }
+	default void visit(DefinitionReference reference) { visit((Formula)reference); }
 
 	default void visit(Term term) {};
 	default void visit(VariableReference variable) { visit((Term)variable); }
