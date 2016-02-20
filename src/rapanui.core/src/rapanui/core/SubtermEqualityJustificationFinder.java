@@ -42,7 +42,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 			Term[] subterms = collectSubterms(originalTerm);
 
 			for (Term originalSubterm : subterms) { // iterate through all subterms, bottom- to topmost
-				FormulaTemplate subTemplate = new FormulaTemplate(originalSubterm, FormulaType.EQUATION, null);
+				FormulaTemplate subTemplate = new FormulaTemplate(originalSubterm, BINARY_RELATION.EQUATION, null);
 				 delegateFinder.justifyAsync(environment, subTemplate, recursionDepth - 1).onEmit(subJustification -> {
 
 					 // avoid duplicates: if this is justified by replacing a subterm of originalSubterm in originalSubterm, then
@@ -101,7 +101,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 				// for the current pair of subterms: try to justify their equality.
 				// If successful, use this as justification.
 
-				FormulaTemplate subTemplate = new FormulaTemplate(currentLeft, FormulaType.EQUATION, currentRight);
+				FormulaTemplate subTemplate = new FormulaTemplate(currentLeft, BINARY_RELATION.EQUATION, currentRight);
 				Emitter<Justification> subEmitter = delegateFinder.justifyAsync(environment, subTemplate, recursionDepth - 1);
 				subEmitter.onEmit(subJustification -> {
 					if (subJustification instanceof SubtermEqualityJustification)

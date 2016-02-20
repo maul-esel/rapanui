@@ -8,7 +8,6 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import rapanui.core.EnvironmentPremiseJustification;
-import rapanui.core.FormulaType;
 import rapanui.core.Justification;
 import rapanui.core.ProofJustification;
 import rapanui.core.RuleApplication;
@@ -101,7 +100,7 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		c.gridy = displayedTransformations;
 		c.weightx = 0.35;
 		longForm.add(ProofEnvironmentView.createMathematicalLabel(
-				(transformation.getFormulaType() == FormulaType.EQUATION ? "= " : "⊆ ")
+				transformation.getFormulaType().getLiteral()
 				+ transformation.getOutput().serialize()),
 				c);
 
