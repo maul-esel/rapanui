@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import rapanui.dsl.Predicate;
 import rapanui.dsl.Formula;
 import rapanui.dsl.RuleSystemCollection;
 import rapanui.dsl.Term;
@@ -16,7 +17,7 @@ import static rapanui.core.Patterns.*;
  */
 public class ProofEnvironment {
 	private final RuleSystemCollection ruleSystems;
-	private final List<Formula> premises;
+	private final List<Predicate> premises;
 	private final List<ConclusionProcess> conclusions;
 	private final List<Observer> observers;
 
@@ -29,7 +30,7 @@ public class ProofEnvironment {
 		assert ruleSystems != null;
 
 		this.ruleSystems = ruleSystems;
-		this.premises = new ArrayList<Formula>();
+		this.premises = new ArrayList<Predicate>();
 		this.conclusions = new ArrayList<ConclusionProcess>();
 		this.observers = new ArrayList<Observer>();
 	}
@@ -45,7 +46,7 @@ public class ProofEnvironment {
 	 *
 	 * If the premise already exists in the environment, it will not be added again.
 	 */
-	public void addPremise(Formula premise) {
+	public void addPremise(Predicate premise) {
 		assert premise != null;
 		if (addToSet(premises, premise))
 			notifyObservers(observers, Observer::premiseAdded, premise);
@@ -54,7 +55,7 @@ public class ProofEnvironment {
 	/**
 	 * @return An array of premises. Guaranteed to be non-null.
 	 */
-	public Formula[] getPremises() {
+	public Predicate[] getPremises() {
 		return listToArray(premises, Formula[]::new);
 	}
 
@@ -85,8 +86,8 @@ public class ProofEnvironment {
 	}
 
 	public interface Observer {
-		void premiseAdded(Formula premise);
-		void premiseRemoved(Formula premise); // unused for now
+		void premiseAdded(Predicate premise);
+		void premiseRemoved(Predicate premise); // unused for now
 
 		void conclusionStarted(ConclusionProcess conclusion);
 		void conclusionRemoved(ConclusionProcess conclusion); // unused for now

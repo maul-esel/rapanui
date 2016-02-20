@@ -1,7 +1,6 @@
 package rapanui.ui.models;
 
 import rapanui.core.ConclusionProcess;
-import rapanui.core.FormulaType;
 import rapanui.core.Transformation;
 import rapanui.dsl.Term;
 
@@ -24,7 +23,7 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 	public String getTitle() {
 		return String.format("%s %s %s",
 				conclusion.getStartTerm().serialize(),
-				(conclusion.getFormulaType() == FormulaType.EQUATION ? "=" : "⊆"),
+				conclusion.getFormulaType().getLiteral(),
 				conclusion.getLastTerm().serialize());
 	}
 

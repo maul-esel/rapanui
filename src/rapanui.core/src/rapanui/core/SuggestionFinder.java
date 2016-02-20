@@ -27,29 +27,18 @@ public class SuggestionFinder {
 		return defaultInstance;
 	}
 
-	public Emitter<Transformation> makeSuggestionsAsync(ConclusionProcess target, FormulaType suggestionType) {
+	public Emitter<Transformation> makeSuggestionsAsync(ConclusionProcess target, BINARY_RELATION suggestionType) {
 		FormulaTemplate template = new FormulaTemplate(target.getLastTerm(), suggestionType, null);
 		return justificationFinder.justifyAsync(target.getEnvironment(), template, MAX_RECURSION)
 			.map(justification -> createTransformation(target, justification));
 	}
 
 	protected Transformation createTransformation(ConclusionProcess target, Justification justification) {
-		Term left, right;
-		FormulaType type;
-
 		Formula formula = justification.getJustifiedFormula();
-		if (formula instanceof Equation) {
-			left = ((Equation)formula).getLeft();
-			right = ((Equation)formula).getRight();
-			type = FormulaType.EQUATION;
-		} else if (formula instanceof Inclusion) {
-			left = ((Inclusion)formula).getLeft();
-			right = ((Inclusion)formula).getRight();
-			type = FormulaType.INCLUSION;
-		} else {
-			throw new IllegalStateException("Unsupported formula type in justification");
-		}
-
-		return new Transformation(target, left, right, type, justification);
+		return new Transformation(target,
+				formula.getLeft(),
+				formula.getRight(),
+				formula.getFormulaType(),
+				justification);
 	}
 }

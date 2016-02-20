@@ -21,7 +21,7 @@ public class PremiseJustificationFinder implements JustificationFinder {
 		for (Formula premise : environment.getResolvedPremises()) {
 			if (formulaTemplate.isTemplateFor(premise))
 				acceptor.accept(new EnvironmentPremiseJustification(premise));
-			else if (premise instanceof Equation && formulaTemplate.isTemplateFor(Builder.reverse((Equation)premise)))
+			else if (premise.getFormulaType() == BINARY_RELATION.EQUATION && formulaTemplate.isTemplateFor(Builder.reverse(premise)))
 				acceptor.accept(new EnvironmentPremiseJustification(premise));
 		}
 	}

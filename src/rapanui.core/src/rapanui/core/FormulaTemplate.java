@@ -1,8 +1,7 @@
 package rapanui.core;
 
-import rapanui.dsl.Equation;
+import rapanui.dsl.BINARY_RELATION;
 import rapanui.dsl.Formula;
-import rapanui.dsl.Inclusion;
 import rapanui.dsl.Term;
 
 /**
@@ -11,7 +10,7 @@ import rapanui.dsl.Term;
  */
 public class FormulaTemplate {
 	private final Term leftTerm;
-	private final FormulaType formulaType;
+	private final BINARY_RELATION formulaType;
 	private final Term rightTerm;
 
 	/**
@@ -21,7 +20,7 @@ public class FormulaTemplate {
 	 * @param type The type of the formula.
 	 * @param rightTerm The right-hand side of the formula.
 	 */
-	public FormulaTemplate(Term leftTerm, FormulaType formulaType, Term rightTerm) {
+	public FormulaTemplate(Term leftTerm, BINARY_RELATION formulaType, Term rightTerm) {
 		this.leftTerm = leftTerm;
 		this.formulaType = formulaType;
 		this.rightTerm = rightTerm;
@@ -44,7 +43,7 @@ public class FormulaTemplate {
 	/**
 	 * @return The formula type. May be null.
 	 */
-	public FormulaType getFormulaType() {
+	public BINARY_RELATION getFormulaType() {
 		return formulaType;
 	}
 
@@ -73,21 +72,8 @@ public class FormulaTemplate {
 	 * @return True if the given formula matches the template, false otherwise.
 	 */
 	public boolean isTemplateFor(Formula instance) {
-		Term left, right;
-		FormulaType type;
-
-		if (instance instanceof Inclusion) {
-			left = ((Inclusion)instance).getLeft();
-			right = ((Inclusion)instance).getRight();
-			type = FormulaType.INCLUSION;
-		} else if (instance instanceof Equation) {
-			left = ((Equation)instance).getLeft();
-			right = ((Equation)instance).getRight();
-			type = FormulaType.EQUATION;
-		} else
-			return false; // TODO: maybe log a warning?
-
-		return (!hasFormulaType() || getFormulaType() == type) && (!hasLeftTerm() || getLeftTerm().structurallyEquals(left))
-				&& (!hasRightTerm() || getRightTerm().structurallyEquals(right));
+		return (!hasFormulaType() || getFormulaType() == instance.getFormulaType())
+				&& (!hasLeftTerm() || getLeftTerm().structurallyEquals(instance.getLeft()))
+				&& (!hasRightTerm() || getRightTerm().structurallyEquals(instance.getRight()));
 	}
 }

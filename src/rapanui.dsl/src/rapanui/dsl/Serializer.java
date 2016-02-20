@@ -13,9 +13,9 @@ public class Serializer implements Visitor {
 		return instance;
 	}
 
-	public String serialize(Formula formula) {
+	public String serialize(Predicate predicate) {
 		result.clear();
-		formula.accept(this);
+		predicate.accept(this);
 
 		assert result.size() == 1;
 		return result.pop();
@@ -29,14 +29,9 @@ public class Serializer implements Visitor {
 		return result.pop();
 	}
 
-	@Override public void visit(Equation equation) {
+	@Override public void visit(Formula formula) {
 		String right = result.pop(), left = result.pop();
-		result.push(left + " = " + right);
-	}
-
-	@Override public void visit(Inclusion inclusion) {
-		String right = result.pop(), left = result.pop();
-		result.push(left + " ⊆ " + right);
+		result.push(left + " " + formula.getFormulaType().getLiteral() + " " + right);
 	}
 
 	@Override public void visit(DefinitionReference reference) {

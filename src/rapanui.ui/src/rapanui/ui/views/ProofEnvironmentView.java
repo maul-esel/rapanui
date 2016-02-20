@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import rapanui.dsl.DefinitionReference;
-import rapanui.dsl.Formula;
+import rapanui.dsl.Predicate;
 import rapanui.ui.MultilineLayout;
 import rapanui.ui.controls.CollapseButton;
 import rapanui.ui.controls.SimpleLink;
@@ -29,7 +29,7 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentMode
 
 	private final JPanel premisePanel = new JPanel(new GridLayout(0, 4));
 
-	private final Map<Formula, JPanel> premiseViewMap = new HashMap<Formula, JPanel>();
+	private final Map<Predicate, JPanel> premiseViewMap = new HashMap<Predicate, JPanel>();
 	private final Map<ConclusionProcessModel, ConclusionProcessView> conclusionViewMap
 		= new HashMap<ConclusionProcessModel, ConclusionProcessView>();
 
@@ -39,7 +39,7 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentMode
 		this.model = model;
 		initializeContent();
 
-		for (Formula premise : model.getPremises())
+		for (Predicate premise : model.getPremises())
 			displayPremise(premise);
 		for (ConclusionProcessModel conclusion : model.getConclusions())
 			displayConclusion(conclusion);
@@ -127,7 +127,7 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentMode
 		add(newConclusionPanel, (Integer)6);
 	}
 
-	private void displayPremise(Formula premise) {
+	private void displayPremise(Predicate premise) {
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		panel.setOpaque(false);
@@ -170,7 +170,7 @@ public class ProofEnvironmentView extends JPanel implements ProofEnvironmentMode
 	}
 
 	@Override
-	public void premiseAdded(Formula premise) {
+	public void premiseAdded(Predicate premise) {
 		displayPremise(premise);
 	}
 

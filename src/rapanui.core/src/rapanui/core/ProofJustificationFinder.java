@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import rapanui.dsl.Builder;
 import rapanui.dsl.Formula;
 import rapanui.dsl.Term;
+import rapanui.dsl.BINARY_RELATION;
 
 /**
  * A @see JustificationFinder that searches previous proofs conducted by the user in the same environment.
@@ -30,20 +31,15 @@ public class ProofJustificationFinder implements JustificationFinder {
 	private void searchProofs(Consumer<Justification> acceptor, ProofEnvironment environment, FormulaTemplate formulaTemplate) {
 		final EmitHelper emit = (conclusion, terms, leftIndex, rightIndex) -> {
 			int start = Math.min(leftIndex, rightIndex), end = Math.max(leftIndex, rightIndex);
-			FormulaType type = conclusion.getFormulaType(start, end);
+			BINARY_RELATION type = conclusion.getFormulaType(start, end);
 
 			if (formulaTemplate.hasFormulaType() && type != formulaTemplate.getFormulaType()) {
-				if (formulaTemplate.getFormulaType() == FormulaType.EQUATION)
+				if (formulaTemplate.getFormulaType() == BINARY_RELATION.EQUATION)
 					return; // equation needed, but only has inclusion ~> invalid result
-				type = FormulaType.INCLUSION; // inclusion needed, even has equation ~> works
+				type = BINARY_RELATION.INCLUSION; // inclusion needed, even has equation ~> works
 			}
 
-			Formula formula = null;
-			if (type == FormulaType.EQUATION)
-				formula = Builder.createEquation(terms[leftIndex], terms[rightIndex]);
-			else if (type == FormulaType.INCLUSION)
-				formula = Builder.createInclusion(terms[leftIndex], terms[rightIndex]);
-
+			Formula formula = Builder.createFormula(terms[leftIndex], type, terms[rightIndex]);
 			acceptor.accept(new ProofJustification(formula, conclusion, start, end));
 		};
 
@@ -86,7 +82,7 @@ public class ProofJustificationFinder implements JustificationFinder {
 		// if the terms are in order (inclusion or equation) or equal, emit them
 		if (indexLeft < indexRight)
 			emit.accept(conclusion, terms, indexLeft, indexRight);
-		else if (indexLeft > indexRight && conclusion.getFormulaType(indexRight, indexLeft) == FormulaType.EQUATION)
+		else if (indexLeft > indexRight && conclusion.getFormulaType(indexRight, indexLeft) == BINARY_RELATION.EQUATION)
 			emit.accept(conclusion, terms, indexLeft, indexRight);
 	}
 
@@ -104,7 +100,7 @@ public class ProofJustificationFinder implements JustificationFinder {
 		for (int j = indexLeft + 1; j < terms.length; ++j)
 			emit.accept(conclusion, terms, indexLeft,  j);
 		// emit also those that are left of it, but are equal (equality is symmetric)
-		for (int j = indexLeft - 1; j >= 0 && conclusion.getFormulaType(j, indexLeft) == FormulaType.EQUATION; --j)
+		for (int j = indexLeft - 1; j >= 0 && conclusion.getFormulaType(j, indexLeft) == BINARY_RELATION.EQUATION; --j)
 			emit.accept(conclusion, terms, indexLeft, j);
 	}
 
@@ -122,7 +118,7 @@ public class ProofJustificationFinder implements JustificationFinder {
 		for (int j = 0; j < indexRight; ++j)
 			emit.accept(conclusion, terms, j, indexRight);
 		// emit also those that are right of it, but are equal
-		for (int j = indexRight + 1; j < terms.length && conclusion.getFormulaType(indexRight, j) == FormulaType.EQUATION; ++j)
+		for (int j = indexRight + 1; j < terms.length && conclusion.getFormulaType(indexRight, j) == BINARY_RELATION.EQUATION; ++j)
 			emit.accept(conclusion, terms, j, indexRight);
 	}
 }

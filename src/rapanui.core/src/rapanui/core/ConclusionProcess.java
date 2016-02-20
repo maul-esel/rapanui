@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rapanui.dsl.Term;
+import rapanui.dsl.BINARY_RELATION;
 
 import static rapanui.core.Patterns.*;
 
@@ -74,9 +75,9 @@ public class ConclusionProcess {
 	/**
 	 * Computes the type of the conclusion, i.e. equality or inclusion.
 	 *
-	 * @return @see FormulaType.INCLUSION if any transformation is an inclusion, @see FormulaType.EQUATION otherwise. Guaranteed to be non-null.
+	 * @return @see BINARY_RELATION.INCLUSION if any transformation is an inclusion, @see BINARY_RELATION.EQUATION otherwise. Guaranteed to be non-null.
 	 */
-	public FormulaType getFormulaType() {
+	public BINARY_RELATION getFormulaType() {
 		return getFormulaType(0, transformations.size());
 	}
 
@@ -86,13 +87,13 @@ public class ConclusionProcess {
 	 * @param startRange The index of the first term (not transformation!) to include in the range
 	 * @param endRange The index of the last term (not transformation!) to include in the range
 	 *
-	 * @return @see FormulaType.INCLUSION if any transformation in the range is an inclusion, @see FormulaType.EQUATION otherwise.
-	 * 	If startIndex == endIndex, there is no transformation in the range and @see FormulaType.EQUATION is returned.
+	 * @return @see BINARY_RELATION.INCLUSION if any transformation in the range is an inclusion, @see BINARY_RELATION.EQUATION otherwise.
+	 * 	If startIndex == endIndex, there is no transformation in the range and @see BINARY_RELATION.EQUATION is returned.
 	 * 	Guaranteed to be non-null.
 	 *
 	 * @throws IllegalArgumentException if the arguments do not specify a valid range
 	 */
-	public FormulaType getFormulaType(int startRange, int endRange) {
+	public BINARY_RELATION getFormulaType(int startRange, int endRange) {
 		if (startRange < 0 || startRange > transformations.size())
 			throw new IllegalArgumentException("startRange");
 		else if (endRange < startRange || endRange > transformations.size())
@@ -100,10 +101,10 @@ public class ConclusionProcess {
 
 		if (transformations.subList(startRange, endRange).stream()
 				.map(Transformation::getFormulaType)
-				.anyMatch(FormulaType.INCLUSION::equals))
-			return FormulaType.INCLUSION;
+				.anyMatch(BINARY_RELATION.INCLUSION::equals))
+			return BINARY_RELATION.INCLUSION;
 
-		return FormulaType.EQUATION;
+		return BINARY_RELATION.EQUATION;
 	}
 
 	public Transformation[] getTransformations() {
