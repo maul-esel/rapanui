@@ -42,7 +42,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 			Term[] subterms = collectSubterms(originalTerm);
 
 			for (Term originalSubterm : subterms) { // iterate through all subterms, bottom- to topmost
-				FormulaTemplate subTemplate = new FormulaTemplate(originalSubterm, FormulaType.EQUATION, null);
+				FormulaTemplate subTemplate = new FormulaTemplate(originalSubterm, BINARY_RELATION.EQUATION, null);
 				 delegateFinder.justifyAsync(environment, subTemplate, recursionDepth - 1).onEmit(subJustification -> {
 
 					 // avoid duplicates: if this is justified by replacing a subterm of originalSubterm in originalSubterm, then
@@ -51,7 +51,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 					 if (subJustification instanceof SubtermEqualityJustification)
 						 return;
 
-					 Equation subEquation = (Equation)subJustification.getJustifiedFormula();
+					 Formula subEquation = subJustification.getJustifiedFormula();
 					 Term newSubterm = subEquation.getRight();
 					 Term newTerm = replaceSubterm(originalTerm, originalSubterm, newSubterm);
 
@@ -101,14 +101,14 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 				// for the current pair of subterms: try to justify their equality.
 				// If successful, use this as justification.
 
-				FormulaTemplate subTemplate = new FormulaTemplate(currentLeft, FormulaType.EQUATION, currentRight);
+				FormulaTemplate subTemplate = new FormulaTemplate(currentLeft, BINARY_RELATION.EQUATION, currentRight);
 				Emitter<Justification> subEmitter = delegateFinder.justifyAsync(environment, subTemplate, recursionDepth - 1);
 				subEmitter.onEmit(subJustification -> {
 					if (subJustification instanceof SubtermEqualityJustification)
 						return;
 					subEmitter.stop(); // one justification suffices – but do not use first() because of previous condition
 
-					Equation subEquation = (Equation)subJustification.getJustifiedFormula();
+					Formula subEquation = subJustification.getJustifiedFormula();
 					Term subLeft = subEquation.getLeft(), subRight = subEquation.getRight();
 					// should be equal to currentLeft, currentRight (but can't use those in lambda)
 

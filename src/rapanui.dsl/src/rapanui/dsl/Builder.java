@@ -3,33 +3,35 @@ package rapanui.dsl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 
 public abstract class Builder {
-	public static Equation reverse(Equation input) {
-		return createEquation(input.getRight(), input.getLeft());
+	public static Formula reverse(Formula input) {
+		return createFormula(input.getRight(), input.getFormulaType(), input.getLeft());
 	}
 
 	/**
 	* NOTE: this method copies the input terms!
 	*/
-	public static Equation createEquation(Term left, Term right) {
-		assert left != null;
-		assert right != null;
-
-		Equation output = DslFactory.eINSTANCE.createEquation();
-		output.setLeft(EcoreUtil.copy(left));
-		output.setRight(EcoreUtil.copy(right));
-		return output;
+	public static Formula createEquation(Term left, Term right) {
+		return createFormula(left, BINARY_RELATION.EQUATION, right);
 	}
 
 	/**
 	* NOTE: this method copies the input terms!
 	*/
-	public static Inclusion createInclusion(Term left, Term right) {
+	public static Formula createInclusion(Term left, Term right) {
+		return createFormula(left, BINARY_RELATION.INCLUSION, right);
+	}
+
+	/**
+	* NOTE: this method copies the input terms!
+	*/
+	public static Formula createFormula(Term left, BINARY_RELATION type, Term right) {
 		assert left != null;
 		assert right != null;
 
-		Inclusion output = DslFactory.eINSTANCE.createInclusion();
+		Formula output = DslFactory.eINSTANCE.createFormula();
 		output.setLeft(EcoreUtil.copy(left));
 		output.setRight(EcoreUtil.copy(right));
+		output.setFormulaType(type);
 		return output;
 	}
 

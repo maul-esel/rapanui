@@ -25,7 +25,7 @@ class RuleSystem {
 }
 
 interface PremiseContainer {
-	contains Formula[] premises
+	contains Predicate[] premises
 
 	// Use a method instead of a derived feature to avoid problems with different EList
 	// implementations: must return an instance of InternalEList, not BasicEList, or there
@@ -42,7 +42,7 @@ interface PremiseContainer {
 
 class Rule extends PremiseContainer {
 	String name
-	contains Formula[] conclusions
+	contains Predicate[] conclusions
 
 	op void accept(Visitor v) {
 		premises.forEach[ accept(v) ]
@@ -65,7 +65,7 @@ class Definition extends PremiseContainer {
 	}
 }
 
-abstract class Formula {
+abstract class Predicate {
 	op boolean structurallyEquals(Formula other) {
 		EcoreUtil.equals(this, other)
 	}
@@ -78,31 +78,24 @@ abstract class Formula {
 		v.visit(this)
 	}
 
+	op Formula[] resolve()
+}
+class Formula extends Predicate {
+	contains Term left
+	contains Term right
+	BINARY_RELATION formulaType
+
+	op void accept(Visitor v) {
+		left.accept(v)
+		right.accept(v)
+		v.visit(this)
+	}
+
 	op Formula[] resolve() {
-		return #[this].toEList
+		#[this].toEList
 	}
 }
-class Equation extends Formula {
-	contains Term left
-	contains Term right
-
-	op void accept(Visitor v) {
-		left.accept(v)
-		right.accept(v)
-		v.visit(this)
-	}
-}
-class Inclusion extends Formula {
-	contains Term left
-	contains Term right
-
-	op void accept(Visitor v) {
-		left.accept(v)
-		right.accept(v)
-		v.visit(this)
-	}
-}
-class DefinitionReference extends Formula {
+class DefinitionReference extends Predicate {
 	contains Term target
 	refers Definition definition
 
@@ -177,4 +170,8 @@ enum BINARY_OPERATOR {
 	UNION as '∪'
 	MINUS as '\\'
 	COMPOSITION as ';'
+}
+enum BINARY_RELATION {
+	EQUATION as '='
+	INCLUSION as '⊆'
 }

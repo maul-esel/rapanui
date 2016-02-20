@@ -12,30 +12,27 @@ Rule:
 ;
 Definition:
 	'define' target=VARIABLE 'as' name=RULE_NAME EOL
-		'iff' premises+=Formula
-		(EOL 'and' premises+=Formula)*
+		'iff' premises+=Predicate
+		(EOL 'and' premises+=Predicate)*
 ;
 Theorem returns Rule:
 	'theorem' name=RULE_NAME EOL
-		'if' premises+=Formula
-		(EOL 'and' premises+=Formula)*
-		EOL 'then' conclusions+=Formula
-		(EOL 'and' conclusions+=Formula)*
+		'if' premises+=Predicate
+		(EOL 'and' premises+=Predicate)*
+		EOL 'then' conclusions+=Predicate
+		(EOL 'and' conclusions+=Predicate)*
 ;
 Axiom returns Rule:
 	'axiom' name=RULE_NAME EOL
-		'always' conclusions+=Formula
-		(EOL 'and' conclusions+=Formula)*
+		'always' conclusions+=Predicate
+		(EOL 'and' conclusions+=Predicate)*
 ;
 
-Formula hidden(WS):
-	=>Equation | =>Inclusion | DefinitionReference
+Predicate hidden(WS):
+	=>Formula | DefinitionReference
 ;
-Equation:
-	left=Term '=' right=Term
-;
-Inclusion:
-	left=Term '⊆' right=Term
+Formula:
+	left=Term formulaType=BINARY_RELATION right=Term
 ;
 DefinitionReference:
 	target=Term 'is' definition=[Definition|RULE_NAME]
@@ -67,6 +64,9 @@ enum POSTFIX_UNARY_OPERATOR:
 ;
 enum BINARY_OPERATOR:
 	INTERSECTION = '∩' | UNION = '∪' | MINUS = '\\' | COMPOSITION = ';'
+;
+enum BINARY_RELATION:
+	EQUATION = '=' | INCLUSION = '⊆'
 ;
 
 terminal SL_COMMENT: '#'->EOL;

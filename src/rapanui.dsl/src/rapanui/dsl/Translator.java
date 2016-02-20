@@ -38,22 +38,16 @@ public class Translator implements Visitor {
 		termResult.push(EcoreUtil.copy(input));
 	}
 
-	public Formula translate(Formula input) {
-		if (input instanceof Equation)
-			return translate((Equation)input);
-		else if (input instanceof Inclusion)
-			return translate((Inclusion)input);
+	public Predicate translate(Predicate input) {
+		if (input instanceof Formula)
+			return translate((Formula)input);
 		else if (input instanceof DefinitionReference)
 			return translate((DefinitionReference)input);
-		throw new IllegalStateException("Unknown formula type: " + input.getClass());
+		throw new IllegalStateException("Unknown predicate type: " + input.getClass());
 	}
 
-	public Equation translate(Equation input){
-		return Builder.createEquation(translate(input.getLeft()), translate(input.getRight()));
-	}
-
-	public Inclusion translate(Inclusion input) {
-		return Builder.createInclusion(translate(input.getLeft()), translate(input.getRight()));
+	public Formula translate(Formula input){
+		return Builder.createFormula(translate(input.getLeft()), input.getFormulaType(), translate(input.getRight()));
 	}
 
 	public DefinitionReference translate(DefinitionReference input) {

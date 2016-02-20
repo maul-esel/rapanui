@@ -1,6 +1,7 @@
 package rapanui.core;
 
 import rapanui.dsl.Term;
+import rapanui.dsl.BINARY_RELATION;
 
 /**
  * Describes a transformation step from one term to another.
@@ -13,7 +14,7 @@ public class Transformation {
 	private final Term input;
 	private final Term output;
 	private final Justification justification;
-	private final FormulaType formulaType;
+	private final BINARY_RELATION formulaType;
 
 	/**
 	 * Creates a new transformation from the given parameters.
@@ -23,7 +24,7 @@ public class Transformation {
 	 * @param formulaType The type of transformation
 	 * @param justification A justification why this transformation is allowed
 	 */
-	Transformation(ConclusionProcess container, Term input, Term output, FormulaType formulaType, Justification justification) {
+	Transformation(ConclusionProcess container, Term input, Term output, BINARY_RELATION formulaType, Justification justification) {
 		// TODO: validate parameters? Or rely on valid input?
 
 		assert container != null;
@@ -52,7 +53,7 @@ public class Transformation {
 		return output;
 	}
 
-	public FormulaType getFormulaType() {
+	public BINARY_RELATION getFormulaType() {
 		return formulaType;
 	}
 

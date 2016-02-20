@@ -11,7 +11,7 @@ import javax.swing.text.PlainDocument;
 
 import rapanui.core.ConclusionProcess;
 import rapanui.core.ProofEnvironment;
-import rapanui.dsl.Formula;
+import rapanui.dsl.Predicate;
 import rapanui.ui.commands.*;
 
 public class ProofEnvironmentModel implements ProofEnvironment.Observer {
@@ -52,7 +52,7 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	 * Sub-data models (premises, conclusions)    *
 	 * ****************************************** */
 
-	public Formula[] getPremises() {
+	public Predicate[] getPremises() {
 		return env.getPremises();
 	}
 
@@ -113,18 +113,18 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	}
 
 	public static interface Observer {
-		void premiseAdded(Formula premise);
+		void premiseAdded(Predicate premise);
 		void conclusionStarted(ConclusionProcessModel conclusionModel);
 	}
 
 	@Override
-	public void premiseAdded(Formula premise) {
+	public void premiseAdded(Predicate premise) {
 		for (Observer observer : observers)
 			observer.premiseAdded(premise);
 	}
 
 	@Override
-	public void premiseRemoved(Formula premise) { /* currently unused */ }
+	public void premiseRemoved(Predicate premise) { /* currently unused */ }
 
 	@Override
 	public void conclusionStarted(ConclusionProcess conclusion) {
