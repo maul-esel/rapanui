@@ -28,14 +28,11 @@ Axiom returns Rule:
 		(EOL 'and' conclusions+=Formula)*
 ;
 
-Formula hidden(WS):
-	=>Equation | =>Inclusion | DefinitionReference
+Predicate hidden(WS):
+	=>Formula | DefinitionReference
 ;
-Equation:
-	left=Term '=' right=Term
-;
-Inclusion:
-	left=Term '⊆' right=Term
+Formula:
+	left=Term formulaType=BINARY_RELATION right=Term
 ;
 DefinitionReference:
 	target=Term 'is' definition=[Definition|RULE_NAME]
@@ -67,6 +64,9 @@ enum POSTFIX_UNARY_OPERATOR:
 ;
 enum BINARY_OPERATOR:
 	INTERSECTION = '∩' | UNION = '∪' | MINUS = '\\' | COMPOSITION = ';'
+;
+enum BINARY_RELATION:
+	EQUATION = '=' | INCLUSION = '⊆'
 ;
 
 terminal SL_COMMENT: '#'->EOL;
