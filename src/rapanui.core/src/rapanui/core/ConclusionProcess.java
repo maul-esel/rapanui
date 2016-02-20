@@ -75,7 +75,7 @@ public class ConclusionProcess {
 	/**
 	 * Computes the type of the conclusion, i.e. equality or inclusion.
 	 *
-	 * @return @see FormulaType.INCLUSION if any transformation is an inclusion, @see FormulaType.EQUATION otherwise. Guaranteed to be non-null.
+	 * @return @see BINARY_RELATION.INCLUSION if any transformation is an inclusion, @see BINARY_RELATION.EQUATION otherwise. Guaranteed to be non-null.
 	 */
 	public BINARY_RELATION getFormulaType() {
 		return getFormulaType(0, transformations.size());
