@@ -30,6 +30,10 @@ public class TranslationFinder {
 		this.translator = new Translator(dictionary);
 	}
 
+	public Map<String, Term> getDictionary() {
+		return dictionary;
+	}
+
 	/**
 	 * Creates a new instance with the current instance's dictionary. Subsequent changes to the original
 	 * or the clone will no affect the other.
