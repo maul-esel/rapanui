@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Represents a source that asynchronously emits objects. This is used by asynchronous
@@ -163,6 +164,17 @@ public abstract class Emitter<T> {
 		return aggregate;
 	}
 
+	/**
+	 * Creates an emitter that only relays results if the meet a condition
+	 *
+	 * @param filter The condition results have to meet to be relayed
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 */
+	public Emitter<T> filter(Predicate<T> filter) {
+		return new FilterEmitter<T>(this, filter);
+	}
+
 	protected static class HeadEmitter<T> extends Emitter<T> {
 		private int count;
 		private final Emitter<T> source;
@@ -190,6 +202,24 @@ public abstract class Emitter<T> {
 		public MapEmitter(Emitter<T> source, Function<T,R> converter) {
 			this.source = source;
 			source.onEmit(s -> acceptResult(converter.apply(s)));
+		}
+
+		@Override
+		public synchronized void stop() {
+			source.stop();
+			super.stop();
+		}
+	}
+
+	protected static class FilterEmitter<T> extends Emitter<T> {
+		private final Emitter<T> source;
+
+		public FilterEmitter(Emitter<T> source, Predicate<T> filter) {
+			this.source = source;
+			source.onEmit(t -> {
+				if (filter.test(t))
+					acceptResult(t);
+			});
 		}
 
 		@Override
