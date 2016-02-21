@@ -150,6 +150,19 @@ public abstract class Emitter<T> {
 		return new MapEmitter<T,R>(this, conversion);
 	}
 
+	/**
+	 * Creates an emitter that relays the objects emitted by the results of the conversion
+	 *
+	 * @param conversion This method is executed whenever this emitter emits an object.
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 */
+	public <R> Emitter<R> flatMap(Function<T, Emitter<R>> conversion) {
+		AggregateEmitter<R> aggregate = new AggregateEmitter<R>();
+		onEmit(result -> aggregate.addSource(conversion.apply(result)));
+		return aggregate;
+	}
+
 	protected static class HeadEmitter<T> extends Emitter<T> {
 		private int count;
 		private final Emitter<T> source;
@@ -189,6 +202,10 @@ public abstract class Emitter<T> {
 	protected static class AggregateEmitter<T> extends Emitter<T> {
 		private final Collection<Emitter<? extends T>> generators;
 
+		public AggregateEmitter() {
+			this(new LinkedList<Emitter<? extends T>>());
+		}
+
 		public AggregateEmitter(Collection<Emitter<? extends T>> generators) {
 			this.generators = generators;
 			for (Emitter<? extends T> generator : generators)
@@ -200,6 +217,11 @@ public abstract class Emitter<T> {
 			for (Emitter<? extends T> generator : generators)
 				generator.stop();
 			super.stop();
+		}
+
+		public synchronized void addSource(Emitter<? extends T> source) {
+			generators.add(source);
+			source.onEmit(this::acceptResult);
 		}
 	}
 
