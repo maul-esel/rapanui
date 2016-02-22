@@ -6,16 +6,6 @@ import java.util.Objects;
 import rapanui.core.*;
 
 class DisplayStringHelper {
-	public static String toSymbol(FormulaType formulaType) {
-		switch (formulaType) {
-		case EQUATION:
-			return "=";
-		case INCLUSION:
-			return "⊆";
-		}
-		throw new IllegalArgumentException();
-	}
-
 	public static String shortDescription(Justification justification) {
 		if (justification instanceof EnvironmentPremiseJustification)
 			return "nach Voraussetzung";

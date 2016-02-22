@@ -6,10 +6,10 @@ import java.util.function.Consumer;
 
 import rapanui.core.ConclusionProcess;
 import rapanui.core.Emitter;
-import rapanui.core.FormulaType;
 import rapanui.core.ProofEnvironment;
 import rapanui.core.SuggestionFinder;
 import rapanui.core.Transformation;
+import rapanui.dsl.BINARY_RELATION;
 import rapanui.dsl.RuleSystemCollection;
 import rapanui.ui.models.ApplicationModel;
 import rapanui.ui.views.MainWindow;
@@ -50,7 +50,7 @@ public class Application {
 			notifyObservers(o -> o.environmentRemoved(environment));
 	}
 
-	public Emitter<Transformation> loadSuggestions(ConclusionProcess target, FormulaType suggestionType) {
+	public Emitter<Transformation> loadSuggestions(ConclusionProcess target, BINARY_RELATION suggestionType) {
 		return SuggestionFinder.getDefaultInstance().makeSuggestionsAsync(target, suggestionType);
 	}
 

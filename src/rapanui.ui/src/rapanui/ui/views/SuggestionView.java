@@ -25,7 +25,7 @@ public class SuggestionView extends JPanel {
 		setLayout(new BorderLayout());
 
 		String shortForm = String.format("<html><pre>\t%s %s\t\t(%s)</pre></html>",
-			DisplayStringHelper.toSymbol(model.getFormulaType()),
+			model.getFormulaType().getLiteral(),
 			model.getOutput().serialize(),
 			DisplayStringHelper.shortDescription(model.getJustification())
 		);
