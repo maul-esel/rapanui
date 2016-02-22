@@ -71,12 +71,13 @@ public class RuleApplicationFinder implements JustificationFinder {
 
 	private void emitRuleApplication(Consumer<Justification> acceptor, FormulaTemplate template, Rule rule,
 			Formula conclusion, TranslationFinder translationFinder, Justification[] premiseJustifications) {
+		BINARY_RELATION type = template.hasFormulaType() ? template.getFormulaType() : conclusion.getFormulaType();
 		Term left = null, right = null;
 		try {
 			left = translationFinder.translate(conclusion.getLeft());
 			right = translationFinder.translate(conclusion.getRight());
 
-			Formula justifiedFormula = Builder.createFormula(left, template.getFormulaType(), right);
+			Formula justifiedFormula = Builder.createFormula(left, type, right);
 			acceptor.accept(new RuleApplication(justifiedFormula, rule, translationFinder.getDictionary(), premiseJustifications));
 		} catch (Translator.IncompleteDictionaryException e) { /* do not emit */ }
 	}
