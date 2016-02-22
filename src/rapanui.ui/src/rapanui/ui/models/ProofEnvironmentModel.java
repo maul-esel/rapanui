@@ -48,6 +48,11 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 		return name;
 	}
 
+	public void onActivate() {
+		if (activeConclusion != null)
+			activeConclusion.onActivate();
+	}
+
 	/* ****************************************** *
 	 * Sub-data models (premises, conclusions)    *
 	 * ****************************************** */

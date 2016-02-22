@@ -1,6 +1,8 @@
-package rapanui.ui;
+package rapanui.ui.views;
 
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
@@ -9,23 +11,24 @@ import java.util.HashMap;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
 
 import rapanui.ui.controls.*;
 import rapanui.ui.models.*;
-import rapanui.ui.views.*;
 
 import rapanui.core.Transformation;
 
-
-class MainWindow extends JFrame implements PropertyChangeListener, ApplicationModel.Observer {
+public class MainWindow extends JFrame implements PropertyChangeListener, ApplicationModel.Observer {
 	private static final long serialVersionUID = 1L;
 	private static final String TITLE = "RAPA NUI – Relational Algebra Proof Assistant 'N User Interface";
 
 	private final ApplicationModel appModel;
 
 	private final SymbolKeyboard keyboard = new SymbolKeyboard();
+	private final JustificationViewer justificationViewer = new JustificationViewer();
 	private final JPanel proofContainer = new JPanel(new CardLayout());
 	private final JComboBox<String> proofList = new JComboBox<String>();
+	private final JList<Transformation> suggestionList = new JList<Transformation>();
 
 	private final Map<ProofEnvironmentModel, ProofEnvironmentView> environmentViewMap = new HashMap<ProofEnvironmentModel, ProofEnvironmentView>();
 
@@ -82,9 +85,25 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationMo
 		leftPanel.add(scrollContainer, BorderLayout.CENTER);
 		leftPanel.add(keyboard, BorderLayout.SOUTH);
 
-		JPanel suggestionPanel = new JPanel();
+		suggestionList.setModel(appModel.suggestionListModel);
+		suggestionList.setCellRenderer(new SuggestionListCellRenderer());
+		suggestionList.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				if (e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() >= 2) {
+					int index = suggestionList.locationToIndex(e.getPoint());
+					if (index >= 0 && suggestionList.getCellBounds(index, index).contains(e.getPoint())) {
+						Transformation suggestion = suggestionList.getModel().getElementAt(index);
+						appModel.applySuggestion(suggestion);
+					}
+				}
+			}
+		});
+		suggestionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		suggestionList.addListSelectionListener(this::onSuggestionSelected);
+
+		JSplitPane suggestionPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, suggestionList, justificationViewer);
 		suggestionPanel.setBackground(Color.WHITE);
-		suggestionPanel.add(new JLabel("Vorschläge"), BorderLayout.NORTH);
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, suggestionPanel);
 		rootPane.getContentPane().add(splitter, BorderLayout.CENTER);
@@ -97,6 +116,14 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationMo
 
 		environmentViewMap.put(model, view);
 		proofContainer.add(view, model.getName());
+	}
+
+	private void onSuggestionSelected(ListSelectionEvent e) {
+		Transformation suggestion = suggestionList.getSelectedValue();
+		if (suggestion != null)
+			justificationViewer.loadJustification(suggestion.getJustification());
+		else
+			justificationViewer.clear();
 	}
 
 	/* ****************************************** *
@@ -132,10 +159,5 @@ class MainWindow extends JFrame implements PropertyChangeListener, ApplicationMo
 			String name = environmentModel.getName();
 			((CardLayout)proofContainer.getLayout()).show(proofContainer, name);
 		}
-	}
-
-	@Override
-	public void suggestionsLoaded(Transformation[] suggestions) {
-		// TODO
 	}
 }

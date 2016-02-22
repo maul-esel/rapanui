@@ -7,11 +7,13 @@ import java.util.Map;
 
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.MutableComboBoxModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import rapanui.core.ConclusionProcess;
+import rapanui.core.Emitter;
 import rapanui.core.ProofEnvironment;
 import rapanui.core.Transformation;
 import rapanui.dsl.RuleSystemCollection;
@@ -27,6 +29,8 @@ public class ApplicationModel implements ApplicationObserver {
 
 	private final List<ProofEnvironmentModel> environments = new LinkedList<ProofEnvironmentModel>();
 	private ProofEnvironmentModel activeEnvironment = null;
+
+	private Emitter<Transformation> activeSuggestionSource = null;
 
 	// needed to proxy environment removals
 	private final Map<ProofEnvironment, ProofEnvironmentModel> environmentModelMap = new HashMap<ProofEnvironment, ProofEnvironmentModel>();
@@ -56,6 +60,8 @@ public class ApplicationModel implements ApplicationObserver {
 			public void intervalRemoved(ListDataEvent e) {}
 		});
 
+		suggestionListModel = new DefaultListModel<Transformation>();
+
 		for (ProofEnvironment env : app.getEnvironments())
 			addEnvironment(env);
 		app.addObserver(this);
@@ -65,6 +71,7 @@ public class ApplicationModel implements ApplicationObserver {
 	public final Action deleteEnvironmentCommand;
 
 	public final MutableComboBoxModel<String> environmentNameModel;
+	public final DefaultListModel<Transformation> suggestionListModel;
 
 	public RuleSystemCollection getRuleSystems() {
 		return app.getRuleSystems();
@@ -84,11 +91,32 @@ public class ApplicationModel implements ApplicationObserver {
 	}
 
 	void loadSuggestions(ProofEnvironment environment, ConclusionProcess conclusion) {
-		// TODO
+		if (activeSuggestionSource != null)
+			clearSuggestions();
+
+		activeSuggestionSource = app.loadSuggestions(conclusion, null); // TODO: make suggestionType configurable via UI
+		activeSuggestionSource.onEmit(this::displaySuggestion);
 	}
 
 	void clearSuggestions() {
-		// TODO
+		if (activeSuggestionSource != null) {
+			activeSuggestionSource.stop();
+			activeSuggestionSource = null;
+		}
+		suggestionListModel.clear();
+	}
+
+	private void displaySuggestion(Transformation suggestion) {
+		suggestionListModel.addElement(suggestion);
+	}
+
+	public void applySuggestion(Transformation suggestion) {
+		assert suggestion != null;
+
+		clearSuggestions();
+		app.applySuggestion(suggestion.getContainer(), suggestion);
+
+		loadSuggestions(suggestion.getContainer().getEnvironment(), suggestion.getContainer());
 	}
 
 	/* ****************************************** *
@@ -101,9 +129,14 @@ public class ApplicationModel implements ApplicationObserver {
 	}
 
 	private void activateEnvironment(ProofEnvironmentModel environmentModel) {
+		if (activeEnvironment != environmentModel)
+			clearSuggestions();
+
 		activeEnvironment = environmentModel;
 		environmentNameModel.setSelectedItem(environmentModel == null ? null : environmentModel.getName());
 
+		if (activeEnvironment != null)
+			activeEnvironment.onActivate();
 		for (Observer observer : observers)
 			observer.environmentActivated(activeEnvironment);
 	}
@@ -147,8 +180,6 @@ public class ApplicationModel implements ApplicationObserver {
 		 * @param environmentModel (may be null)
 		 */
 		void environmentActivated(ProofEnvironmentModel environmentModel);
-
-		void suggestionsLoaded(Transformation[] suggestions);
 	}
 
 	@Override
