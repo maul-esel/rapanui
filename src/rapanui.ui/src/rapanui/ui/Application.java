@@ -4,9 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import rapanui.core.ConclusionProcess;
+import rapanui.core.Emitter;
 import rapanui.core.ProofEnvironment;
+import rapanui.core.SuggestionFinder;
+import rapanui.core.Transformation;
+import rapanui.dsl.BINARY_RELATION;
 import rapanui.dsl.RuleSystemCollection;
 import rapanui.ui.models.ApplicationModel;
+import rapanui.ui.views.MainWindow;
 
 public class Application {
 	private final List<ApplicationObserver> observers = new ArrayList<ApplicationObserver>();
@@ -42,6 +48,15 @@ public class Application {
 	public void removeEnvironment(ProofEnvironment environment) {
 		if (environments.remove(environment))
 			notifyObservers(o -> o.environmentRemoved(environment));
+	}
+
+	public Emitter<Transformation> loadSuggestions(ConclusionProcess target, BINARY_RELATION suggestionType) {
+		return SuggestionFinder.getDefaultInstance().makeSuggestionsAsync(target, suggestionType);
+	}
+
+	public void applySuggestion(ConclusionProcess target, Transformation suggestion) {
+		assert target != null;
+		target.appendTransformation(suggestion);
 	}
 
 	public void addObserver(ApplicationObserver observer) {

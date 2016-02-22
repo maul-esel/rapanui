@@ -7,11 +7,6 @@ import java.awt.event.MouseEvent;
 import javax.swing.*;
 import javax.swing.border.*;
 
-import rapanui.core.EnvironmentPremiseJustification;
-import rapanui.core.Justification;
-import rapanui.core.ProofJustification;
-import rapanui.core.RuleApplication;
-import rapanui.core.SubtermEqualityJustification;
 import rapanui.core.Transformation;
 import rapanui.ui.controls.CollapseButton;
 import rapanui.ui.models.ConclusionProcessModel;
@@ -101,27 +96,13 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		c.weightx = 0.35;
 		longForm.add(ProofEnvironmentView.createMathematicalLabel(
 				transformation.getFormulaType().getLiteral()
-				+ transformation.getOutput().serialize()),
+				+ " " + transformation.getOutput().serialize()),
 				c);
 
 		c.gridx = 2;
 		c.weightx = 0;
-		longForm.add(new JLabel(justificationText(transformation.getJustification())), c);
+		longForm.add(new JLabel("(" + DisplayStringHelper.shortDescription(transformation.getJustification()) + ")"), c);
 		displayedTransformations++;
-	}
-
-	private String justificationText(Justification justification) {
-		if (justification instanceof EnvironmentPremiseJustification)
-			return "(nach Voraussetzung)";
-		else if (justification instanceof RuleApplication)
-			return "(" + ((RuleApplication)justification).getAppliedRule().getName() + ")";
-		else if (justification instanceof ProofJustification)
-			return "(siehe oben)";
-		else if (justification instanceof SubtermEqualityJustification)
-			return "(" + ((SubtermEqualityJustification) justification).getOriginalSubTerm().serialize()
-					+ " = "
-					+ ((SubtermEqualityJustification) justification).getNewSubTerm().serialize() + ")";
-		return "";
 	}
 
 	@Override
