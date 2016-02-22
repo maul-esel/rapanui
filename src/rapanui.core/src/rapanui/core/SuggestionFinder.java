@@ -22,6 +22,7 @@ public class SuggestionFinder {
 				new ProofJustificationFinder()
 			));
 			finder.addJustificationFinder(new SubtermEqualityJustificationFinder(finder));
+			finder.addJustificationFinder(new RuleApplicationFinder(finder));
 			defaultInstance = new SuggestionFinder(finder);
 		}
 		return defaultInstance;
