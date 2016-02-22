@@ -94,9 +94,9 @@ public class RuleApplicationFinder implements JustificationFinder {
 			return Emitter.empty();
 
 		FormulaTemplate premiseTemplate = createTemplate(premise, translationFinder);
-		return delegateFinder.justifyAsync(environment, premiseTemplate, recursionDepth - 1)
-			.map( premiseJustification -> new SearchResult(premiseJustification, translationFinder.clone()) )
-			.filter( result -> {
+		return delegateFinder.justifyAsync(environment, premiseTemplate, recursionDepth - 1) // justify premise
+			.map( premiseJustification -> new SearchResult(premiseJustification, translationFinder.clone()) ) // wrap it in a SearchResult
+			.filter( result -> { // only emit it if it does not conflict with the current translation
 				return result.finder.train(premise.getLeft(), result.getLast().getJustifiedFormula().getLeft())
 					&& result.finder.train(premise.getRight(), result.getLast().getJustifiedFormula().getRight());
 			} );
