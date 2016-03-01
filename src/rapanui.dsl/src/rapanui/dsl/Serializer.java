@@ -3,14 +3,18 @@ package rapanui.dsl;
 import java.util.Stack;
 
 public class Serializer implements Visitor {
-	private static final Serializer instance = new Serializer();
+	private static final ThreadLocal<Serializer> instances = new ThreadLocal<Serializer>() {
+		@Override protected Serializer initialValue() {
+			return new Serializer();
+		}
+	};
 
 	private final Stack<String> result = new Stack<String>();
 
 	private Serializer() {}
 
 	public static Serializer getInstance() {
-		return instance;
+		return instances.get();
 	}
 
 	public String serialize(Predicate predicate) {
