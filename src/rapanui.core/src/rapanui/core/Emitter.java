@@ -36,7 +36,8 @@ public abstract class Emitter<T> {
 		assert action != null;
 		for (T result : results)
 			action.accept(result);
-		actions.add(action);
+		if (!isStopped())
+			actions.add(action);
 	}
 
 	/**
@@ -66,6 +67,7 @@ public abstract class Emitter<T> {
 	 */
 	public synchronized void stop() {
 		isStopped = true;
+		actions.clear();
 	}
 
 	/**
@@ -191,8 +193,14 @@ public abstract class Emitter<T> {
 				super.acceptResult(result);
 				count--;
 				if (count <= 0)
-					source.stop();
+					stop();
 			}
+		}
+
+		@Override
+		public synchronized void stop() {
+			source.stop();
+			super.stop();
 		}
 	}
 
@@ -246,12 +254,16 @@ public abstract class Emitter<T> {
 		public synchronized void stop() {
 			for (Emitter<? extends T> generator : generators)
 				generator.stop();
+			generators.clear();
 			super.stop();
 		}
 
 		public synchronized void addSource(Emitter<? extends T> source) {
-			generators.add(source);
-			source.onEmit(this::acceptResult);
+			if (!isStopped()) {
+				generators.add(source);
+				source.onEmit(this::acceptResult);
+			} else
+				source.stop();
 		}
 	}
 
