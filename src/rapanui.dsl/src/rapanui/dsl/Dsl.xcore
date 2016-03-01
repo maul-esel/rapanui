@@ -86,8 +86,8 @@ class Formula extends Predicate {
 	BINARY_RELATION formulaType
 
 	op void accept(Visitor v) {
-		left.accept(v)
-		right.accept(v)
+		left?.accept(v)
+		right?.accept(v)
 		v.visit(this)
 	}
 
@@ -106,7 +106,7 @@ class DefinitionReference extends Predicate {
 	refers Definition definition
 
 	op void accept(Visitor v) {
-		target.accept(v)
+		target?.accept(v)
 		v.visit(this)
 	}
 
@@ -159,7 +159,7 @@ class UnaryOperation extends Term {
 	POSTFIX_UNARY_OPERATOR operator
 
 	op void accept(Visitor v) {
-		operand.accept(v)
+		operand?.accept(v)
 		v.visit(this)
 	}
 
@@ -175,8 +175,8 @@ class BinaryOperation extends Term {
 	BINARY_OPERATOR operator
 
 	op void accept(Visitor v) {
-		left.accept(v)
-		right.accept(v)
+		left?.accept(v)
+		right?.accept(v)
 		v.visit(this)
 	}
 
