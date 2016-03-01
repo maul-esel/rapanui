@@ -94,6 +94,12 @@ class Formula extends Predicate {
 	op Formula[] resolve() {
 		#[this].toEList
 	}
+
+	op boolean isTemplateFor(Formula instance) {
+		(formulaType == null || formulaType == instance.formulaType)
+		&& (left == null || left.isTemplateFor(instance.left))
+		&& (right == null || right.isTemplateFor(instance.right))
+	}
 }
 class DefinitionReference extends Predicate {
 	contains Term target
@@ -123,6 +129,8 @@ abstract class Term {
 	op void accept(Visitor v) {
 		v.visit(this)
 	}
+
+	op boolean isTemplateFor(Term instance)
 }
 class VariableReference extends Term {
 	String variable
@@ -130,12 +138,20 @@ class VariableReference extends Term {
 	op void accept(Visitor v) {
 		v.visit(this)
 	}
+
+	op boolean isTemplateFor(Term instance) {
+		instance instanceof VariableReference && variable.equals((instance as VariableReference).variable)
+	}
 }
 class ConstantReference extends Term {
 	String constant
 
 	op void accept(Visitor v) {
 		v.visit(this)
+	}
+
+	op boolean isTemplateFor(Term instance) {
+		instance instanceof ConstantReference && constant.equals((instance as ConstantReference).constant)
 	}
 }
 class UnaryOperation extends Term {
@@ -145,6 +161,12 @@ class UnaryOperation extends Term {
 	op void accept(Visitor v) {
 		operand.accept(v)
 		v.visit(this)
+	}
+
+	op boolean isTemplateFor(Term instance) {
+		instance instanceof UnaryOperation
+		&& (operator == null || operator == (instance as UnaryOperation).operator)
+		&& (operand == null || operand.isTemplateFor((instance as UnaryOperation).operand))
 	}
 }
 class BinaryOperation extends Term {
@@ -156,6 +178,15 @@ class BinaryOperation extends Term {
 		left.accept(v)
 		right.accept(v)
 		v.visit(this)
+	}
+
+	op boolean isTemplateFor(Term instance) {
+		if (instance instanceof BinaryOperation)
+			(operator == null || operator == instance.operator)
+			&& (left == null || left.isTemplateFor(instance.left))
+			&& (right == null || right.isTemplateFor(instance.right))
+		else
+			false
 	}
 }
 
