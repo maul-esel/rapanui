@@ -13,8 +13,7 @@ import rapanui.dsl.BINARY_RELATION;
  */
 public class ProofJustificationFinder implements JustificationFinder {
 	@Override
-	public Emitter<Justification> justifyAsync(ProofEnvironment environment, FormulaTemplate formulaTemplate,
-			int recursionDepth) {
+	public Emitter<Justification> justifyAsync(ProofEnvironment environment, Formula formulaTemplate, int recursionDepth) {
 		return Emitter.fromResultComputation(acceptor -> searchProofs(acceptor, environment, formulaTemplate));
 	}
 
@@ -28,12 +27,12 @@ public class ProofJustificationFinder implements JustificationFinder {
 	 * The method then iterates through all conclusions, and passes their data to the selected helper method
 	 * along with a reference to the emit helper function.
 	 */
-	private void searchProofs(Consumer<Justification> acceptor, ProofEnvironment environment, FormulaTemplate formulaTemplate) {
+	private void searchProofs(Consumer<Justification> acceptor, ProofEnvironment environment, Formula formulaTemplate) {
 		final EmitHelper emit = (conclusion, terms, leftIndex, rightIndex) -> {
 			int start = Math.min(leftIndex, rightIndex), end = Math.max(leftIndex, rightIndex);
 			BINARY_RELATION type = conclusion.getFormulaType(start, end);
 
-			if (formulaTemplate.hasFormulaType() && type != formulaTemplate.getFormulaType()) {
+			if (formulaTemplate.getFormulaType() != null && type != formulaTemplate.getFormulaType()) {
 				if (formulaTemplate.getFormulaType() == BINARY_RELATION.EQUATION)
 					return; // equation needed, but only has inclusion ~> invalid result
 				type = BINARY_RELATION.INCLUSION; // inclusion needed, even has equation ~> works
@@ -44,14 +43,14 @@ public class ProofJustificationFinder implements JustificationFinder {
 		};
 
 		final BiConsumer<ConclusionProcess, Term[]> worker;
-		if (!formulaTemplate.hasLeftTerm() && !formulaTemplate.hasRightTerm())
+		if (formulaTemplate.getLeft() == null && formulaTemplate.getRight() == null)
 			worker = (conclusion, terms) -> searchProofsWithoutTerms(conclusion, terms, emit);
-		else if (formulaTemplate.hasLeftTerm() && formulaTemplate.hasRightTerm())
-			worker = (conclusion, terms) -> searchProofsWithTwoTerms(conclusion, terms, formulaTemplate.getLeftTerm(), formulaTemplate.getRightTerm(), emit);
-		else if (formulaTemplate.hasLeftTerm())
-			worker = (conclusion, terms) -> searchProofsWithLeftTerm(conclusion, terms, formulaTemplate.getLeftTerm(), emit);
+		else if (formulaTemplate.getLeft() != null && formulaTemplate.getRight() != null)
+			worker = (conclusion, terms) -> searchProofsWithTwoTerms(conclusion, terms, formulaTemplate.getLeft(), formulaTemplate.getRight(), emit);
+		else if (formulaTemplate.getLeft() != null)
+			worker = (conclusion, terms) -> searchProofsWithLeftTerm(conclusion, terms, formulaTemplate.getLeft(), emit);
 		else
-			worker = (conclusion, terms) -> searchProofsWithRightTerm(conclusion, terms, formulaTemplate.getRightTerm(), emit);
+			worker = (conclusion, terms) -> searchProofsWithRightTerm(conclusion, terms, formulaTemplate.getRight(), emit);
 
 		for (final ConclusionProcess conclusion : environment.getConclusions()) {
 			final Term[] terms = conclusion.getTerms();
@@ -66,14 +65,14 @@ public class ProofJustificationFinder implements JustificationFinder {
 				emit.accept(conclusion, terms, i, j);
 	}
 
-	private void searchProofsWithTwoTerms(ConclusionProcess conclusion, Term[] terms, Term leftTerm, Term rightTerm, EmitHelper emit) {
+	private void searchProofsWithTwoTerms(ConclusionProcess conclusion, Term[] terms, Term leftTermTemplate, Term rightTermTemplate, EmitHelper emit) {
 		// locate both specified terms
 		int indexLeft = -1, indexRight = -1;
 
 		for (int i = 0; i < terms.length; ++i) {
-			if (terms[i].structurallyEquals(leftTerm))
+			if (leftTermTemplate.isTemplateFor(terms[i]))
 				indexLeft = i;
-			else if (terms[i].structurallyEquals(rightTerm))
+			else if (rightTermTemplate.isTemplateFor(terms[i]))
 				indexRight = i;
 		}
 		if (indexRight < 0 || indexLeft < 0)
@@ -86,11 +85,11 @@ public class ProofJustificationFinder implements JustificationFinder {
 			emit.accept(conclusion, terms, indexLeft, indexRight);
 	}
 
-	private void searchProofsWithLeftTerm(ConclusionProcess conclusion, Term[] terms, Term leftTerm, EmitHelper emit) {
+	private void searchProofsWithLeftTerm(ConclusionProcess conclusion, Term[] terms, Term leftTermTemplate, EmitHelper emit) {
 		// locate term in conclusion
 		int indexLeft = -1;
 		for (int i = 0; i < terms.length && indexLeft < 0; ++i) {
-			if (terms[i].structurallyEquals(leftTerm))
+			if (leftTermTemplate.isTemplateFor(terms[i]))
 				indexLeft = i;
 		}
 		if (indexLeft < 0)
@@ -104,11 +103,11 @@ public class ProofJustificationFinder implements JustificationFinder {
 			emit.accept(conclusion, terms, indexLeft, j);
 	}
 
-	private void searchProofsWithRightTerm(ConclusionProcess conclusion, Term[] terms, Term rightTerm, EmitHelper emit) {
+	private void searchProofsWithRightTerm(ConclusionProcess conclusion, Term[] terms, Term rightTermTemplate, EmitHelper emit) {
 		// locate term in conclusion
 		int indexRight = -1;
 		for (int i = 0; i < terms.length && indexRight < 0; ++i) {
-			if (terms[i].structurallyEquals(rightTerm))
+			if (rightTermTemplate.isTemplateFor(terms[i]))
 				indexRight = i;
 		}
 		if (indexRight < 0)
