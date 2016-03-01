@@ -1,5 +1,7 @@
 package rapanui.core;
 
+import rapanui.dsl.Formula;
+
 /**
  * Finds justifications for formulas matching given @see FormulaTemplate instances.
  */
@@ -13,5 +15,5 @@ public interface JustificationFinder {
 	 *
 	 * @return An emitter that emits a new justification whenever it finds one. Must not be null.
 	 */
-	Emitter<Justification> justifyAsync(ProofEnvironment environment, FormulaTemplate formulaTemplate, int recursionDepth);
+	Emitter<Justification> justifyAsync(ProofEnvironment environment, Formula formulaTemplate, int recursionDepth);
 }
