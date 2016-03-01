@@ -9,15 +9,14 @@ import rapanui.dsl.*;
  */
 public class PremiseJustificationFinder implements JustificationFinder {
 	@Override
-	public Emitter<Justification> justifyAsync(ProofEnvironment environment, FormulaTemplate formulaTemplate,
-			int recursionDepth) {
+	public Emitter<Justification> justifyAsync(ProofEnvironment environment, Formula formulaTemplate, int recursionDepth) {
 		return Emitter.fromResultComputation(acceptor -> searchPremises(environment, formulaTemplate, acceptor));
 	}
 
 	/**
 	 * Internal method that does the actual search (called asynchronously).
 	 */
-	protected void searchPremises(ProofEnvironment environment, FormulaTemplate formulaTemplate, Consumer<Justification> acceptor) {
+	protected void searchPremises(ProofEnvironment environment, Formula formulaTemplate, Consumer<Justification> acceptor) {
 		for (Formula premise : environment.getResolvedPremises()) {
 			if (formulaTemplate.isTemplateFor(premise))
 				acceptor.accept(new EnvironmentPremiseJustification(premise));
