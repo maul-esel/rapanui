@@ -20,7 +20,7 @@ public class PremiseJustificationFinder implements JustificationFinder {
 		for (Formula premise : environment.getResolvedPremises()) {
 			if (formulaTemplate.isTemplateFor(premise))
 				acceptor.accept(new EnvironmentPremiseJustification(premise));
-			else if (premise.getFormulaType() == BINARY_RELATION.EQUATION) {
+			if (premise.getFormulaType() == BINARY_RELATION.EQUATION) {
 				Formula reversedPremise = Builder.reverse(premise);
 				if (formulaTemplate.isTemplateFor(reversedPremise))
 					acceptor.accept(new EnvironmentPremiseJustification(reversedPremise));
