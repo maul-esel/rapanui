@@ -131,6 +131,7 @@ abstract class Term {
 	}
 
 	op boolean isTemplateFor(Term instance)
+	op boolean isComplete()
 }
 class VariableReference extends Term {
 	String variable
@@ -142,6 +143,10 @@ class VariableReference extends Term {
 	op boolean isTemplateFor(Term instance) {
 		instance instanceof VariableReference && variable.equals((instance as VariableReference).variable)
 	}
+
+	op boolean isComplete() {
+		variable != null
+	}
 }
 class ConstantReference extends Term {
 	String constant
@@ -152,6 +157,10 @@ class ConstantReference extends Term {
 
 	op boolean isTemplateFor(Term instance) {
 		instance instanceof ConstantReference && constant.equals((instance as ConstantReference).constant)
+	}
+
+	op boolean isComplete() {
+		constant != null
 	}
 }
 class UnaryOperation extends Term {
@@ -167,6 +176,10 @@ class UnaryOperation extends Term {
 		instance instanceof UnaryOperation
 		&& (operator == null || operator == (instance as UnaryOperation).operator)
 		&& (operand == null || operand.isTemplateFor((instance as UnaryOperation).operand))
+	}
+
+	op boolean isComplete() {
+		operator != null && operand?.isComplete()
 	}
 }
 class BinaryOperation extends Term {
@@ -187,6 +200,10 @@ class BinaryOperation extends Term {
 			&& (right == null || right.isTemplateFor(instance.right))
 		else
 			false
+	}
+
+	op boolean isComplete() {
+		operator != null && left?.isComplete() && right?.isComplete()
 	}
 }
 
