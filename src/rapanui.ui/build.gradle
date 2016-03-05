@@ -21,7 +21,7 @@ dependencies {
   compile project(':rapanui.core')
 }
 
-mainClassName = 'rapanui.ui.Application'
+mainClassName = 'rapanui.ui.Program'
 
 sourceSets {
   main {

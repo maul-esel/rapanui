@@ -2,7 +2,6 @@
 
 package rapanui.dsl
 
-import rapanui.dsl.Serializer
 import org.eclipse.emf.ecore.util.EcoreUtil
 import java.util.stream.Collectors
 

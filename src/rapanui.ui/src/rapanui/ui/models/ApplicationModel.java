@@ -12,17 +12,16 @@ import javax.swing.MutableComboBoxModel;
 import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
+import rapanui.core.Application;
 import rapanui.core.ConclusionProcess;
 import rapanui.core.Emitter;
 import rapanui.core.ProofEnvironment;
 import rapanui.core.Transformation;
 import rapanui.dsl.RuleSystemCollection;
-import rapanui.ui.Application;
-import rapanui.ui.ApplicationObserver;
 import rapanui.ui.commands.CreateEnvironmentCommand;
 import rapanui.ui.commands.DeleteEnvironmentCommand;
 
-public class ApplicationModel implements ApplicationObserver {
+public class ApplicationModel implements Application.Observer {
 	private final Application app;
 
 	private final List<Observer> observers = new LinkedList<Observer>();

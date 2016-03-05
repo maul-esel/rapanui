@@ -26,6 +26,7 @@ public class Serializer implements Visitor {
 	}
 
 	public String serialize(Term term) {
+		assert term.isComplete();
 		result.clear();
 		term.accept(this);
 
