@@ -86,13 +86,19 @@ class Formula extends Predicate {
 	BINARY_RELATION formulaType
 
 	op void accept(Visitor v) {
-		left.accept(v)
-		right.accept(v)
+		left?.accept(v)
+		right?.accept(v)
 		v.visit(this)
 	}
 
 	op Formula[] resolve() {
 		#[this].toEList
+	}
+
+	op boolean isTemplateFor(Formula instance) {
+		(formulaType == null || formulaType == instance.formulaType || formulaType == BINARY_RELATION.EQUATION)
+		&& (left == null || left.isTemplateFor(instance.left))
+		&& (right == null || right.isTemplateFor(instance.right))
 	}
 }
 class DefinitionReference extends Predicate {
@@ -100,7 +106,7 @@ class DefinitionReference extends Predicate {
 	refers Definition definition
 
 	op void accept(Visitor v) {
-		target.accept(v)
+		target?.accept(v)
 		v.visit(this)
 	}
 
@@ -123,12 +129,23 @@ abstract class Term {
 	op void accept(Visitor v) {
 		v.visit(this)
 	}
+
+	op boolean isTemplateFor(Term instance)
+	op boolean isComplete()
 }
 class VariableReference extends Term {
 	String variable
 
 	op void accept(Visitor v) {
 		v.visit(this)
+	}
+
+	op boolean isTemplateFor(Term instance) {
+		instance instanceof VariableReference && variable.equals((instance as VariableReference).variable)
+	}
+
+	op boolean isComplete() {
+		variable != null
 	}
 }
 class ConstantReference extends Term {
@@ -137,14 +154,32 @@ class ConstantReference extends Term {
 	op void accept(Visitor v) {
 		v.visit(this)
 	}
+
+	op boolean isTemplateFor(Term instance) {
+		instance instanceof ConstantReference && constant.equals((instance as ConstantReference).constant)
+	}
+
+	op boolean isComplete() {
+		constant != null
+	}
 }
 class UnaryOperation extends Term {
 	contains Term operand
 	POSTFIX_UNARY_OPERATOR operator
 
 	op void accept(Visitor v) {
-		operand.accept(v)
+		operand?.accept(v)
 		v.visit(this)
+	}
+
+	op boolean isTemplateFor(Term instance) {
+		instance instanceof UnaryOperation
+		&& (operator == null || operator == (instance as UnaryOperation).operator)
+		&& (operand == null || operand.isTemplateFor((instance as UnaryOperation).operand))
+	}
+
+	op boolean isComplete() {
+		operator != null && operand?.isComplete()
 	}
 }
 class BinaryOperation extends Term {
@@ -153,9 +188,22 @@ class BinaryOperation extends Term {
 	BINARY_OPERATOR operator
 
 	op void accept(Visitor v) {
-		left.accept(v)
-		right.accept(v)
+		left?.accept(v)
+		right?.accept(v)
 		v.visit(this)
+	}
+
+	op boolean isTemplateFor(Term instance) {
+		if (instance instanceof BinaryOperation)
+			(operator == null || operator == instance.operator)
+			&& (left == null || left.isTemplateFor(instance.left))
+			&& (right == null || right.isTemplateFor(instance.right))
+		else
+			false
+	}
+
+	op boolean isComplete() {
+		operator != null && left?.isComplete() && right?.isComplete()
 	}
 }
 

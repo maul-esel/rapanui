@@ -28,8 +28,8 @@ public class SuggestionFinder {
 	}
 
 	public Emitter<Transformation> makeSuggestionsAsync(ConclusionProcess target, BINARY_RELATION suggestionType) {
-		FormulaTemplate template = new FormulaTemplate(target.getLastTerm(), suggestionType, null);
-		return justificationFinder.justifyAsync(target.getEnvironment(), template, MAX_RECURSION)
+		Formula formulaTemplate = Builder.createFormula(target.getLastTerm(), suggestionType, null);
+		return justificationFinder.justifyAsync(target.getEnvironment(), formulaTemplate, MAX_RECURSION)
 			.map(justification -> createTransformation(target, justification));
 	}
 

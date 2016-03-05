@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import rapanui.dsl.Formula;
+
 /**
  * Helper class that aggregates the results of multiple @see JustificationFinder implementations
  */
@@ -44,7 +46,7 @@ public class AggregateJustificationFinder implements JustificationFinder {
 	 * @return An emitter that combines the emitters returned by all the employed instances.
 	 */
 	@Override
-	public Emitter<Justification> justifyAsync(ProofEnvironment environment, FormulaTemplate formulaTemplate, int recursionDepth) {
+	public Emitter<Justification> justifyAsync(ProofEnvironment environment, Formula formulaTemplate, int recursionDepth) {
 		return Emitter.combine(
 			finders.stream()
 			.map(finder -> finder.justifyAsync(environment, formulaTemplate, recursionDepth))
