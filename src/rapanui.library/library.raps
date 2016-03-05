@@ -1,5 +1,11 @@
 # Gleichheit/Inklusion: allgemeine Eigenschaften
 
+axiom "Reflexivität der Gleichheit"
+  always M = M
+
+axiom "Reflexivität der Inklusion"
+  always M ⊆ M
+
 theorem "Transitivität der Gleichheit"
   if L = M
   and M = N
