@@ -11,20 +11,12 @@ import rapanui.core.SuggestionFinder;
 import rapanui.core.Transformation;
 import rapanui.dsl.BINARY_RELATION;
 import rapanui.dsl.RuleSystemCollection;
-import rapanui.ui.models.ApplicationModel;
-import rapanui.ui.views.MainWindow;
 
 public class Application {
 	private final List<Observer> observers = new ArrayList<Observer>();
 	private final List<ProofEnvironment> environments = new ArrayList<ProofEnvironment>();
 
 	private final RuleSystemCollection ruleSystems = new RuleSystemCollection();
-
-	public static void main(String[] args) {
-		Application instance = new Application();
-		ApplicationModel model = new ApplicationModel(instance);
-		new MainWindow(model);
-	}
 
 	public Application() {
 		ruleSystems.load("../rapanui.library/library.raps");
