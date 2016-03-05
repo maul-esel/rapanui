@@ -25,9 +25,6 @@ public abstract class Builder {
 	* NOTE: this method copies the input terms!
 	*/
 	public static Formula createFormula(Term left, BINARY_RELATION type, Term right) {
-		assert left != null;
-		assert right != null;
-
 		Formula output = DslFactory.eINSTANCE.createFormula();
 		output.setLeft(EcoreUtil.copy(left));
 		output.setRight(EcoreUtil.copy(right));
@@ -52,10 +49,6 @@ public abstract class Builder {
 	* NOTE: this method copies the input terms!
 	*/
 	public static BinaryOperation createBinaryOperation(Term left, BINARY_OPERATOR operator, Term right) {
-		assert left != null;
-		assert operator != null;
-		assert right != null;
-
 		BinaryOperation output = DslFactory.eINSTANCE.createBinaryOperation();
 		output.setLeft(EcoreUtil.copy(left));
 		output.setOperator(operator);
@@ -67,9 +60,6 @@ public abstract class Builder {
 	* NOTE: this method copies the input term!
 	*/
 	public static UnaryOperation createUnaryOperation(Term operand, POSTFIX_UNARY_OPERATOR operator) {
-		assert operand != null;
-		assert operator != null;
-
 		UnaryOperation output = DslFactory.eINSTANCE.createUnaryOperation();
 		output.setOperand(EcoreUtil.copy(operand));
 		output.setOperator(operator);
