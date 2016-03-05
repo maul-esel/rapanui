@@ -206,7 +206,7 @@ public abstract class Emitter<T> {
 	}
 
 	protected static class ThreadedEmitter<T> extends Emitter<T> {
-		protected static final ExecutorService executor = Executors.newCachedThreadPool();
+		protected static final ExecutorService executor = Executors.newFixedThreadPool(8);
 
 		protected final Future<?> underlyingFuture;
 
