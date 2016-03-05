@@ -8,13 +8,19 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 public class Translator implements Visitor {
 	private final Map<String, Term> dictionary;
 	private final Stack<Term> termResult = new Stack<Term>();
+	private boolean allowIncomplete = false;
 
 	public Translator(Map<String, Term> dictionary) {
 		this.dictionary = dictionary;
 	}
 
 	public Term translate(Term input) {
+		return translate(input, false);
+	}
+
+	public Term translate(Term input, boolean allowIncomplete) {
 		termResult.clear();
+		this.allowIncomplete = allowIncomplete;
 		input.accept(this);
 
 		assert termResult.size() == 1;
@@ -32,7 +38,7 @@ public class Translator implements Visitor {
 
 	@Override public void visit(VariableReference input) {
 		String variable = input.getVariable();
-		if (!dictionary.containsKey(variable))
+		if ((!dictionary.containsKey(variable) || !dictionary.get(variable).isComplete()) && !allowIncomplete)
 			throw new IncompleteDictionaryException(variable);
 		termResult.push(EcoreUtil.copy(dictionary.get(variable)));
 	}

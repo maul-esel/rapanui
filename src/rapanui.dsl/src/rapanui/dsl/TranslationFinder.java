@@ -51,6 +51,10 @@ public class TranslationFinder {
 		return translator.translate(original);
 	}
 
+	public Term partialTranslate(Term original) {
+		return translator.translate(original, true);
+	}
+
 	/**
 	 * Informs the instance of a valid translation. From this, the instance derives dictionary entries
 	 * and checks if the translation is compatible with what it has previously learned.
