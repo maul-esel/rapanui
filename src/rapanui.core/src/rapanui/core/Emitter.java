@@ -105,7 +105,9 @@ public abstract class Emitter<T> {
 	 * @return A new @see Emitter instance. Guaranteed to be non-null.
 	 */
 	public static <T> Emitter<T> empty() {
-		return new Emitter<T>() {};
+		return new Emitter<T>() {
+			@Override public void onEmit(Consumer<T> action) {}
+		};
 	}
 
 	/**
