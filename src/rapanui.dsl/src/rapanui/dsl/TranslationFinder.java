@@ -56,13 +56,18 @@ public class TranslationFinder {
 	 * and checks if the translation is compatible with what it has previously learned.
 	 *
 	 * @param original The original term
-	 * @param translation The term the original term was translated to
+	 * @param translation The term the original term was translated to. May be null or incomplete.
 	 * @return False if this translation conflicts with previously learned dictionary entries, true otherwise.
 	 *
 	 * Note that this method may affect the instance's dictionary even if false is returned. Currently,
 	 * the only way to reset is to perform this operation on a clone.
 	 */
 	public boolean train(Term original, Term translation) {
+		assert original != null && original.isComplete();
+
+		if (translation == null)
+			return true;
+
 		if (original instanceof VariableReference)
 			return train((VariableReference)original, translation);
 		else if (original instanceof ConstantReference)
@@ -75,9 +80,15 @@ public class TranslationFinder {
 	}
 
 	private boolean train(VariableReference from, Term to) {
-		if (dictionary.containsKey(from.getVariable()))
-			return dictionary.get(from.getVariable()).structurallyEquals(to);
-		dictionary.put(from.getVariable(), to);
+		String variable = from.getVariable();
+		if (dictionary.containsKey(variable)) {
+			try {
+				dictionary.put(variable, to.mergeTemplate(dictionary.get(variable)));
+			} catch (IncompatibleTemplateException e) {
+				return false;
+			}
+		} else
+			dictionary.put(variable, to);
 		return true;
 	}
 
