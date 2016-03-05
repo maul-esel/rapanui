@@ -1,5 +1,6 @@
 package rapanui.ui;
 
+import rapanui.core.Application;
 import rapanui.ui.models.ApplicationModel;
 import rapanui.ui.views.MainWindow;
 

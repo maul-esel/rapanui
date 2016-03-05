@@ -1,14 +1,9 @@
-package rapanui.ui;
+package rapanui.core;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import rapanui.core.ConclusionProcess;
-import rapanui.core.Emitter;
-import rapanui.core.ProofEnvironment;
-import rapanui.core.SuggestionFinder;
-import rapanui.core.Transformation;
 import rapanui.dsl.BINARY_RELATION;
 import rapanui.dsl.RuleSystemCollection;
 

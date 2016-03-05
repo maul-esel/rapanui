@@ -1,6 +1,6 @@
 package rapanui.ui.commands;
 
-import rapanui.ui.Application;
+import rapanui.core.Application;
 
 public class CreateEnvironmentCommand extends AbstractCommand {
 	private static final long serialVersionUID = 1L;
