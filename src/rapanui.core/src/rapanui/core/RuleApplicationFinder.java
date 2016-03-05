@@ -17,39 +17,39 @@ public class RuleApplicationFinder implements JustificationFinder {
 	}
 
 	@Override
-	public Emitter<Justification> justifyAsync(ProofEnvironment environment, FormulaTemplate formulaTemplate,
+	public Emitter<Justification> justifyAsync(ProofEnvironment environment, Formula formulaTemplate,
 			int recursionDepth) {
-		if (!formulaTemplate.hasLeftTerm() && !formulaTemplate.hasRightTerm())
+		if (formulaTemplate.getLeft() == null && formulaTemplate.getRight() == null)
 			return Emitter.empty();
 		return Emitter.fromResultComputation(acceptor -> searchRuleApplications(acceptor, environment, formulaTemplate, recursionDepth));
 	}
 
 	private void searchRuleApplications(Consumer<Justification> acceptor, ProofEnvironment environment,
-			FormulaTemplate template, int recursionDepth) {
+			Formula formulaTemplate, int recursionDepth) {
 		for (RuleSystem ruleSystem : environment.getRuleSystems())
 			for (Rule rule : ruleSystem.getRules())
 				for (Formula conclusion : rule.getResolvedConclusions()) {
 					BINARY_RELATION conclusionType = conclusion.getFormulaType();
-					if (!template.hasFormulaType() || template.getFormulaType() == conclusionType
-							|| (conclusionType == BINARY_RELATION.EQUATION && template.getFormulaType() == BINARY_RELATION.INCLUSION))
-						searchApplications(rule, conclusion, template, acceptor, environment, recursionDepth);
+					if (formulaTemplate.getFormulaType() == null || formulaTemplate.getFormulaType() == conclusionType
+							|| (conclusionType == BINARY_RELATION.EQUATION && formulaTemplate.getFormulaType() == BINARY_RELATION.INCLUSION))
+						searchApplications(rule, conclusion, formulaTemplate, acceptor, environment, recursionDepth);
 
 					if (conclusionType == BINARY_RELATION.EQUATION) // (type is always compatible)
-						searchApplications(rule, Builder.reverse(conclusion), template, acceptor, environment, recursionDepth);
+						searchApplications(rule, Builder.reverse(conclusion), formulaTemplate, acceptor, environment, recursionDepth);
 				}
 	}
 
-	private void searchApplications(Rule rule, Formula conclusion, FormulaTemplate template,
+	private void searchApplications(Rule rule, Formula conclusion, Formula formulaTemplate,
 			Consumer<Justification> acceptor, ProofEnvironment environment, int recursionDepth) {
 		TranslationFinder translationFinder = new TranslationFinder();
 
 		// try matching specified terms to conclusion
-		if ( (template.hasLeftTerm() && !translationFinder.train(conclusion.getLeft(), template.getLeftTerm()))
-			|| (template.hasRightTerm() && !translationFinder.train(conclusion.getRight(), template.getRightTerm())) )
+		if ( !translationFinder.train(conclusion.getLeft(), formulaTemplate.getLeft())
+			|| !translationFinder.train(conclusion.getRight(), formulaTemplate.getRight()) )
 			return;
 
 		if (rule.getResolvedPremises().size() == 0) // no premises to justify
-			emitRuleApplication(acceptor, template, rule, conclusion, translationFinder, new Justification[0]);
+			emitRuleApplication(acceptor, formulaTemplate, rule, conclusion, translationFinder, new Justification[0]);
 		else {
 			// search justifications for first premise
 			Emitter<SearchResult> emitter = justifyPremise(rule.getResolvedPremises().get(0), translationFinder, environment, recursionDepth);
@@ -64,14 +64,14 @@ public class RuleApplicationFinder implements JustificationFinder {
 			}
 			// Whenever a list of justifications for all premises is found, emit a rule application
 			emitter.onEmit(result ->
-				emitRuleApplication(acceptor, template, rule, conclusion, result.finder, result.justifications.stream().toArray(Justification[]::new))
+				emitRuleApplication(acceptor, formulaTemplate, rule, conclusion, result.finder, result.justifications.stream().toArray(Justification[]::new))
 			);
 		}
 	}
 
-	private void emitRuleApplication(Consumer<Justification> acceptor, FormulaTemplate template, Rule rule,
+	private void emitRuleApplication(Consumer<Justification> acceptor, Formula formulaTemplate, Rule rule,
 			Formula conclusion, TranslationFinder translationFinder, Justification[] premiseJustifications) {
-		BINARY_RELATION type = template.hasFormulaType() ? template.getFormulaType() : conclusion.getFormulaType();
+		BINARY_RELATION type = formulaTemplate.getFormulaType() != null ? formulaTemplate.getFormulaType() : conclusion.getFormulaType();
 		Term left = null, right = null;
 		try {
 			left = translationFinder.translate(conclusion.getLeft());
@@ -93,7 +93,7 @@ public class RuleApplicationFinder implements JustificationFinder {
 		if (recursionDepth <= 0)
 			return Emitter.empty();
 
-		FormulaTemplate premiseTemplate = createTemplate(premise, translationFinder);
+		Formula premiseTemplate = createTemplate(premise, translationFinder);
 		return delegateFinder.justifyAsync(environment, premiseTemplate, recursionDepth - 1) // justify premise
 			.map( premiseJustification -> new SearchResult(premiseJustification, translationFinder.clone()) ) // wrap it in a SearchResult
 			.filter( result -> { // only emit it if it does not conflict with the current translation
@@ -102,15 +102,12 @@ public class RuleApplicationFinder implements JustificationFinder {
 			} );
 	}
 
-	private FormulaTemplate createTemplate(Formula formula, TranslationFinder translationFinder) {
-		Term translatedLeft, translatedRight;
-
-		try { translatedLeft = translationFinder.translate(formula.getLeft()); }
-		catch (Translator.IncompleteDictionaryException e) { translatedLeft = null; }
-		try { translatedRight = translationFinder.translate(formula.getRight()); }
-		catch (Translator.IncompleteDictionaryException e) { translatedRight = null; }
-
-		return new FormulaTemplate(translatedLeft, formula.getFormulaType(), translatedRight);
+	private Formula createTemplate(Formula formula, TranslationFinder translationFinder) {
+		return Builder.createFormula(
+				translationFinder.partialTranslate(formula.getLeft()),
+				formula.getFormulaType(),
+				translationFinder.partialTranslate(formula.getRight())
+		);
 	}
 
 	private static class SearchResult {
