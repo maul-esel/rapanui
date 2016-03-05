@@ -47,6 +47,8 @@ public class AggregateJustificationFinder implements JustificationFinder {
 	 */
 	@Override
 	public Emitter<Justification> justifyAsync(ProofEnvironment environment, Formula formulaTemplate, int recursionDepth) {
+		if (recursionDepth < 0)
+			return Emitter.empty();
 		return Emitter.combine(
 			finders.stream()
 			.map(finder -> finder.justifyAsync(environment, formulaTemplate, recursionDepth))
