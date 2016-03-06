@@ -47,6 +47,7 @@ class Rule extends PremiseContainer {
 	op void accept(Visitor v) {
 		premises.forEach[ accept(v) ]
 		conclusions.forEach[ accept(v) ]
+		v.visit(this)
 	}
 
 	// see comments in PremiseContainer.getResolvedPremises()
@@ -66,6 +67,7 @@ class Definition extends PremiseContainer {
 
 	op void accept(Visitor v) {
 		premises.forEach[ accept(v) ]
+		v.visit(this)
 	}
 }
 
