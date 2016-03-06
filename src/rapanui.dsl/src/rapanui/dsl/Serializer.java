@@ -17,6 +17,14 @@ public class Serializer implements Visitor {
 		return instances.get();
 	}
 
+	public String serialize(Rule rule) {
+		result.clear();
+		rule.accept(this);
+
+		assert result.size() == 1;
+		return result.pop();
+	}
+
 	public String serialize(Predicate predicate) {
 		result.clear();
 		predicate.accept(this);
@@ -32,6 +40,21 @@ public class Serializer implements Visitor {
 
 		assert result.size() == 1;
 		return result.pop();
+	}
+
+	@Override public void visit(Rule rule) {
+		String conclusions = result.pop();
+		for (int i = 1; i < rule.getConclusions().size(); ++i)
+			conclusions = result.pop() + "\n\tand " + conclusions;
+
+		if (rule.getPremises().size() == 0)
+			result.push("axiom \"" + rule.getName() + "\"\n\talways " + conclusions);
+		else {
+			String premises = result.pop();
+			for (int i = 1; i < rule.getPremises().size(); ++i)
+				premises = result.pop() + "\n\tand " + premises;
+			result.push("theorem \"" + rule.getName() + "\"\n\tif " + premises + "\n\tthen " + conclusions + "\n");
+		}
 	}
 
 	@Override public void visit(Formula formula) {

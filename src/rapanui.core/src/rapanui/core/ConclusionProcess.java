@@ -1,7 +1,10 @@
 package rapanui.core;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import rapanui.dsl.Term;
 import rapanui.dsl.BINARY_RELATION;
@@ -126,6 +129,12 @@ public class ConclusionProcess {
 			throw new IllegalArgumentException();
 		transformations.add(transformation);
 		notifyObservers(observers, Observer::transformationAdded, transformation);
+	}
+
+	public Set<String> getFreeVariables() {
+		return Arrays.stream(getTerms())
+			.flatMap(term -> term.getFreeVariables().stream())
+			.collect(Collectors.toSet());
 	}
 
 	public interface Observer {

@@ -5,6 +5,7 @@ package rapanui.dsl
 import org.eclipse.emf.ecore.util.EcoreUtil
 import java.util.stream.Collectors
 
+type StringSet wraps java.util.Set<String>
 type StringArray wraps String[]
 type Visitor wraps rapanui.dsl.Visitor
 type IncompatibleTemplateException wraps rapanui.dsl.IncompatibleTemplateException
@@ -47,6 +48,7 @@ class Rule extends PremiseContainer {
 	op void accept(Visitor v) {
 		premises.forEach[ accept(v) ]
 		conclusions.forEach[ accept(v) ]
+		v.visit(this)
 	}
 
 	// see comments in PremiseContainer.getResolvedPremises()
@@ -55,6 +57,14 @@ class Rule extends PremiseContainer {
 			.toMap [ serialize ].values // should be unique (not by equals(), but by structure/syntax)
 			.toEList
 	}
+
+	op StringSet getFreeVariables() {
+		(premises + conclusions).map[ freeVariables.toList ].flatten.toSet
+	}
+
+	op String serialize() {
+		Serializer.getInstance().serialize(this)
+	}
 }
 class Definition extends PremiseContainer {
 	String name
@@ -62,6 +72,7 @@ class Definition extends PremiseContainer {
 
 	op void accept(Visitor v) {
 		premises.forEach[ accept(v) ]
+		v.visit(this)
 	}
 }
 
@@ -79,6 +90,7 @@ abstract class Predicate {
 	}
 
 	op Formula[] resolve()
+	op StringSet getFreeVariables()
 }
 class Formula extends Predicate {
 	contains Term left
@@ -100,6 +112,15 @@ class Formula extends Predicate {
 		&& (left == null || left.isTemplateFor(instance.left))
 		&& (right == null || right.isTemplateFor(instance.right))
 	}
+
+	op StringSet getFreeVariables() {
+		val result = #{ }
+		if (left != null)
+			result.addAll(left.freeVariables)
+		if (right != null)
+			result.addAll(right.freeVariables)
+		result
+	}
 }
 class DefinitionReference extends Predicate {
 	contains Term target
@@ -113,6 +134,13 @@ class DefinitionReference extends Predicate {
 	op Formula[] resolve() {
 		val translator = new Translator(#{ definition.target -> target})
 		return definition.resolvedPremises.map[ p | translator.translate(p) ]
+	}
+
+	op StringSet getFreeVariables() {
+		if (target != null)
+			target.freeVariables
+		else
+			#{ }
 	}
 }
 
@@ -133,6 +161,7 @@ abstract class Term {
 	op boolean isTemplateFor(Term instance)
 	op boolean isComplete()
 	op Term mergeTemplate(Term other) throws IncompatibleTemplateException
+	op StringSet getFreeVariables()
 }
 class VariableReference extends Term {
 	String variable
@@ -154,6 +183,10 @@ class VariableReference extends Term {
 			return EcoreUtil.copy(this)
 		throw new IncompatibleTemplateException()
 	}
+
+	op StringSet getFreeVariables() {
+		#{ variable }
+	}
 }
 class ConstantReference extends Term {
 	String constant
@@ -174,6 +207,10 @@ class ConstantReference extends Term {
 		if (other == null || other.structurallyEquals(this))
 			return EcoreUtil.copy(this)
 		throw new IncompatibleTemplateException()
+	}
+
+	op StringSet getFreeVariables() {
+		#{ }
 	}
 }
 class UnaryOperation extends Term {
@@ -204,6 +241,13 @@ class UnaryOperation extends Term {
 			return Builder.createUnaryOperation(mergedOperand, operator)
 		}
 		throw new IncompatibleTemplateException()
+	}
+
+	op StringSet getFreeVariables() {
+		if (operand != null)
+			operand.freeVariables
+		else
+			#{ }
 	}
 }
 class BinaryOperation extends Term {
@@ -240,6 +284,15 @@ class BinaryOperation extends Term {
 			return Builder.createBinaryOperation(mergedLeft, operator, mergedRight)
 		}
 		throw new IncompatibleTemplateException()
+	}
+
+	op StringSet getFreeVariables() {
+		val result = #{ }
+		if (left != null)
+			result.addAll(left.freeVariables)
+		if (right != null)
+			result.addAll(right.freeVariables)
+		result
 	}
 }
 
