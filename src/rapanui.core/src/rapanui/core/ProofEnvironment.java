@@ -2,7 +2,9 @@ package rapanui.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import rapanui.dsl.Predicate;
 import rapanui.dsl.Formula;
@@ -83,6 +85,13 @@ public class ProofEnvironment {
 
 	public ConclusionProcess[] getConclusions() {
 		return listToArray(conclusions, ConclusionProcess[]::new);
+	}
+
+	public Set<String> getFreeVariables() {
+		return Stream.concat(
+			premises.stream().flatMap(predicate -> predicate.getFreeVariables().stream()),
+			conclusions.stream().flatMap(conclusion -> conclusion.getFreeVariables().stream())
+		).collect(Collectors.toSet());
 	}
 
 	public interface Observer {
