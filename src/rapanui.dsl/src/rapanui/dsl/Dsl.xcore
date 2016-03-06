@@ -5,6 +5,7 @@ package rapanui.dsl
 import org.eclipse.emf.ecore.util.EcoreUtil
 import java.util.stream.Collectors
 
+type StringSet wraps java.util.Set<String>
 type StringArray wraps String[]
 type Visitor wraps rapanui.dsl.Visitor
 
@@ -54,6 +55,10 @@ class Rule extends PremiseContainer {
 			.toMap [ serialize ].values // should be unique (not by equals(), but by structure/syntax)
 			.toEList
 	}
+
+	op StringSet getFreeVariables() {
+		(premises + conclusions).map[ freeVariables.toList ].flatten.toSet
+	}
 }
 class Definition extends PremiseContainer {
 	String name
@@ -78,6 +83,7 @@ abstract class Predicate {
 	}
 
 	op Formula[] resolve()
+	op StringSet getFreeVariables()
 }
 class Formula extends Predicate {
 	contains Term left
@@ -99,6 +105,15 @@ class Formula extends Predicate {
 		&& (left == null || left.isTemplateFor(instance.left))
 		&& (right == null || right.isTemplateFor(instance.right))
 	}
+
+	op StringSet getFreeVariables() {
+		val result = #{ }
+		if (left != null)
+			result.addAll(left.freeVariables)
+		if (right != null)
+			result.addAll(right.freeVariables)
+		result
+	}
 }
 class DefinitionReference extends Predicate {
 	contains Term target
@@ -112,6 +127,13 @@ class DefinitionReference extends Predicate {
 	op Formula[] resolve() {
 		val translator = new Translator(#{ definition.target -> target})
 		return definition.resolvedPremises.map[ p | translator.translate(p) ]
+	}
+
+	op StringSet getFreeVariables() {
+		if (target != null)
+			target.freeVariables
+		else
+			#{ }
 	}
 }
 
@@ -131,6 +153,7 @@ abstract class Term {
 
 	op boolean isTemplateFor(Term instance)
 	op boolean isComplete()
+	op StringSet getFreeVariables()
 }
 class VariableReference extends Term {
 	String variable
@@ -146,6 +169,10 @@ class VariableReference extends Term {
 	op boolean isComplete() {
 		variable != null
 	}
+
+	op StringSet getFreeVariables() {
+		#{ variable }
+	}
 }
 class ConstantReference extends Term {
 	String constant
@@ -160,6 +187,10 @@ class ConstantReference extends Term {
 
 	op boolean isComplete() {
 		constant != null
+	}
+
+	op StringSet getFreeVariables() {
+		#{ }
 	}
 }
 class UnaryOperation extends Term {
@@ -179,6 +210,13 @@ class UnaryOperation extends Term {
 
 	op boolean isComplete() {
 		operator != null && operand?.isComplete()
+	}
+
+	op StringSet getFreeVariables() {
+		if (operand != null)
+			operand.freeVariables
+		else
+			#{ }
 	}
 }
 class BinaryOperation extends Term {
@@ -203,6 +241,15 @@ class BinaryOperation extends Term {
 
 	op boolean isComplete() {
 		operator != null && left?.isComplete() && right?.isComplete()
+	}
+
+	op StringSet getFreeVariables() {
+		val result = #{ }
+		if (left != null)
+			result.addAll(left.freeVariables)
+		if (right != null)
+			result.addAll(right.freeVariables)
+		result
 	}
 }
 
