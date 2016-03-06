@@ -1,6 +1,7 @@
 package rapanui.ui.views;
 
 import java.awt.Insets;
+import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -10,6 +11,7 @@ import javax.swing.text.StyledDocument;
 import static javax.swing.text.StyleConstants.*;
 
 import rapanui.core.*;
+import rapanui.dsl.Term;
 
 class JustificationViewer extends JTextPane {
 	private static final long serialVersionUID = 1L;
@@ -17,6 +19,7 @@ class JustificationViewer extends JTextPane {
 	private static final String DEFAULT_STYLE = "default";
 	private static final String MATH_STYLE = "math";
 	private static final String BOLD_STYLE = "bold";
+	private static final String BOLD_MATH_STYLE = "math_bold";
 
 	public JustificationViewer() {
 		setEditable(false);
@@ -32,6 +35,9 @@ class JustificationViewer extends JTextPane {
 		Style mathStyle = getStyledDocument().addStyle(MATH_STYLE, defaultStyle);
 		setFontFamily(mathStyle, "DejaVu Sans Mono");
 		setItalic(mathStyle, false);
+
+		Style boldMathStyle = getStyledDocument().addStyle(BOLD_MATH_STYLE, mathStyle);
+		setBold(boldMathStyle, true);
 
 		Style boldStyle = getStyledDocument().addStyle(BOLD_STYLE, null);
 		setFontSize(boldStyle, 15);
@@ -109,15 +115,28 @@ class JustificationViewer extends JTextPane {
 		if (!referenceList.isEmpty())
 			referenceList = referenceList.substring(0, referenceList.length() - 2);
 
-		appendText("Nach der Regel " + justification.getAppliedRule().getName() + ":");
-		// TODO: display rule, but with distinct variable names
-		appendText(", mit "); // TODO: display variable translation
+		appendText("Nach der Regel " + justification.getAppliedRule().getName() + ":\n\n");
+		appendMathText(justification.getAppliedRule().serialize());
+		appendText("\nmit ");
+		displayVariableTranslation(justification.getVariableTranslation());
 		if (!referenceList.isEmpty())
 			appendText(" und " + referenceList);
-		appendText(", folgt dann ");
+		appendText(" folgt dann ");
 		appendMathText(justification.getJustifiedFormula().serialize());
 		appendText(" [" + (++referenceCounter) + "].\n\n");
 		return referenceCounter;
+	}
+
+	private void displayVariableTranslation(Map<String, Term> translation) throws BadLocationException {
+		boolean isFirst = true;
+		for (String variable : translation.keySet()) {
+			if (!isFirst)
+				appendText(", ");
+			else
+				isFirst = false;
+			appendMathText(variable + " = ");
+			appendBoldMathText(translation.get(variable).serialize());
+		}
 	}
 
 	private void appendBoldText(String text) throws BadLocationException {
@@ -133,5 +152,10 @@ class JustificationViewer extends JTextPane {
 	private void appendMathText(String mathText) throws BadLocationException {
 		StyledDocument document = getStyledDocument();
 		document.insertString(document.getLength(), mathText, document.getStyle(MATH_STYLE));
+	}
+
+	private void appendBoldMathText(String mathText) throws BadLocationException {
+		StyledDocument document = getStyledDocument();
+		document.insertString(document.getLength(), mathText, document.getStyle(BOLD_MATH_STYLE));
 	}
 }
