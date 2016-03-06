@@ -60,6 +60,10 @@ class Rule extends PremiseContainer {
 	op StringSet getFreeVariables() {
 		(premises + conclusions).map[ freeVariables.toList ].flatten.toSet
 	}
+
+	op String serialize() {
+		Serializer.getInstance().serialize(this)
+	}
 }
 class Definition extends PremiseContainer {
 	String name
