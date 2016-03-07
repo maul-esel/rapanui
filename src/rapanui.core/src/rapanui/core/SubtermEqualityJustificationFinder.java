@@ -30,11 +30,8 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 		if (recursionDepth <= 0 || (formulaTemplate.getLeft() == null && formulaTemplate.getRight() == null)) // needs at least one recursion and one term
 			return Emitter.empty();
 
-		Function<Formula,Emitter<Justification>> delegate = (template) -> {
-			if (recursionDepth <= 0)
-				return Emitter.empty();
-			return delegateFinder.justifyAsync(environment, template, recursionDepth - 1);
-		};
+		Function<Formula,Emitter<Justification>> delegate = (template) ->
+			delegateFinder.justifyAsync(environment, template, recursionDepth - 1);
 		return Emitter.fromResultComputation(acceptor -> searchSubtermEqualities(acceptor, delegate, formulaTemplate));
 	}
 
