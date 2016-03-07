@@ -102,7 +102,10 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 		suggestionList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		suggestionList.addListSelectionListener(this::onSuggestionSelected);
 
-		JSplitPane suggestionPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, suggestionList, justificationViewer);
+		JScrollPane suggestionScroller = new JScrollPane();
+		suggestionScroller.setViewportView(suggestionList);
+
+		JSplitPane suggestionPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT, suggestionScroller, justificationViewer);
 		suggestionPanel.setBackground(Color.WHITE);
 
 		JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, leftPanel, suggestionPanel);
