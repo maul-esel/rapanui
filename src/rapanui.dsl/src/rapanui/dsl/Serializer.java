@@ -48,7 +48,7 @@ public class Serializer implements Visitor {
 			conclusions = result.pop() + "\n\tand " + conclusions;
 
 		if (rule.getPremises().size() == 0)
-			result.push("axiom \"" + rule.getName() + "\"\n\talways " + conclusions);
+			result.push("axiom \"" + rule.getName() + "\"\n\talways " + conclusions + "\n");
 		else {
 			String premises = result.pop();
 			for (int i = 1; i < rule.getPremises().size(); ++i)
