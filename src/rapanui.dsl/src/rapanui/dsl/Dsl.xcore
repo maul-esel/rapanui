@@ -8,6 +8,7 @@ import java.util.stream.Collectors
 type StringSet wraps java.util.Set<String>
 type StringArray wraps String[]
 type Visitor wraps rapanui.dsl.Visitor
+type IncompatibleTemplateException wraps rapanui.dsl.IncompatibleTemplateException
 
 class RuleSystem {
 	contains Rule[] rules
@@ -159,6 +160,7 @@ abstract class Term {
 
 	op boolean isTemplateFor(Term instance)
 	op boolean isComplete()
+	op Term mergeTemplate(Term other) throws IncompatibleTemplateException
 	op StringSet getFreeVariables()
 }
 class VariableReference extends Term {
@@ -174,6 +176,12 @@ class VariableReference extends Term {
 
 	op boolean isComplete() {
 		variable != null
+	}
+
+	op Term mergeTemplate(Term other) throws IncompatibleTemplateException {
+		if (other == null || other.structurallyEquals(this))
+			return EcoreUtil.copy(this)
+		throw new IncompatibleTemplateException()
 	}
 
 	op StringSet getFreeVariables() {
@@ -193,6 +201,12 @@ class ConstantReference extends Term {
 
 	op boolean isComplete() {
 		constant != null
+	}
+
+	op Term mergeTemplate(Term other) throws IncompatibleTemplateException {
+		if (other == null || other.structurallyEquals(this))
+			return EcoreUtil.copy(this)
+		throw new IncompatibleTemplateException()
 	}
 
 	op StringSet getFreeVariables() {
@@ -216,6 +230,17 @@ class UnaryOperation extends Term {
 
 	op boolean isComplete() {
 		operator != null && operand?.isComplete()
+	}
+
+	op Term mergeTemplate(Term other) throws IncompatibleTemplateException {
+		if (other == null)
+			return EcoreUtil.copy(this)
+		else if (other instanceof UnaryOperation && (other as UnaryOperation).operator == operator) {
+			val otherOperand = (other as UnaryOperation).operand
+			val mergedOperand = operand?.mergeTemplate(otherOperand) ?: otherOperand?.mergeTemplate(operand)
+			return Builder.createUnaryOperation(mergedOperand, operator)
+		}
+		throw new IncompatibleTemplateException()
 	}
 
 	op StringSet getFreeVariables() {
@@ -247,6 +272,18 @@ class BinaryOperation extends Term {
 
 	op boolean isComplete() {
 		operator != null && left?.isComplete() && right?.isComplete()
+	}
+
+	op Term mergeTemplate(Term other) throws IncompatibleTemplateException {
+		if (other == null)
+			return EcoreUtil.copy(this)
+		else if (other instanceof BinaryOperation && (other as BinaryOperation).operator == operator) {
+			val binary = other as BinaryOperation
+			val mergedLeft = left?.mergeTemplate(binary.left) ?: binary.left?.mergeTemplate(left)
+			val mergedRight = right?.mergeTemplate(binary.right) ?: binary.right?.mergeTemplate(right)
+			return Builder.createBinaryOperation(mergedLeft, operator, mergedRight)
+		}
+		throw new IncompatibleTemplateException()
 	}
 
 	op StringSet getFreeVariables() {

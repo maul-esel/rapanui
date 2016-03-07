@@ -6,7 +6,14 @@ import rapanui.dsl.*;
 
 public class SuggestionFinder {
 	private final JustificationFinder justificationFinder;
-	private static final int MAX_RECURSION = 2;
+
+	/* Limit recursion depth to 1 to achieve acceptable performance.
+	 *
+	 * TODO: Alternatively, avoid recursive rule application searches
+	 * by modifying getDefaultInstance() to pass another AggregateJustificationFinder
+	 * (which only includes the other algorithms) to the new RuleApplicationFinder.
+	 */
+	private static final int MAX_RECURSION = 1;
 
 	private static SuggestionFinder defaultInstance;
 
@@ -22,6 +29,7 @@ public class SuggestionFinder {
 				new ProofJustificationFinder()
 			));
 			finder.addJustificationFinder(new SubtermEqualityJustificationFinder(finder));
+			finder.addJustificationFinder(new RuleApplicationFinder(finder));
 			defaultInstance = new SuggestionFinder(finder);
 		}
 		return defaultInstance;

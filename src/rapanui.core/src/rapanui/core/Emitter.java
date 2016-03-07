@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  * Represents a source that asynchronously emits objects. This is used by asynchronous
@@ -35,7 +36,8 @@ public abstract class Emitter<T> {
 		assert action != null;
 		for (T result : results)
 			action.accept(result);
-		actions.add(action);
+		if (!isStopped())
+			actions.add(action);
 	}
 
 	/**
@@ -65,6 +67,7 @@ public abstract class Emitter<T> {
 	 */
 	public synchronized void stop() {
 		isStopped = true;
+		actions.clear();
 	}
 
 	/**
@@ -152,6 +155,30 @@ public abstract class Emitter<T> {
 		return new MapEmitter<T,R>(this, conversion);
 	}
 
+	/**
+	 * Creates an emitter that relays the objects emitted by the results of the conversion
+	 *
+	 * @param conversion This method is executed whenever this emitter emits an object.
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 */
+	public <R> Emitter<R> flatMap(Function<T, Emitter<R>> conversion) {
+		AggregateEmitter<R> aggregate = new AggregateEmitter<R>();
+		onEmit(result -> aggregate.addSource(conversion.apply(result)));
+		return aggregate;
+	}
+
+	/**
+	 * Creates an emitter that only relays results if the meet a condition
+	 *
+	 * @param filter The condition results have to meet to be relayed
+	 *
+	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 */
+	public Emitter<T> filter(Predicate<T> filter) {
+		return new FilterEmitter<T>(this, filter);
+	}
+
 	protected static class HeadEmitter<T> extends Emitter<T> {
 		private int count;
 		private final Emitter<T> source;
@@ -168,8 +195,14 @@ public abstract class Emitter<T> {
 				super.acceptResult(result);
 				count--;
 				if (count <= 0)
-					source.stop();
+					stop();
 			}
+		}
+
+		@Override
+		public synchronized void stop() {
+			source.stop();
+			super.stop();
 		}
 	}
 
@@ -188,8 +221,30 @@ public abstract class Emitter<T> {
 		}
 	}
 
+	protected static class FilterEmitter<T> extends Emitter<T> {
+		private final Emitter<T> source;
+
+		public FilterEmitter(Emitter<T> source, Predicate<T> filter) {
+			this.source = source;
+			source.onEmit(t -> {
+				if (filter.test(t))
+					acceptResult(t);
+			});
+		}
+
+		@Override
+		public synchronized void stop() {
+			source.stop();
+			super.stop();
+		}
+	}
+
 	protected static class AggregateEmitter<T> extends Emitter<T> {
 		private final Collection<Emitter<? extends T>> generators;
+
+		public AggregateEmitter() {
+			this(new LinkedList<Emitter<? extends T>>());
+		}
 
 		public AggregateEmitter(Collection<Emitter<? extends T>> generators) {
 			this.generators = generators;
@@ -201,7 +256,16 @@ public abstract class Emitter<T> {
 		public synchronized void stop() {
 			for (Emitter<? extends T> generator : generators)
 				generator.stop();
+			generators.clear();
 			super.stop();
+		}
+
+		public synchronized void addSource(Emitter<? extends T> source) {
+			if (!isStopped()) {
+				generators.add(source);
+				source.onEmit(this::acceptResult);
+			} else
+				source.stop();
 		}
 	}
 
