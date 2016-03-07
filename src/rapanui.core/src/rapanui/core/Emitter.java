@@ -169,6 +169,13 @@ public abstract class Emitter<T> {
 	}
 
 	/**
+	 * Casts all results to the given type before emitting them
+	 */
+	public <S> Emitter<S> cast(Class<S> clazz) {
+		return map(result -> (S)result);
+	}
+
+	/**
 	 * Creates an emitter that only relays results if the meet a condition
 	 *
 	 * @param filter The condition results have to meet to be relayed
@@ -177,6 +184,27 @@ public abstract class Emitter<T> {
 	 */
 	public Emitter<T> filter(Predicate<T> filter) {
 		return new FilterEmitter<T>(this, filter);
+	}
+
+	/**
+	 * Only emits results of the given type
+	 */
+	public <S> Emitter<S> filter(Class<S> clazz) {
+		return filter(clazz::isInstance).cast(clazz);
+	}
+
+	/**
+	 * The opposite of @see filter: only returns results that do NOT meet the given predicate.
+	 */
+	public Emitter<T> reject(Predicate<T> predicate) {
+		return filter(predicate.negate());
+	}
+
+	/**
+	 * Only emits results that are NOT of the given type.
+	 */
+	public <S> Emitter<T> reject(Class<S> clazz) {
+		return filter(result -> !clazz.isInstance(result));
 	}
 
 	protected static class HeadEmitter<T> extends Emitter<T> {
