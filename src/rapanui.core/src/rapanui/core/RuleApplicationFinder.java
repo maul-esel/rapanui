@@ -50,7 +50,7 @@ public class RuleApplicationFinder implements JustificationFinder {
 
 		if (rule.getResolvedPremises().size() == 0) // no premises to justify
 			emitRuleApplication(acceptor, formulaTemplate, rule, conclusion, translationFinder, new Justification[0]);
-		else {
+		else if (recursionDepth > 0){
 			// search justifications for first premise
 			Emitter<SearchResult> emitter = justifyPremise(rule.getResolvedPremises().get(0), translationFinder, environment, recursionDepth);
 			for (Formula premise : rule.getResolvedPremises().subList(1, rule.getResolvedPremises().size())) {
@@ -90,9 +90,6 @@ public class RuleApplicationFinder implements JustificationFinder {
 	}
 
 	private Emitter<SearchResult> justifyPremise(Formula premise, TranslationFinder translationFinder, ProofEnvironment environment, int recursionDepth) {
-		if (recursionDepth <= 0)
-			return Emitter.empty();
-
 		Formula premiseTemplate = createTemplate(premise, translationFinder);
 		return delegateFinder.justifyAsync(environment, premiseTemplate, recursionDepth - 1) // justify premise
 			.map( premiseJustification -> new SearchResult(premiseJustification, translationFinder.clone()) ) // wrap it in a SearchResult
