@@ -58,14 +58,9 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 			Consumer<Justification> acceptor, Function<Formula,Emitter<Justification>> delegate) {
 		for (Term originalSubterm : collectSubterms(originalTerm)) { // iterate through all subterms, bottom- to topmost
 			Formula subTemplate = Builder.createEquation(originalSubterm, null);
-			delegate.apply(subTemplate).onEmit(subJustification -> {
-
-				 // avoid duplicates: if this is justified by replacing a subterm of originalSubterm in originalSubterm, then
-				 // the same can and will be achieved by replacing the subterm of originalSubterm directly in originalTerm.
-				 // Therefore, to avoid duplicates, subJustification must not itself be a SubtermEqualityJustification.
-				 if (subJustification instanceof SubtermEqualityJustification) // TODO: use filter(Class<S extends T>)
-					 return;
-
+			delegate.apply(subTemplate)
+			.reject(SubtermEqualityJustification.class)
+			.onEmit(subJustification -> {
 				 Term newSubterm = subJustification.getJustifiedFormula().getRight();
 				 Term newTerm = replaceSubterm(originalTerm, originalSubterm, newSubterm);
 
@@ -108,9 +103,9 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 
 			Formula subTemplate = Builder.createEquation(current, null);
 			final Term parentReference = parent; // for lambda
-			delegate.apply(subTemplate).onEmit(subJustification -> {
-				if (subJustification instanceof SubtermEqualityJustification)
-					return; // TODO: use filter()
+			delegate.apply(subTemplate)
+			.reject(SubtermEqualityJustification.class)
+			.onEmit(subJustification -> {
 				Term incomplete = subTemplate.getLeft(); // == current, which can't be used in lambda
 
 				Term originalSubterm = subJustification.getJustifiedFormula().getLeft();
@@ -170,12 +165,10 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 			// If successful, use this as justification.
 
 			Formula subTemplate = Builder.createFormula(currentLeft, BINARY_RELATION.EQUATION, currentRight);
-			Emitter<Justification> subEmitter = delegate.apply(subTemplate);
-			subEmitter.onEmit(subJustification -> {
-				if (subJustification instanceof SubtermEqualityJustification) // TODO: use filter().first()
-					return;
-				subEmitter.stop(); // one justification suffices – but do not use first() because of previous condition
-
+			delegate.apply(subTemplate)
+			.reject(SubtermEqualityJustification.class)
+			.first()
+			.onEmit(subJustification -> {
 				Formula subEquation = subJustification.getJustifiedFormula();
 				Term subLeft = subEquation.getLeft(), subRight = subEquation.getRight();
 				// should be equal to currentLeft, currentRight (but can't use those in lambda)
