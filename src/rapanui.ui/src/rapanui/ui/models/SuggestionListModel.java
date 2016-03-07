@@ -33,19 +33,19 @@ public class SuggestionListModel extends AbstractListModel<Transformation> {
 		int size = elements.size();
 		elements.clear();
 		termMap.clear();
-		fireIntervalRemoved(this, -1, size);
+		fireIntervalRemoved(this, 0, size - 1);
 	}
 
 	protected void insertElement(Transformation suggestion) {
 		// TODO: maintain ordered list
 		elements.add(suggestion);
-		fireIntervalAdded(this, elements.size() - 2, elements.size());
+		fireIntervalAdded(this, elements.size() - 1, elements.size() - 1);
 	}
 
 	protected void removeElement(Transformation suggestion) {
 		int oldIndex = elements.indexOf(suggestion);
 		elements.remove(oldIndex);
-		fireIntervalRemoved(this, oldIndex - 1, oldIndex + 1);
+		fireIntervalRemoved(this, oldIndex, oldIndex);
 	}
 
 	protected boolean isPreferable(Transformation newSuggestion, Transformation oldSuggestion) {
