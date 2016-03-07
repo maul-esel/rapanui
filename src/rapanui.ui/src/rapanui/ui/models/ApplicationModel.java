@@ -14,6 +14,7 @@ import javax.swing.event.ListDataListener;
 import rapanui.core.Application;
 import rapanui.core.ConclusionProcess;
 import rapanui.core.Emitter;
+import rapanui.core.Justification;
 import rapanui.core.ProofEnvironment;
 import rapanui.core.Transformation;
 import rapanui.dsl.RuleSystemCollection;
@@ -104,6 +105,11 @@ public class ApplicationModel implements Application.Observer {
 		suggestionListModel.clear();
 	}
 
+	void displayJustification(Justification justification) {
+		for (Observer observer : observers)
+			observer.justificationOpened(justification);
+	}
+
 	private void displaySuggestion(Transformation suggestion) {
 		suggestionListModel.addSuggestion(suggestion);
 	}
@@ -171,6 +177,7 @@ public class ApplicationModel implements Application.Observer {
 	}
 
 	public static interface Observer {
+		void justificationOpened(Justification justification);
 		void environmentCreated(ProofEnvironmentModel environmentModel);
 		void environmentDeleted(ProofEnvironmentModel environmentModel);
 

@@ -1,5 +1,6 @@
 package rapanui.ui.commands;
 
+import rapanui.core.Justification;
 import rapanui.ui.models.ApplicationModel;
 import rapanui.ui.models.ProofEnvironmentModel;
 
@@ -44,4 +45,7 @@ public class DeleteEnvironmentCommand extends AbstractCommand implements Applica
 	public void environmentActivated(ProofEnvironmentModel environmentModel) {
 		updateEnabled();
 	}
+
+	@Override
+	public void justificationOpened(Justification justification) {}
 }

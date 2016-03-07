@@ -101,7 +101,15 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 
 		c.gridx = 2;
 		c.weightx = 0;
-		longForm.add(new JLabel("(" + DisplayStringHelper.shortDescription(transformation.getJustification()) + ")"), c);
+
+		JLabel justificationLabel = new JLabel("(" + DisplayStringHelper.shortDescription(transformation.getJustification()) + ")");
+		justificationLabel.setToolTipText("display details");
+		justificationLabel.addMouseListener(new MouseAdapter() {
+			@Override public void mouseClicked(MouseEvent e) {
+				model.displayJustification(transformation.getJustification());
+			}
+		});
+		longForm.add(justificationLabel, c);
 		displayedTransformations++;
 	}
 

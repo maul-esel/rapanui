@@ -1,6 +1,7 @@
 package rapanui.ui.models;
 
 import rapanui.core.ConclusionProcess;
+import rapanui.core.Justification;
 import rapanui.core.Transformation;
 import rapanui.dsl.Term;
 
@@ -61,6 +62,10 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 
 	void clearSuggestions() {
 		container.clearSuggestions();
+	}
+
+	public void displayJustification(Justification justification) {
+		container.displayJustification(justification);
 	}
 
 	/* ****************************************** *

@@ -10,6 +10,7 @@ import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
 import rapanui.core.ConclusionProcess;
+import rapanui.core.Justification;
 import rapanui.core.ProofEnvironment;
 import rapanui.dsl.Predicate;
 import rapanui.ui.commands.*;
@@ -75,6 +76,10 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 
 	void clearSuggestions() {
 		container.clearSuggestions();
+	}
+
+	void displayJustification(Justification justification) {
+		container.displayJustification(justification);
 	}
 
 	ProofEnvironment getUnderlyingModel() {

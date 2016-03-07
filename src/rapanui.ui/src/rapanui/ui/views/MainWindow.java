@@ -16,6 +16,7 @@ import javax.swing.event.ListSelectionEvent;
 import rapanui.ui.controls.*;
 import rapanui.ui.models.*;
 
+import rapanui.core.Justification;
 import rapanui.core.Transformation;
 
 public class MainWindow extends JFrame implements PropertyChangeListener, ApplicationModel.Observer {
@@ -162,5 +163,11 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 			String name = environmentModel.getName();
 			((CardLayout)proofContainer.getLayout()).show(proofContainer, name);
 		}
+	}
+
+	@Override
+	public void justificationOpened(Justification justification) {
+		suggestionList.clearSelection();
+		justificationViewer.loadJustification(justification);
 	}
 }
