@@ -39,7 +39,7 @@ DefinitionReference:
 ;
 
 Term hidden(WS):
-	BinaryOperation
+	Union
 ;
 VariableReference:
 	variable=VARIABLE
@@ -55,16 +55,51 @@ SimpleTerm returns Term hidden(WS):
 UnaryOperation returns Term hidden():
 	SimpleTerm ({UnaryOperation.operand=current} operator=POSTFIX_UNARY_OPERATOR)?
 ;
-BinaryOperation returns Term hidden(WS):
-	UnaryOperation ({BinaryOperation.left=current} operator=BINARY_OPERATOR right=Term)?
+
+// Implement operator precedence
+Composition returns Term hidden(WS):
+	UnaryOperation ({BinaryOperation.left=current} operator=COMPOSITION_OP right=UnaryOperation)*
+;
+SetDifference returns Term hidden(WS):
+	Composition ({BinaryOperation.left=current} operator=MINUS_OP right=Composition)*
+;
+Intersection returns Term hidden(WS):
+	SetDifference ({BinaryOperation.left=current} operator=INTERSECTION_OP right=SetDifference)*
+;
+Union returns Term hidden(WS):
+	Intersection ({BinaryOperation.left=current} operator=UNION_OP right=Intersection)*
 ;
 
-enum POSTFIX_UNARY_OPERATOR:
-	CONVERSE = '˘' | KLEENE = '*' | PLUS = '⁺' | COMPLEMENT = 'ᶜ'
+/*
+// Alternative: force parentheses
+Term hidden(WS):
+	BinaryOperation
+;
+BinaryOperation returns Term hidden(WS):
+	UnaryOperation ({BinaryOperation.left=current} operator=BINARY_OPERATOR right=UnaryOperation)?
 ;
 enum BINARY_OPERATOR:
 	INTERSECTION = '∩' | UNION = '∪' | MINUS = '\\' | COMPOSITION = ';'
 ;
+*/
+
+enum POSTFIX_UNARY_OPERATOR:
+	CONVERSE = '˘' | KLEENE = '*' | PLUS = '⁺' | COMPLEMENT = 'ᶜ'
+;
+
+enum COMPOSITION_OP returns BINARY_OPERATOR:
+	COMPOSITION = ';'
+;
+enum MINUS_OP returns BINARY_OPERATOR:
+	MINUS = '\\'
+;
+enum INTERSECTION_OP returns BINARY_OPERATOR:
+	INTERSECTION = '∩'
+;
+enum UNION_OP returns BINARY_OPERATOR:
+	UNION = '∪'
+;
+
 enum BINARY_RELATION:
 	EQUATION = '=' | INCLUSION = '⊆'
 ;
