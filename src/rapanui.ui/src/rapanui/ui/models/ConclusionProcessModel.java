@@ -86,6 +86,7 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 		void deactivated();
 		void titleChanged(String newTitle);
 		void transformationAdded(Transformation transformation);
+		void transformationRemoved(Transformation transformation);
 	}
 
 	@Override
@@ -97,5 +98,10 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 	}
 
 	@Override
-	public void transformationRemoved(Transformation transformation) { /* currently unused */ }
+	public void transformationRemoved(Transformation transformation) {
+		for (Observer observer : observers)
+			observer.transformationRemoved(transformation);
+		for (Observer observer : observers)
+			observer.titleChanged(getTitle());
+	}
 }

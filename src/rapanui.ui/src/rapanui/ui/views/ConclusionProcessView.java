@@ -119,6 +119,15 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 	}
 
 	@Override
+	public void transformationRemoved(Transformation transformation) {
+		// removed transformation is always last one!
+		int componentCount = longForm.getComponentCount();
+		longForm.remove(longForm.getComponent(componentCount - 1));
+		longForm.remove(longForm.getComponent(componentCount - 2));
+		displayedTransformations--;
+	}
+
+	@Override
 	public void titleChanged(String newTitle) {
 		titleLabel.setText(newTitle);
 	}
