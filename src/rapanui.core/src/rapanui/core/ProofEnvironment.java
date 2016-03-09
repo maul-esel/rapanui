@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import rapanui.dsl.Predicate;
-import rapanui.core.ConclusionProcess.Observer;
 import rapanui.dsl.Formula;
 import rapanui.dsl.RuleSystemCollection;
 import rapanui.dsl.Term;
