@@ -130,7 +130,6 @@ public class ProofEnvironment {
 
 		void conclusionStarted(ConclusionProcess conclusion);
 		void conclusionRemoved(ConclusionProcess conclusion);
-		void conclusionMoved(ConclusionProcess conclusion); // unused for now
 	}
 
 	/**

@@ -62,8 +62,6 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		/*
 		 * Implementation of modification features has been postponed.
 		 *
-		 * header.add(new SimpleLink("\u2B06", "Nach oben"));
-		 * header.add(new SimpleLink("\u2B07", "Nach unten"));
 		 * header.add(new SimpleLink("\u2718", "Folgerung entfernen"));
 		 */
 		header.add(new SimpleLink(model.undoCommand));

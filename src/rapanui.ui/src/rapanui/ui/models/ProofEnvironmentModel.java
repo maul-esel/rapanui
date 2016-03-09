@@ -166,7 +166,4 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 
 	@Override
 	public void conclusionRemoved(ConclusionProcess conclusion) { /* currently unused */ }
-
-	@Override
-	public void conclusionMoved(ConclusionProcess conclusion) { /* currently unused */ }
 }
