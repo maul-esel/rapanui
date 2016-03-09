@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import rapanui.dsl.Predicate;
+import rapanui.core.ConclusionProcess.Observer;
 import rapanui.dsl.Formula;
 import rapanui.dsl.RuleSystemCollection;
 import rapanui.dsl.Term;
@@ -99,12 +100,36 @@ public class ProofEnvironment {
 		).collect(Collectors.toSet());
 	}
 
+	public void removePremise(Predicate premise) {
+		if (!premises.contains(premise))
+			return;
+
+		Set<Transformation> derivatives = analyst.findDirectDerivatives(premise);
+		for (Transformation derivative : derivatives)
+			derivative.getContainer().resetBefore(derivative);
+
+		premises.remove(premise);
+		notifyObservers(observers, Observer::premiseRemoved, premise);
+	}
+
+	public void removeConclusion(ConclusionProcess conclusion) {
+		if (!conclusions.contains(conclusion))
+			return;
+
+		Set<Transformation> derivatives = analyst.findDirectDerivatives(conclusion);
+		for (Transformation derivative : derivatives)
+			derivative.getContainer().resetBefore(derivative);
+
+		conclusions.remove(conclusion);
+		notifyObservers(observers, Observer::conclusionRemoved, conclusion);
+	}
+
 	public interface Observer {
 		void premiseAdded(Predicate premise);
-		void premiseRemoved(Predicate premise); // unused for now
+		void premiseRemoved(Predicate premise);
 
 		void conclusionStarted(ConclusionProcess conclusion);
-		void conclusionRemoved(ConclusionProcess conclusion); // unused for now
+		void conclusionRemoved(ConclusionProcess conclusion);
 		void conclusionMoved(ConclusionProcess conclusion); // unused for now
 	}
 
