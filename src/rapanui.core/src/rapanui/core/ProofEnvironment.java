@@ -22,6 +22,7 @@ public class ProofEnvironment {
 	private final List<Predicate> premises;
 	private final List<ConclusionProcess> conclusions;
 	private final List<Observer> observers;
+	private final DependencyAnalyst analyst = new DependencyAnalyst(this);
 
 	/**
 	 * Create a new environment.
@@ -39,6 +40,10 @@ public class ProofEnvironment {
 
 	public RuleSystemCollection getRuleSystems() {
 		return ruleSystems;
+	}
+
+	public DependencyAnalyst getAnalyst() {
+		return analyst;
 	}
 
 	/**
