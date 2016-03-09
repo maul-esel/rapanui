@@ -1,5 +1,6 @@
 package rapanui.ui.models;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -13,6 +14,7 @@ import javax.swing.text.PlainDocument;
 import rapanui.core.ConclusionProcess;
 import rapanui.core.Justification;
 import rapanui.core.ProofEnvironment;
+import rapanui.core.Transformation;
 import rapanui.dsl.Predicate;
 import rapanui.ui.commands.*;
 
@@ -99,6 +101,16 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 
 	void requestConfirmation(String message, Consumer<Boolean> handler) {
 		container.requestConfirmation(message, handler);
+	}
+
+	void highlight(Collection<Transformation> transformations) {
+		for (ConclusionProcessModel conclusion : conclusions)
+			conclusion.highlight(transformations);
+	}
+
+	void unhighlight() {
+		for (ConclusionProcessModel conclusion : conclusions)
+			conclusion.unhighlight();
 	}
 
 	/* ****************************************** *
