@@ -174,7 +174,7 @@ public class ConclusionProcess {
 		void transformationAdded(Transformation transformation);
 
 		/**
-		 * Called when a @see Transformation is removed from the conclusion. Currently unused.
+		 * Called when a @see Transformation is removed from the conclusion.
 		 *
 		 * @param transformation The removed @see Transformation. Guaranteed to be non-null.
 		 */
