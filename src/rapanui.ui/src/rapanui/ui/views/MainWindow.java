@@ -7,6 +7,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.HashMap;
 
 import javax.swing.*;
@@ -169,5 +170,11 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 	public void justificationOpened(Justification justification) {
 		suggestionList.clearSelection();
 		justificationViewer.loadJustification(justification);
+	}
+
+	@Override
+	public void confirmationRequested(String message, Consumer<Boolean> handler) {
+		int result = JOptionPane.showConfirmDialog(this, message, "Confirmation requested", JOptionPane.OK_CANCEL_OPTION);
+		handler.accept(result == JOptionPane.OK_OPTION);
 	}
 }

@@ -2,6 +2,7 @@ package rapanui.ui.models;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 import javax.swing.Action;
 import javax.swing.ComboBoxModel;
@@ -94,6 +95,10 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 			previous.onDeactivate();
 		if (activeConclusion != null)
 			activeConclusion.onActivate();
+	}
+
+	void requestConfirmation(String message, Consumer<Boolean> handler) {
+		container.requestConfirmation(message, handler);
 	}
 
 	/* ****************************************** *

@@ -1,5 +1,7 @@
 package rapanui.ui.commands;
 
+import java.util.function.Consumer;
+
 import rapanui.core.Justification;
 import rapanui.ui.models.ApplicationModel;
 import rapanui.ui.models.ProofEnvironmentModel;
@@ -48,4 +50,7 @@ public class DeleteEnvironmentCommand extends AbstractCommand implements Applica
 
 	@Override
 	public void justificationOpened(Justification justification) {}
+
+	@Override
+	public void confirmationRequested(String message, Consumer<Boolean> handler) {}
 }
