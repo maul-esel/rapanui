@@ -183,15 +183,15 @@ public class ApplicationModel implements Application.Observer {
 	}
 
 	public static interface Observer {
-		void justificationOpened(Justification justification);
-		void environmentCreated(ProofEnvironmentModel environmentModel);
-		void environmentDeleted(ProofEnvironmentModel environmentModel);
+		default void justificationOpened(Justification justification) {};
+		default void environmentCreated(ProofEnvironmentModel environmentModel) {};
+		default void environmentDeleted(ProofEnvironmentModel environmentModel) {};
 
 		/***
 		 * @param environmentModel (may be null)
 		 */
-		void environmentActivated(ProofEnvironmentModel environmentModel);
-		void confirmationRequested(String message, Consumer<Boolean> handler);
+		default void environmentActivated(ProofEnvironmentModel environmentModel) {};
+		default void confirmationRequested(String message, Consumer<Boolean> handler) {};
 	}
 
 	@Override

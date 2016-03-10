@@ -40,10 +40,4 @@ public class UndoTransformationCommand extends AbstractCommand implements Conclu
 	public void transformationRemoved(Transformation transformation) {
 		updateEnabled();
 	}
-
-	@Override public void activated() {}
-	@Override public void deactivated() {}
-	@Override public void titleChanged(String newTitle) {}
-	@Override public void highlightRequested(Collection<Transformation> transformations) {}
-	@Override public void unhighlightRequested() {}
 }

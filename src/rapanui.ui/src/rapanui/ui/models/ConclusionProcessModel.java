@@ -127,14 +127,14 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 	}
 
 	public static interface Observer {
-		void activated();
-		void deactivated();
-		void titleChanged(String newTitle);
-		void transformationAdded(Transformation transformation);
-		void transformationRemoved(Transformation transformation);
+		default void activated() {};
+		default void deactivated() {};
+		default void titleChanged(String newTitle) {};
+		default void transformationAdded(Transformation transformation) {};
+		default void transformationRemoved(Transformation transformation) {};
 
-		void highlightRequested(Collection<Transformation> transformations);
-		void unhighlightRequested();
+		default void highlightRequested(Collection<Transformation> transformations) {};
+		default void unhighlightRequested() {};
 	}
 
 	@Override

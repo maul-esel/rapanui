@@ -47,10 +47,4 @@ public class DeleteEnvironmentCommand extends AbstractCommand implements Applica
 	public void environmentActivated(ProofEnvironmentModel environmentModel) {
 		updateEnabled();
 	}
-
-	@Override
-	public void justificationOpened(Justification justification) {}
-
-	@Override
-	public void confirmationRequested(String message, Consumer<Boolean> handler) {}
 }

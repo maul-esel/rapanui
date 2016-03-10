@@ -178,10 +178,10 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	}
 
 	public static interface Observer {
-		void premiseAdded(Predicate premise);
-		void premiseRemoved(Predicate premise);
-		void conclusionStarted(ConclusionProcessModel conclusionModel);
-		void conclusionRemoved(ConclusionProcessModel conclusionModel);
+		default void premiseAdded(Predicate premise) {};
+		default void premiseRemoved(Predicate premise) {};
+		default void conclusionStarted(ConclusionProcessModel conclusionModel) {};
+		default void conclusionRemoved(ConclusionProcessModel conclusionModel) {};
 	}
 
 	@Override

@@ -124,11 +124,11 @@ public class ProofEnvironment {
 	}
 
 	public interface Observer {
-		void premiseAdded(Predicate premise);
-		void premiseRemoved(Predicate premise);
+		default void premiseAdded(Predicate premise) {};
+		default void premiseRemoved(Predicate premise) {};
 
-		void conclusionStarted(ConclusionProcess conclusion);
-		void conclusionRemoved(ConclusionProcess conclusion);
+		default void conclusionStarted(ConclusionProcess conclusion) {};
+		default void conclusionRemoved(ConclusionProcess conclusion) {};
 	}
 
 	/**
