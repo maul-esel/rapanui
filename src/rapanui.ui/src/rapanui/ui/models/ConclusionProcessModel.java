@@ -4,9 +4,13 @@ import rapanui.core.ConclusionProcess;
 import rapanui.core.Justification;
 import rapanui.core.Transformation;
 import rapanui.dsl.Term;
+import rapanui.ui.commands.DeleteConclusionCommand;
 import rapanui.ui.commands.UndoTransformationCommand;
 
 import java.util.List;
+
+import javax.swing.Action;
+
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -22,9 +26,11 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 
 		conclusion.addObserver(this);
 		undoCommand = new UndoTransformationCommand(this, conclusion);
+		deleteCommand = new DeleteConclusionCommand(this);
 	}
 
-	public final UndoTransformationCommand undoCommand;
+	public final Action undoCommand;
+	public final Action deleteCommand;
 
 	public String getTitle() {
 		return String.format("%s %s %s",
@@ -91,6 +97,10 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 			conclusion.undoTransformation();
 			container.clearSuggestions();
 		}
+	}
+
+	public void remove() {
+		container.removeConclusion(conclusion);
 	}
 
 	void highlight(Collection<Transformation> transformations) {

@@ -1,8 +1,10 @@
 package rapanui.ui.models;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import javax.swing.Action;
@@ -24,7 +26,7 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	private final String name;
 
 	private final List<Observer> observers = new LinkedList<Observer>();
-	private final List<ConclusionProcessModel> conclusions = new LinkedList<ConclusionProcessModel>();
+	private final Map<ConclusionProcess, ConclusionProcessModel> conclusionModelMap = new HashMap<ConclusionProcess, ConclusionProcessModel>();
 	private ConclusionProcessModel activeConclusion = null;
 
 	public ProofEnvironmentModel(ApplicationModel container, ProofEnvironment env, String name) {
@@ -66,7 +68,7 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	}
 
 	public ConclusionProcessModel[] getConclusions() {
-		return conclusions.toArray(new ConclusionProcessModel[conclusions.size()]);
+		return conclusionModelMap.values().toArray(new ConclusionProcessModel[conclusionModelMap.size()]);
 	}
 
 	public ConclusionProcessModel getActiveConclusion() {
@@ -104,13 +106,29 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	}
 
 	void highlight(Collection<Transformation> transformations) {
-		for (ConclusionProcessModel conclusion : conclusions)
+		for (ConclusionProcessModel conclusion : conclusionModelMap.values())
 			conclusion.highlight(transformations);
 	}
 
 	void unhighlight() {
-		for (ConclusionProcessModel conclusion : conclusions)
+		for (ConclusionProcessModel conclusion : conclusionModelMap.values())
 			conclusion.unhighlight();
+	}
+
+	void removeConclusion(ConclusionProcess conclusion) {
+		if (env.getAnalyst().hasDerivatives(conclusion)) {
+			highlight(env.getAnalyst().findDerivatives(conclusion));
+			requestConfirmation(
+				"Diese Aktion würde auch die markierten Daten entfernen. Fortfahren?",
+				result -> {
+					if (result)
+						env.removeConclusion(conclusion);
+					else
+						unhighlight();
+				}
+			);
+		} else
+			env.removeConclusion(conclusion);
 	}
 
 	/* ****************************************** *
@@ -142,6 +160,7 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	public static interface Observer {
 		void premiseAdded(Predicate premise);
 		void conclusionStarted(ConclusionProcessModel conclusionModel);
+		void conclusionRemoved(ConclusionProcessModel conclusionModel);
 	}
 
 	@Override
@@ -156,7 +175,7 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	@Override
 	public void conclusionStarted(ConclusionProcess conclusion) {
 		ConclusionProcessModel model = new ConclusionProcessModel(this, conclusion);
-		conclusions.add(model);
+		conclusionModelMap.put(conclusion, model);
 
 		for (Observer observer : observers)
 			observer.conclusionStarted(model);
@@ -165,5 +184,16 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	}
 
 	@Override
-	public void conclusionRemoved(ConclusionProcess conclusion) { /* currently unused */ }
+	public void conclusionRemoved(ConclusionProcess conclusion) {
+		if (!conclusionModelMap.containsKey(conclusion))
+			return;
+
+		ConclusionProcessModel model = conclusionModelMap.get(conclusion);
+		if (model == activeConclusion)
+			activateConclusion(null);
+
+		conclusionModelMap.remove(conclusion);
+		for (Observer observer : observers)
+			observer.conclusionRemoved(model);
+	}
 }

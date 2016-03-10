@@ -177,4 +177,17 @@ class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Obser
 	public void conclusionStarted(ConclusionProcessModel conclusion) {
 		displayConclusion(conclusion);
 	}
+
+	@Override
+	public void conclusionRemoved(ConclusionProcessModel conclusionModel) {
+		if (!conclusionViewMap.containsKey(conclusionModel))
+			return;
+
+		ConclusionProcessView view = conclusionViewMap.get(conclusionModel);
+		conclusionViewMap.remove(conclusionModel);
+		remove(view);
+
+		validate();
+		repaint();
+	}
 }

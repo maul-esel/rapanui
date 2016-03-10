@@ -59,12 +59,8 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		header.add(titleLabel = ProofEnvironmentView.createMathematicalLabel(shortForm));
 		header.add(Box.createHorizontalGlue());
 
-		/*
-		 * Implementation of modification features has been postponed.
-		 *
-		 * header.add(new SimpleLink("\u2718", "Folgerung entfernen"));
-		 */
 		header.add(new SimpleLink(model.undoCommand));
+		header.add(new SimpleLink(model.deleteCommand));
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
