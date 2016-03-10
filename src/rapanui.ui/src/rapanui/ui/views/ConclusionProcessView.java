@@ -3,12 +3,14 @@ package rapanui.ui.views;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Collection;
 
 import javax.swing.*;
 import javax.swing.border.*;
 
 import rapanui.core.Transformation;
 import rapanui.ui.controls.CollapseButton;
+import rapanui.ui.controls.SimpleLink;
 import rapanui.ui.models.ConclusionProcessModel;
 
 class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Observer {
@@ -57,14 +59,8 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		header.add(titleLabel = ProofEnvironmentView.createMathematicalLabel(shortForm));
 		header.add(Box.createHorizontalGlue());
 
-		/*
-		 * Implementation of modification features has been postponed.
-		 *
-		 * header.add(new SimpleLink("\u2B06", "Nach oben"));
-		 * header.add(new SimpleLink("\u2B07", "Nach unten"));
-		 * header.add(new SimpleLink("\u27F2", "Letzter Schritt rückgängig"));
-		 * header.add(new SimpleLink("\u2718", "Folgerung entfernen"));
-		 */
+		header.add(new SimpleLink(model.undoCommand));
+		header.add(new SimpleLink(model.deleteCommand));
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -119,6 +115,15 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 	}
 
 	@Override
+	public void transformationRemoved(Transformation transformation) {
+		// removed transformation is always last one!
+		int componentCount = longForm.getComponentCount();
+		longForm.remove(longForm.getComponent(componentCount - 1));
+		longForm.remove(longForm.getComponent(componentCount - 2));
+		displayedTransformations--;
+	}
+
+	@Override
 	public void titleChanged(String newTitle) {
 		titleLabel.setText(newTitle);
 	}
@@ -131,5 +136,21 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 	@Override
 	public void deactivated() {
 		updateBorder();
+	}
+
+	@Override
+	public void highlightRequested(Collection<Transformation> transformations) {
+		Transformation[] ownTransformations = model.getTransformations();
+		for (int i = 0; i < ownTransformations.length; ++i)
+			if (transformations.contains(ownTransformations[i])) {
+				int componentIndex = 1 + 2*i;
+				longForm.getComponent(componentIndex).setForeground(Color.red);
+			}
+	}
+
+	@Override
+	public void unhighlightRequested() {
+		for (int i = 1; i < longForm.getComponentCount(); i += 2)
+			longForm.getComponent(i).setForeground(null);
 	}
 }

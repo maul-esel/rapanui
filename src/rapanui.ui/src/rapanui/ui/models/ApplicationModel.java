@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
@@ -123,6 +124,11 @@ public class ApplicationModel implements Application.Observer {
 		loadSuggestions(suggestion.getContainer().getEnvironment(), suggestion.getContainer());
 	}
 
+	void requestConfirmation(String message, Consumer<Boolean> handler) {
+		for (Observer observer : observers)
+			observer.confirmationRequested(message, handler);
+	}
+
 	/* ****************************************** *
 	 * private helper methods                     *
 	 * ****************************************** */
@@ -185,6 +191,7 @@ public class ApplicationModel implements Application.Observer {
 		 * @param environmentModel (may be null)
 		 */
 		void environmentActivated(ProofEnvironmentModel environmentModel);
+		void confirmationRequested(String message, Consumer<Boolean> handler);
 	}
 
 	@Override

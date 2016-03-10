@@ -115,6 +115,34 @@ public class ConclusionProcess {
 	}
 
 	/**
+	 * Removes the last transformation from the conclusion.
+	 * Note that this also removes all derivatives of this transformation from the environment.
+	 */
+	public void undoTransformation() {
+		Transformation lastTransformation = transformations.get(transformations.size() - 1);
+
+		Set<Transformation> derivatives = environment.getAnalyst().findDirectDerivatives(lastTransformation);
+		for (Transformation derivative : derivatives)
+				derivative.getContainer().resetBefore(derivative);
+
+		transformations.remove(transformations.size() - 1);
+		notifyObservers(observers, Observer::transformationRemoved, lastTransformation);
+	}
+
+	/**
+	 * Removes the given transformation and all subsequent ones from the conclusion.
+	 * Note that this also removes all their derivatives from the environment.
+	 */
+	public void resetBefore(Transformation transformation) {
+		if (!transformations.contains(transformation))
+			return; // do not error
+
+		for (int i = transformations.size() - 1; transformations.get(i) != transformation; --i)
+			undoTransformation();
+		undoTransformation();
+	}
+
+	/**
 	 * Appends a new transformation to the chain.
 	 *
 	 * @param transformation The transformation to append. Must not be null.
@@ -146,7 +174,7 @@ public class ConclusionProcess {
 		void transformationAdded(Transformation transformation);
 
 		/**
-		 * Called when a @see Transformation is removed from the conclusion. Currently unused.
+		 * Called when a @see Transformation is removed from the conclusion.
 		 *
 		 * @param transformation The removed @see Transformation. Guaranteed to be non-null.
 		 */
