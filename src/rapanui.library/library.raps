@@ -6,11 +6,6 @@ axiom "Reflexivität der Gleichheit"
 axiom "Reflexivität der Inklusion"
   always M ⊆ M
 
-theorem "Transitivität der Gleichheit"
-  if L = M
-  and M = N
-  then L = N
-
 theorem "Transitivität der Inklusion"
   if L ⊆ M
   and M ⊆ N
