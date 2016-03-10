@@ -19,5 +19,6 @@ Require-Bundle: rapanui.dsl;visibility:=reexport,
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: rapanui.dsl.ui.internal,
- rapanui.dsl.ui.contentassist.antlr
+ rapanui.dsl.ui.contentassist.antlr,
+ rapanui.dsl.ui.contentassist.antlr.internal
 Bundle-Activator: rapanui.dsl.ui.internal.DslActivator
