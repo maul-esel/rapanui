@@ -139,11 +139,7 @@ class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Obser
 		} else
 			panel.add(createMathematicalLabel(premise.serialize()));
 
-		/*
-		 * Implementation of modification features has been postponed.
-		 *
-		 * panel.add(new SimpleLink("\u2718", "Voraussetzung entfernen"));
-		 */
+		panel.add(new SimpleLink(model.getDeletePremiseCommand(premise)));
 
 		panel.setBorder(new EmptyBorder(5,5,5,5));
 		premisePanel.add(panel);
@@ -171,6 +167,19 @@ class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Obser
 	@Override
 	public void premiseAdded(Predicate premise) {
 		displayPremise(premise);
+	}
+
+	@Override
+	public void premiseRemoved(Predicate premise) {
+		if (!premiseViewMap.containsKey(premise))
+			return;
+
+		JPanel view = premiseViewMap.get(premise);
+		premiseViewMap.remove(premise);
+		premisePanel.remove(view);
+
+		validate();
+		repaint();
 	}
 
 	@Override

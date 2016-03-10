@@ -131,6 +131,22 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 			env.removeConclusion(conclusion);
 	}
 
+	public void removePremise(Predicate premise) {
+		if (env.getAnalyst().hasDerivatives(premise)) {
+			highlight(env.getAnalyst().findDerivatives(premise));
+			requestConfirmation(
+				"Diese Aktion würde auch die markierten Daten entfernen. Fortfahren?",
+				result -> {
+					if (result)
+						env.removePremise(premise);
+					else
+						unhighlight();
+				}
+			);
+		} else
+			env.removePremise(premise);
+	}
+
 	/* ****************************************** *
 	 * Sub-UI models                              *
 	 * ****************************************** */
@@ -144,6 +160,10 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	public final Action createFormulaPremiseCommand;
 	public final Action createDefinitionReferencePremiseCommand;
 	public final Action createConclusionCommand;
+
+	public Action getDeletePremiseCommand(Predicate premise) {
+		return new DeletePremiseCommand(this, premise);
+	}
 
 	/* ****************************************** *
 	 * Observer proxy                             *
@@ -159,6 +179,7 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 
 	public static interface Observer {
 		void premiseAdded(Predicate premise);
+		void premiseRemoved(Predicate premise);
 		void conclusionStarted(ConclusionProcessModel conclusionModel);
 		void conclusionRemoved(ConclusionProcessModel conclusionModel);
 	}
@@ -170,7 +191,10 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	}
 
 	@Override
-	public void premiseRemoved(Predicate premise) { /* currently unused */ }
+	public void premiseRemoved(Predicate premise) {
+		for (Observer observer : observers)
+			observer.premiseRemoved(premise);
+	}
 
 	@Override
 	public void conclusionStarted(ConclusionProcess conclusion) {
