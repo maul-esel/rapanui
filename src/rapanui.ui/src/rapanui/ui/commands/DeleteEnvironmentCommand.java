@@ -1,8 +1,5 @@
 package rapanui.ui.commands;
 
-import java.util.function.Consumer;
-
-import rapanui.core.Justification;
 import rapanui.ui.models.ApplicationModel;
 import rapanui.ui.models.ProofEnvironmentModel;
 

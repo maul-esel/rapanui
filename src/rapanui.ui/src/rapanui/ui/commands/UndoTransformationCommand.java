@@ -1,7 +1,5 @@
 package rapanui.ui.commands;
 
-import java.util.Collection;
-
 import rapanui.core.ConclusionProcess;
 import rapanui.core.Transformation;
 import rapanui.ui.models.ConclusionProcessModel;
