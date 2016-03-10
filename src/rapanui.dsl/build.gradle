@@ -1,5 +1,5 @@
 plugins {
-  id "org.xtext.xtext" version "0.3.26" // used to build Xcore model
+  id "org.xtext.xtext" version "0.3.27" // used to build Xcore model
   id "org.xtend.xtend" version "0.4.14"
   id "java"
   id "eclipse"
