@@ -14,7 +14,11 @@ public class Application {
 	private final RuleSystemCollection ruleSystems = new RuleSystemCollection();
 
 	public Application() {
-		ruleSystems.load("../rapanui.library/library.raps");
+		try {
+			ruleSystems.load(Application.class.getResourceAsStream("/library.raps"));
+		} catch (Exception e) {
+			throw new IllegalStateException("Failed to load rule system.", e);
+		}
 		createEnvironment(); // always create initial environment
 	}
 
