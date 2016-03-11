@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.border.*;
 
 import rapanui.core.Transformation;
+import rapanui.ui.ProofFormatter;
 import rapanui.ui.controls.CollapseButton;
 import rapanui.ui.controls.SimpleLink;
 import rapanui.ui.models.ConclusionProcessModel;
@@ -98,7 +99,7 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		c.gridx = 2;
 		c.weightx = 0;
 
-		JLabel justificationLabel = new JLabel("(" + DisplayStringHelper.shortDescription(transformation.getJustification()) + ")");
+		JLabel justificationLabel = new JLabel("(" + ProofFormatter.shortDescription(transformation.getJustification()) + ")");
 		justificationLabel.setToolTipText("display details");
 		justificationLabel.addMouseListener(new MouseAdapter() {
 			@Override public void mouseClicked(MouseEvent e) {

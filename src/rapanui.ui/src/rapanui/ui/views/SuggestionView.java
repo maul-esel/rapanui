@@ -9,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import rapanui.core.*;
+import rapanui.ui.ProofFormatter;
 
 public class SuggestionView extends JPanel {
 	private static final long serialVersionUID = 1L;
@@ -29,7 +30,7 @@ public class SuggestionView extends JPanel {
 		String shortForm = String.format("<html><pre>\t%s %s\t\t(%s)</pre></html>",
 			model.getFormulaType().getLiteral(),
 			model.getOutput().serialize(),
-			DisplayStringHelper.shortDescription(model.getJustification())
+			ProofFormatter.shortDescription(model.getJustification())
 		);
 		// TODO: use math font
 		add(new JLabel(shortForm), BorderLayout.NORTH);
