@@ -22,8 +22,6 @@ class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Obser
 	// ugly hack: use this instead of Integer.MAX_VALUE to avoid integer overflow
 	private static final int MAX_WIDTH = 5000;
 
-	private static final Font mathFont = new Font("DejaVu Sans Mono", Font.PLAIN, 14);
-
 	private final ProofEnvironmentModel model;
 
 	private final JPanel premisePanel = new JPanel(new GridLayout(0, 4));
@@ -159,7 +157,7 @@ class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Obser
 
 	static JLabel createMathematicalLabel(String text) {
 		JLabel label = new JLabel(text);
-		label.setFont(mathFont);
+		label.setFont(FontManager.getMathFont());
 		label.setAlignmentX(LEFT_ALIGNMENT);
 		return label;
 	}

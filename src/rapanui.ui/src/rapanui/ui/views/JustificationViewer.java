@@ -43,7 +43,7 @@ class JustificationViewer extends JTextPane {
 		setFontSize(defaultStyle, 14);
 
 		mathStyle = defaultDocument.addStyle(null, defaultStyle);
-		setFontFamily(mathStyle, "DejaVu Sans Mono");
+		setFontFamily(mathStyle, FontManager.getMathFontFamily());
 		setItalic(mathStyle, false);
 
 		boldMathStyle = defaultDocument.addStyle(null, mathStyle);

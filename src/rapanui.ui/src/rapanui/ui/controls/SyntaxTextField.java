@@ -1,7 +1,6 @@
 package rapanui.ui.controls;
 
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.event.FocusEvent;
 
 import javax.swing.JTextField;
@@ -12,11 +11,11 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.Document;
 
 import rapanui.dsl.Parser;
+import rapanui.ui.views.FontManager;
 
 public class SyntaxTextField extends JTextField implements DocumentListener {
 	private static final long serialVersionUID = 1L;
 
-	private static final Font mathFont = new Font("DejaVu Sans Mono", Font.PLAIN, 14);
 	private static final Border invalidBorder = new LineBorder(Color.red);
 
 	private boolean isValid = false;
@@ -30,7 +29,7 @@ public class SyntaxTextField extends JTextField implements DocumentListener {
 
 	public SyntaxTextField(ParsingMode mode, Document model /* may be null */) {
 		super(model, null, 0);
-		setFont(mathFont);
+		setFont(FontManager.getMathFont());
 		this.parsingMode = mode;
 		getDocument().addDocumentListener(this);
 		defaultBorder = getBorder();
