@@ -13,6 +13,7 @@ import java.util.HashMap;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import rapanui.ui.controls.*;
 import rapanui.ui.models.*;
@@ -72,6 +73,7 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 		proofSelectionPanel.add(Box.createHorizontalStrut(5));
 		proofSelectionPanel.add(proofList);
 		proofSelectionPanel.add(new SimpleLink(appModel.createEnvironmentCommand));
+		proofSelectionPanel.add(new SimpleLink(appModel.exportEnvironmentCommand));
 		proofSelectionPanel.add(new SimpleLink(appModel.deleteEnvironmentCommand));
 
 		proofContainer.setOpaque(false);
@@ -176,5 +178,18 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 	public void confirmationRequested(String message, Consumer<Boolean> handler) {
 		int result = JOptionPane.showConfirmDialog(this, message, "Confirmation requested", JOptionPane.OK_CANCEL_OPTION);
 		handler.accept(result == JOptionPane.OK_OPTION);
+	}
+
+	@Override
+	public void filePathRequested(boolean isWrite, String[] extensions, Consumer<String> callback) {
+		JFileChooser chooser = new JFileChooser();
+
+		chooser.removeChoosableFileFilter(chooser.getAcceptAllFileFilter());
+		for (String ext : extensions)
+			chooser.addChoosableFileFilter(new FileNameExtensionFilter(ext + " files", ext));
+
+		chooser.setMultiSelectionEnabled(false);
+		if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+			callback.accept(chooser.getSelectedFile().getAbsolutePath());
 	}
 }

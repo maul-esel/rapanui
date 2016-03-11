@@ -1,5 +1,7 @@
 package rapanui.ui.models;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -10,14 +12,17 @@ import java.util.function.Consumer;
 import javax.swing.Action;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
+import javax.swing.text.html.HTMLDocument;
 
 import rapanui.core.ConclusionProcess;
 import rapanui.core.Justification;
 import rapanui.core.ProofEnvironment;
 import rapanui.core.Transformation;
 import rapanui.dsl.Predicate;
+import rapanui.ui.ProofFormatter;
 import rapanui.ui.commands.*;
 
 public class ProofEnvironmentModel implements ProofEnvironment.Observer {
@@ -57,6 +62,20 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	public void onActivate() {
 		if (activeConclusion != null)
 			activeConclusion.onActivate();
+	}
+
+	public void export() {
+		container.requestFilePath(true, new String[]{ "txt" }, path -> {
+			HTMLDocument document = new ProofFormatter(env).getDocument();
+			try {
+				// TODO: HTML export
+				PrintWriter writer = new PrintWriter(path);
+				writer.write(document.getText(0, document.getLength()));
+				writer.close();
+			} catch (FileNotFoundException|BadLocationException e) {
+				throw new IllegalStateException("Export failed", e);
+			}
+		});
 	}
 
 	/* ****************************************** *

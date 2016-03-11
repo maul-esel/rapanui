@@ -21,6 +21,7 @@ import rapanui.core.Transformation;
 import rapanui.dsl.RuleSystemCollection;
 import rapanui.ui.commands.CreateEnvironmentCommand;
 import rapanui.ui.commands.DeleteEnvironmentCommand;
+import rapanui.ui.commands.ExportEnvironmentCommand;
 
 public class ApplicationModel implements Application.Observer {
 	private final Application app;
@@ -46,6 +47,7 @@ public class ApplicationModel implements Application.Observer {
 		this.app = app;
 
 		createEnvironmentCommand = new CreateEnvironmentCommand(app);
+		exportEnvironmentCommand = new ExportEnvironmentCommand(this);
 		deleteEnvironmentCommand = new DeleteEnvironmentCommand(this);
 
 		environmentNameModel = new DefaultComboBoxModel<String>();
@@ -68,6 +70,7 @@ public class ApplicationModel implements Application.Observer {
 	}
 
 	public final Action createEnvironmentCommand;
+	public final Action exportEnvironmentCommand;
 	public final Action deleteEnvironmentCommand;
 
 	public final MutableComboBoxModel<String> environmentNameModel;
@@ -127,6 +130,11 @@ public class ApplicationModel implements Application.Observer {
 	void requestConfirmation(String message, Consumer<Boolean> handler) {
 		for (Observer observer : observers)
 			observer.confirmationRequested(message, handler);
+	}
+
+	void requestFilePath(boolean isWrite, String[] extensions, Consumer<String> callback) {
+		for (Observer observer : observers)
+			observer.filePathRequested(isWrite, extensions, callback);
 	}
 
 	/* ****************************************** *
@@ -192,6 +200,7 @@ public class ApplicationModel implements Application.Observer {
 		 */
 		default void environmentActivated(ProofEnvironmentModel environmentModel) {}
 		default void confirmationRequested(String message, Consumer<Boolean> handler) {}
+		default void filePathRequested(boolean isWrite, String[] extensions, Consumer<String> callback) {}
 	}
 
 	@Override
