@@ -16,10 +16,10 @@ import rapanui.dsl.Term;
 class JustificationViewer extends JTextPane {
 	private static final long serialVersionUID = 1L;
 
-	private static final String DEFAULT_STYLE = "default";
-	private static final String MATH_STYLE = "math";
-	private static final String BOLD_STYLE = "bold";
-	private static final String BOLD_MATH_STYLE = "math_bold";
+	private Style defaultStyle;
+	private Style mathStyle;
+	private Style boldMathStyle;
+	private Style boldStyle;
 
 	public JustificationViewer() {
 		setEditable(false);
@@ -28,18 +28,18 @@ class JustificationViewer extends JTextPane {
 	}
 
 	private void initializeStyles() {
-		Style defaultStyle = getStyledDocument().addStyle(DEFAULT_STYLE, null);
+		defaultStyle = getStyledDocument().addStyle(null, null);
 		setFontSize(defaultStyle, 14);
 		setItalic(defaultStyle, true);
 
-		Style mathStyle = getStyledDocument().addStyle(MATH_STYLE, defaultStyle);
+		mathStyle = getStyledDocument().addStyle(null, defaultStyle);
 		setFontFamily(mathStyle, "DejaVu Sans Mono");
 		setItalic(mathStyle, false);
 
-		Style boldMathStyle = getStyledDocument().addStyle(BOLD_MATH_STYLE, mathStyle);
+		boldMathStyle = getStyledDocument().addStyle(null, mathStyle);
 		setBold(boldMathStyle, true);
 
-		Style boldStyle = getStyledDocument().addStyle(BOLD_STYLE, null);
+		boldStyle = getStyledDocument().addStyle(null, null);
 		setFontSize(boldStyle, 15);
 		setBold(boldStyle, true);
 	}
@@ -47,26 +47,22 @@ class JustificationViewer extends JTextPane {
 	public void loadJustification(Justification justification) {
 		clear();
 
-		try {
-			appendBoldText("Es gilt ");
-			appendMathText(justification.getJustifiedFormula().serialize());
-			appendText(", " + DisplayStringHelper.shortDescription(justification) + ".\n\n");
+		appendText("Es gilt ", boldStyle);
+		appendMathText(justification.getJustifiedFormula().serialize());
+		appendText(", " + DisplayStringHelper.shortDescription(justification) + ".\n\n");
 
-			if (justification instanceof EnvironmentPremiseJustification || justification instanceof ProofJustification)
-				return; // no further details
+		if (justification instanceof EnvironmentPremiseJustification || justification instanceof ProofJustification)
+			return; // no further details
 
-			appendBoldText("Begründung:\n\n");
-			displayJustification(justification, 0);
-		} catch (BadLocationException e) {
-			assert false;
-		}
+		appendText("Begründung:\n\n", boldStyle);
+		displayJustification(justification, 0);
 	}
 
 	public void clear() {
 		setText(null);
 	}
 
-	private int displayJustification(Justification justification, int referenceCounter) throws BadLocationException {
+	private int displayJustification(Justification justification, int referenceCounter) {
 		if (justification instanceof EnvironmentPremiseJustification)
 			return displayJustification((EnvironmentPremiseJustification)justification, referenceCounter);
 		else if (justification instanceof ProofJustification)
@@ -79,24 +75,21 @@ class JustificationViewer extends JTextPane {
 			throw new IllegalStateException("Unknown justification type");
 	}
 
-	private int displayJustification(EnvironmentPremiseJustification justification, int referenceCounter)
-			throws BadLocationException {
+	private int displayJustification(EnvironmentPremiseJustification justification, int referenceCounter) {
 		appendText("Es gilt ");
 		appendMathText(justification.getJustifiedFormula().serialize());
 		appendText(" " + DisplayStringHelper.shortDescription(justification) + " [" + (++referenceCounter) + "].\n\n");
 		return referenceCounter;
 	}
 
-	private int displayJustification(ProofJustification justification, int referenceCounter)
-			throws BadLocationException {
+	private int displayJustification(ProofJustification justification, int referenceCounter) {
 		appendText("Es gilt ");
 		appendMathText(justification.getJustifiedFormula().serialize());
 		appendText(" " + DisplayStringHelper.shortDescription(justification) + " [" + (++referenceCounter) + "]\n\n.");
 		return referenceCounter;
 	}
 
-	private int displayJustification(SubtermEqualityJustification justification, int referenceCounter)
-		throws BadLocationException {
+	private int displayJustification(SubtermEqualityJustification justification, int referenceCounter) {
 		referenceCounter = displayJustification(justification.getJustification(), referenceCounter);
 		appendText("Daraus folgt ");
 		appendMathText(justification.getJustifiedFormula().serialize());
@@ -104,8 +97,7 @@ class JustificationViewer extends JTextPane {
 		return referenceCounter;
 	}
 
-	private int displayJustification(RuleApplication justification, int referenceCounter)
-		throws BadLocationException {
+	private int displayJustification(RuleApplication justification, int referenceCounter) {
 		Justification[] premiseJustifications = justification.getPremiseJustifications();
 		String referenceList = "";
 		for (Justification premiseJustification : premiseJustifications) {
@@ -127,7 +119,7 @@ class JustificationViewer extends JTextPane {
 		return referenceCounter;
 	}
 
-	private void displayVariableTranslation(Map<String, Term> translation) throws BadLocationException {
+	private void displayVariableTranslation(Map<String, Term> translation) {
 		boolean isFirst = true;
 		for (String variable : translation.keySet()) {
 			if (!isFirst)
@@ -135,27 +127,23 @@ class JustificationViewer extends JTextPane {
 			else
 				isFirst = false;
 			appendMathText(variable + " = ");
-			appendBoldMathText(translation.get(variable).serialize());
+			appendText(translation.get(variable).serialize(), boldMathStyle);
 		}
 	}
 
-	private void appendBoldText(String text) throws BadLocationException {
-		StyledDocument document = getStyledDocument();
-		document.insertString(document.getLength(), text, document.getStyle(BOLD_STYLE));
+	private void appendText(String text) {
+		appendText(text, defaultStyle);
 	}
 
-	private void appendText(String text) throws BadLocationException {
-		StyledDocument document = getStyledDocument();
-		document.insertString(document.getLength(), text, document.getStyle(DEFAULT_STYLE));
+	private void appendMathText(String mathText) {
+		appendText(mathText, mathStyle);
 	}
 
-	private void appendMathText(String mathText) throws BadLocationException {
-		StyledDocument document = getStyledDocument();
-		document.insertString(document.getLength(), mathText, document.getStyle(MATH_STYLE));
-	}
-
-	private void appendBoldMathText(String mathText) throws BadLocationException {
-		StyledDocument document = getStyledDocument();
-		document.insertString(document.getLength(), mathText, document.getStyle(BOLD_MATH_STYLE));
+	private void appendText(String text, Style style) {
+		try {
+			StyledDocument document = getStyledDocument();
+			int pos = document.getLength();
+			document.insertString(pos, text, style);
+		} catch (BadLocationException e) {}
 	}
 }
