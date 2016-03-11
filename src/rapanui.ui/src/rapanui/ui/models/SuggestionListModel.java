@@ -17,7 +17,7 @@ public class SuggestionListModel extends AbstractListModel<Transformation> {
 	private List<Transformation> elements = new ArrayList<Transformation>();
 	private Map<String, Transformation> termMap = new HashMap<String, Transformation>();
 
-	public void addSuggestion(Transformation suggestion) {
+	public synchronized void addSuggestion(Transformation suggestion) {
 		String term = suggestion.getOutput().serialize();
 		if (!termMap.containsKey(term)) {
 			termMap.put(term, suggestion);
@@ -29,7 +29,7 @@ public class SuggestionListModel extends AbstractListModel<Transformation> {
 		}
 	}
 
-	public void clear() {
+	public synchronized void clear() {
 		int size = elements.size();
 		if (size > 0) {
 			elements.clear();
@@ -61,12 +61,12 @@ public class SuggestionListModel extends AbstractListModel<Transformation> {
 	}
 
 	@Override
-	public Transformation getElementAt(int index) {
+	public synchronized Transformation getElementAt(int index) {
 		return elements.get(index);
 	}
 
 	@Override
-	public int getSize() {
+	public synchronized int getSize() {
 		return elements.size();
 	}
 
