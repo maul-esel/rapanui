@@ -1,10 +1,12 @@
 package rapanui.ui;
 
+import java.nio.CharBuffer;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Style;
@@ -19,7 +21,10 @@ import rapanui.core.ProofEnvironment;
 import rapanui.core.ProofJustification;
 import rapanui.core.RuleApplication;
 import rapanui.core.SubtermEqualityJustification;
+import rapanui.core.Transformation;
+import rapanui.dsl.DefinitionReference;
 import rapanui.dsl.Formula;
+import rapanui.dsl.Predicate;
 import rapanui.dsl.Rule;
 import rapanui.dsl.Term;
 import rapanui.ui.views.FontManager;
@@ -84,11 +89,56 @@ public class ProofFormatter {
 	}
 
 	private void format(ProofEnvironment environment) {
-		// TODO
+		appendText(boldStyle, "Voraussetzungen\n\n");
+
+		Predicate[] premises = environment.getPremises();
+		if (premises.length > 0)
+			text("Es gelte: ");
+		else
+			text("keine");
+
+		for (int i = 0; i < premises.length; ++i) {
+			if (i != 0)
+				text(", ");
+
+			if (premises[i] instanceof DefinitionReference) {
+				DefinitionReference reference = (DefinitionReference)premises[i];
+				formatting("%m ist %s (%m)",
+					reference.getTarget(),
+					reference.getDefinition().getName(),
+					reference.resolve().stream().map(Formula::serialize).collect(Collectors.joining(", "))
+				);
+			} else
+				math(premises[i].serialize());
+		}
+		text("\n\n");
+
+		int referenceCounter = 0, i = 0;
+		for (ConclusionProcess conclusion : environment.getConclusions())
+			referenceCounter = format(conclusion, ++i, referenceCounter);
 	}
 
-	private void format(ConclusionProcess conclusion, int referenceCounter) {
-		// TODO
+	private int format(ConclusionProcess conclusion, int conclusionNumber, int referenceCounter) {
+		appendText(boldStyle, "Folgerung #" + conclusionNumber + "\n\n");
+
+		Transformation[] transformations = conclusion.getTransformations();
+		int[] referenceNumbers = new int[transformations.length];
+		for (int i = 0; i < transformations.length; ++i) {
+			referenceCounter = format(transformations[i].getJustification(), referenceCounter);
+			referenceNumbers[i] = referenceCounter;
+		}
+
+		text("Somit gilt:\n");
+		math(conclusion.getStartTerm().serialize());
+
+		int padLength = conclusion.getStartTerm().serialize().length();
+		String pad = CharBuffer.allocate( padLength ).toString().replace('\0', ' ');
+
+		Term[] terms = conclusion.getTerms();
+		for (int i = 1; i < terms.length; ++i)
+			formatting(" %m %m [%d]\n%m", "=", terms[i], referenceNumbers[i-1], i < terms.length - 1 ? pad : "");
+
+		return referenceCounter;
 	}
 
 	private int format(Justification justification, int referenceCounter) {
