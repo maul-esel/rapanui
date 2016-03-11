@@ -1,11 +1,14 @@
 package rapanui.ui.views;
 
+import java.awt.Color;
 import java.awt.Insets;
 import java.util.Map;
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import static javax.swing.text.StyleConstants.*;
@@ -20,32 +23,54 @@ class JustificationViewer extends JTextPane {
 	private Style mathStyle;
 	private Style boldMathStyle;
 	private Style boldStyle;
+	private Style helpHeadingStyle;
+	private Style helpSubheadingStyle;
+	private Style helpStyle;
+
+	private final StyledDocument helpTextDocument = new DefaultStyledDocument();
+	private final StyledDocument defaultDocument;
 
 	public JustificationViewer() {
 		setEditable(false);
 		this.setMargin(new Insets(10,10,10,10));
+		defaultDocument = getStyledDocument();
 		initializeStyles();
+		initializeHelpText();
 	}
 
 	private void initializeStyles() {
-		defaultStyle = getStyledDocument().addStyle(null, null);
+		defaultStyle = defaultDocument.addStyle(null, null);
 		setFontSize(defaultStyle, 14);
-		setItalic(defaultStyle, true);
 
-		mathStyle = getStyledDocument().addStyle(null, defaultStyle);
+		mathStyle = defaultDocument.addStyle(null, defaultStyle);
 		setFontFamily(mathStyle, "DejaVu Sans Mono");
 		setItalic(mathStyle, false);
 
-		boldMathStyle = getStyledDocument().addStyle(null, mathStyle);
+		boldMathStyle = defaultDocument.addStyle(null, mathStyle);
 		setBold(boldMathStyle, true);
 
-		boldStyle = getStyledDocument().addStyle(null, null);
+		boldStyle = defaultDocument.addStyle(null, null);
 		setFontSize(boldStyle, 15);
 		setBold(boldStyle, true);
+
+		helpStyle = helpTextDocument.addStyle(null, null);
+		setFontSize(helpStyle, 14);
+		setLeftIndent(helpStyle, 30);
+		setRightIndent(helpStyle, 30);
+		setAlignment(helpStyle, ALIGN_JUSTIFIED);
+		StyleConstants.setForeground(helpStyle, Color.gray);
+
+		helpHeadingStyle = helpTextDocument.addStyle(null, helpStyle);
+		setBold(helpHeadingStyle, true);
+		setAlignment(helpHeadingStyle, ALIGN_CENTER);
+
+		helpSubheadingStyle = helpTextDocument.addStyle(null, helpStyle);
+		setAlignment(helpSubheadingStyle, ALIGN_CENTER);
 	}
 
 	public void loadJustification(Justification justification) {
-		clear();
+		setDocument(defaultDocument);
+		setText(null);
 
 		appendText("Es gilt ", boldStyle);
 		appendMathText(justification.getJustifiedFormula().serialize());
@@ -59,7 +84,7 @@ class JustificationViewer extends JTextPane {
 	}
 
 	public void clear() {
-		setText(null);
+		setStyledDocument(helpTextDocument);
 	}
 
 	private int displayJustification(Justification justification, int referenceCounter) {
@@ -145,5 +170,32 @@ class JustificationViewer extends JTextPane {
 			int pos = document.getLength();
 			document.insertString(pos, text, style);
 		} catch (BadLocationException e) {}
+	}
+
+	private void appendParagraph(String text, Style style) {
+		StyledDocument document = getStyledDocument();
+		int pos = document.getLength();
+		appendText(text, style);
+		document.setParagraphAttributes(pos, text.length(), style, false);
+	}
+
+	private void initializeHelpText() {
+		setStyledDocument(helpTextDocument);
+
+		appendParagraph("\n\nWillkommen zu rapanui\n", helpHeadingStyle);
+		appendParagraph("Unterstützte Beweisführung in der relationalen Algebra\n\n", helpSubheadingStyle);
+		appendParagraph("Vorgehen:\n\n", helpHeadingStyle);
+
+		appendParagraph("Gib oben links Voraussetzungen an, z.B. ", helpStyle);
+		appendMathText("R = R ; R");
+
+		appendParagraph(". Bei der Eingabe hilft die unten links erscheinende Bildschirmtastatur.\n\n"
+				+ "Gib links mittig einen Startterm für deinen Beweis ein, z.B. ", helpStyle);
+		appendMathText("R ; S*");
+		appendParagraph(".\n\nRechts oben werden mögliche Umformungen des Terms angezeigt. Wenn du"
+				+ " eine auswählst, wird sie dir hier erklärt.\n\n"
+				+ "Wende eine der Umformungen durch Doppelklick an. Sie wird links angezeigt.\n\n"
+				+ "Wiederhole diesen Vorgang, bis du die zu beweisende Aussage erreicht hast.",
+				helpStyle);
 	}
 }
