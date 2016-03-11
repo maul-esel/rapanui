@@ -63,7 +63,7 @@ public class ProofEnvironment {
 	 * @return An array of premises. Guaranteed to be non-null.
 	 */
 	public Predicate[] getPremises() {
-		return listToArray(premises, Formula[]::new);
+		return listToArray(premises, Predicate[]::new);
 	}
 
 	/**
