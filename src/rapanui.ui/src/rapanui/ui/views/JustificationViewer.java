@@ -44,7 +44,6 @@ class JustificationViewer extends JTextPane {
 		setFontFamily(mathStyle, FontManager.getMathFontFamily());
 
 		Style helpStyle = helpTextDocument.addStyle(null, null);
-		System.out.println(getFontFamily(helpStyle));
 		setFontSize(helpStyle, 14);
 		setLeftIndent(helpStyle, 30);
 		setRightIndent(helpStyle, 30);
