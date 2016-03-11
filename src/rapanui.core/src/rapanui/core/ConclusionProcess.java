@@ -171,14 +171,14 @@ public class ConclusionProcess {
 		 *
 		 * @param transformation The newly appended @see Transformation. Guaranteed to be non-null.
 		 */
-		default void transformationAdded(Transformation transformation) {};
+		default void transformationAdded(Transformation transformation) {}
 
 		/**
 		 * Called when a @see Transformation is removed from the conclusion.
 		 *
 		 * @param transformation The removed @see Transformation. Guaranteed to be non-null.
 		 */
-		default void transformationRemoved(Transformation transformation) {};
+		default void transformationRemoved(Transformation transformation) {}
 	}
 
 	/**

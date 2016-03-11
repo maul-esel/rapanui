@@ -51,8 +51,8 @@ public class Application {
 	}
 
 	public interface Observer {
-		default void environmentAdded(ProofEnvironment environment) {};
-		default void environmentRemoved(ProofEnvironment environment) {};
+		default void environmentAdded(ProofEnvironment environment) {}
+		default void environmentRemoved(ProofEnvironment environment) {}
 	}
 
 	public void addObserver(Observer observer) {
