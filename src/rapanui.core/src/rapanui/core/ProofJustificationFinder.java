@@ -9,7 +9,7 @@ import rapanui.dsl.Term;
 import rapanui.dsl.BINARY_RELATION;
 
 /**
- * A @see JustificationFinder that searches previous proofs conducted by the user in the same environment.
+ * A {@link JustificationFinder} that searches previous proofs conducted by the user in the same environment.
  */
 public class ProofJustificationFinder implements JustificationFinder {
 	@Override
@@ -19,10 +19,10 @@ public class ProofJustificationFinder implements JustificationFinder {
 
 	@FunctionalInterface private interface EmitHelper { void accept(ConclusionProcess conclusion, Term[] terms, int left, int right); }
 
-	/*
+	/**
 	 * Depending on which terms are specified in the template, this method selects one of four helper methods
 	 * to actually extract justifications from a given conclusion. Code common to all these helper methods,
-	 * namely the creation of @see ProofJustification instances, is encapsulated in the "emit" helper function.
+	 * namely the creation of {@link ProofJustification} instances, is encapsulated in the "emit" helper function.
 	 *
 	 * The method then iterates through all conclusions, and passes their data to the selected helper method
 	 * along with a reference to the emit helper function.

@@ -12,8 +12,8 @@ import rapanui.dsl.Predicate;
  * Analyzes dependencies between conclusions, transformations, justifications and premises
  * within a ProofEnvironment.
  *
- * Definition of what a "dependency" is (in this context) below. If A is a dependency of B,
- * B is called a "derivative" of A.
+ * <p>Definition of what a "dependency" is (in this context) below. If A is a dependency of B,
+ * B is called a "derivative" of A.</p>
  */
 public class DependencyAnalyst {
 	private final ProofEnvironment environment;
@@ -27,7 +27,7 @@ public class DependencyAnalyst {
 
 	/**
 	 * Retrieves direct derivatives of the given premise.
-	 * For the definition of direct dependence, @see isDirectDependency(Predicate, Transformation)
+	 * For the definition of direct dependence, see {@link #isDirectDependency(Predicate, Transformation)}.
 	 */
 	public Set<Transformation> findDirectDerivatives(Predicate dependency) {
 		return filterTransformations(transformation -> isDirectDependency(dependency, transformation));
@@ -35,7 +35,7 @@ public class DependencyAnalyst {
 
 	/**
 	 * Retrieves the direct derivatives of the given transformation.
-	 * For the definition of direct dependence, @see isDirectDependency(Transformation, Transformation)
+	 * For the definition of direct dependence, see {@link #isDirectDependency(Transformation, Transformation)}.
 	 */
 	public Set<Transformation> findDirectDerivatives(Transformation dependency) {
 		return filterTransformations(transformation -> isDirectDependency(dependency, transformation));
@@ -44,8 +44,8 @@ public class DependencyAnalyst {
 	/**
 	 * Retrieves the direct derivatives of the given conclusion process.
 	 *
-	 * A transformation (directly) depends on a conclusion process, if it (directly) depends on
-	 * one of the conclusion's transformations, but is not itself part of the conclusion.
+	 * <p<A transformation (directly) depends on a conclusion process, if it (directly) depends on
+	 * one of the conclusion's transformations, but is not itself part of the conclusion.</p>
 	 */
 	public Set<Transformation> findDirectDerivatives(ConclusionProcess dependency) {
 		return Arrays.stream(environment.getConclusions())
@@ -100,12 +100,12 @@ public class DependencyAnalyst {
 	 * Given an environment premise, find all transformations that directly or
 	 * indirectly depend on the premise.
 	 *
+	 * <p>For the definition of direct dependence, see {@link #isDirectDependency(Predicate, Transformation)}.
+	 * Dependency in general is defined as:</p>
+	 * 		<pre>{@code depends_on_premise = direct_dependency ∪ direct_dependency ; depends_on_transformation}</pre>
+	 *
 	 * @param premise
 	 * @return All transformations that depend on the premise, from all of the environment's conclusion processes
-	 *
-	 * For the definition of direct dependence, @see isDirectDependency(Predicate, Transformation).
-	 * Dependency in general is defined as:
-	 * 		depends_on_premise = direct_dependency ∪ direct_dependency ; depends_on_transformation
 	 */
 	public Set<Transformation> findDerivatives(Predicate premise) {
 		return findTransitiveDerivatives(findDirectDerivatives(premise));
@@ -115,12 +115,12 @@ public class DependencyAnalyst {
 	 * Given a transformation inside a conclusion process of the environment, find
 	 * all transformations that depend directly or indirectly on the transformation.
 	 *
+	 * <p>For the definition of direct dependence, see {@link #isDirectDependency(Transformation, Transformation)}.
+	 * Dependency in general is defined as the transitive closure of direct dependency.</p>
+	 *
 	 * @param dependency
 	 * @return All transformations that depend on the given transformation, from all
 	 *	 of the environment's conclusion processes
-	 *
-	 * For the definition of direct dependence, @see isDirectDependency(Transformation, Transformation).
-	 * Dependency in general is defined as the transitive closure of direct dependency.
 	 */
 	public Set<Transformation> findDerivatives(Transformation dependency) {
 		return findTransitiveDerivatives(findDirectDerivatives(dependency));
@@ -130,13 +130,13 @@ public class DependencyAnalyst {
 	 * Given one of the environment's conclusion process, find all transformations
 	 * that directly or indirectly depend on the conclusion process.
 	 *
-	 * @param conclusion
-	 * @return All transformations that depend on the conclusion, from all of the environment's conclusion processes
-	 *
-	 * A transformation t1 depends on a conclusion process if it depends on any of the
+	 * <p>A transformation {@code t1} depends on a conclusion process if it depends on any of the
 	 * conclusion process' transformations, but is not part of the conclusion itself.
 	 * Therefore the set of all derivatives of the conclusion is the union of all
-	 * derivatives of the conclusion's transformations, minus the conclusion's transformations.
+	 * derivatives of the conclusion's transformations, minus the conclusion's transformations.</p>
+	 *
+	 * @param conclusion
+	 * @return All transformations that depend on the conclusion, from all of the environment's conclusion processes
 	 */
 	public Set<Transformation> findDerivatives(ConclusionProcess conclusion) {
 		return Arrays.stream(conclusion.getTransformations())
@@ -146,16 +146,16 @@ public class DependencyAnalyst {
 	}
 
 	/**
-	 * Helper method for @see findDerivatives(Transformation) and @see
-	 * findDerivatives(Predicate). Given the set of direct derivatives,
+	 * Helper method for {@link #findDerivatives(Transformation)} and
+	 * {@link #findDerivatives(Predicate)}. Given the set of direct derivatives,
 	 * retrieves all derivatives.
+	 *
+	 * <p>This methods does a fixed-point iteration to retrieve indirect dependencies.</p>
 	 *
 	 * @param directDerivatives The set of direct derivatives
 	 *
 	 * @return All transformations that depend on the given derivatives, from all
 	 *	 of the environment's conclusion processes
-	 *
-	 * This methods does a fixed-point iteration to retrieve indirect dependencies.
 	 */
 	protected Set<Transformation> findTransitiveDerivatives(Set<Transformation> directDerivatives) {
 		Set<Transformation> derivatives = directDerivatives;
@@ -178,12 +178,13 @@ public class DependencyAnalyst {
 	/**
 	 * Given two transformations, decides if the first is a direct dependency of the second.
 	 *
+	 * <p>A transformation {@code t2} directly depends on another transformation {@code t1}
+	 * if {@code t2}'s justification depends on {@code t1}, or {@code t2} follows {@code t1}
+	 * in the same conclusion.</p>
+	 *
 	 * @param dependency
 	 * @param derivative
 	 * @return true if it is a dependency, false otherwise
-	 *
-	 * A transformation t2 directly depends on another transformation t1 if t2's justification
-	 * depends on t1, or t2 follows t1 in the same conclusion.
 	 */
 	public boolean isDirectDependency(Transformation dependency, Transformation derivative) {
 		return dependsOn(dependency, derivative.getJustification())
@@ -198,13 +199,15 @@ public class DependencyAnalyst {
 	}
 
 	/**
-	 * Given a premise and a transformation, decides if the transformation directly depends on the premise.
+	 * Given a premise and a transformation, decides if the transformation directly
+	 * depends on the premise.
+	 *
+	 * <p>A transformation {@code t} directly depends on a premise {@code p} if {@code t}'s
+	 * justification depends on {@code p}.</p>
 	 *
 	 * @param premise An environment premise
 	 * @param derivative
 	 * @return true if it is a dependency, false otherwise
-	 *
-	 * A transformation t directly depends on a premise p if t's justification depends on p.
 	 */
 	public boolean isDirectDependency(Predicate premise, Transformation derivative) {
 		return dependsOn(premise, derivative.getJustification());
@@ -213,11 +216,11 @@ public class DependencyAnalyst {
 	/**
 	 * Given a premise and a justification, decides if the latter depends on the former
 	 *
-	 * The rules for direct dependency are visible in this method's source code.
-	 * Basically, an EnvironmentPremiseJustification depends on a premise, if that premise
+	 * <p>The rules for direct dependency are visible in this method's source code.
+	 * Basically, an {@link EnvironmentPremiseJustification} depends on a premise, if that premise
 	 * is the only premise to resolve to the formula the justification refers to.
 	 * Any other type of justification directly depends on a premise
-	 * if the justifications or transformations contained within it depend on the premise.
+	 * if the justifications or transformations contained within it depend on the premise.</p>
 	 */
 	public boolean dependsOn(Predicate premise, Justification derivative) {
 		if (derivative instanceof EnvironmentPremiseJustification)
@@ -247,8 +250,8 @@ public class DependencyAnalyst {
 	 * Given a transformation and a justification, decides if the justification directly depends
 	 * on the transformation.
 	 *
-	 * Similarly to the overloaded method, direct dependency is defined recursively
-	 * over the justifications or transformations contained in the justification. 
+	 * <p>Similarly to the overloaded method, direct dependency is defined recursively
+	 * over the justifications or transformations contained in the justification.</p>
 	 */
 	public boolean dependsOn(Transformation dependency, Justification derivative) {
 		if (derivative instanceof EnvironmentPremiseJustification)

@@ -13,9 +13,9 @@ import java.util.function.Predicate;
 
 /**
  * Represents a source that asynchronously emits objects. This is used by asynchronous
- * methods that, if they were synchronous, would return an array or @see Iterable.
+ * methods that, if they were synchronous, would return an array or {@link Iterable}.
  *
- * It is similar to a "promise" in other languages or a Java @see java.util.concurrent.Future,
+ * It is similar to a "promise" in other languages or a Java {@link java.util.concurrent.Future},
  * but differs in that it produces multiple instances and in that it cannot be determined if
  * all objects have been emitted or more will be emitted in the future.
  *
@@ -71,9 +71,9 @@ public abstract class Emitter<T> {
 	}
 
 	/**
-	 * Test if this emitter has been explicitly stopped by means of @see stop().
+	 * Test if this emitter has been explicitly stopped by means of {@link #stop()}.
 	 *
-	 * @return True if @see stop() has been previously called, false otherwise.
+	 * @return True if {@link #stop()} has been previously called, false otherwise.
 	 */
 	public boolean isStopped() {
 		return isStopped;
@@ -95,7 +95,7 @@ public abstract class Emitter<T> {
 	 *
 	 * @param emitters The sources for the combined emitter. Must not be null nor contain null-values.
 	 *
-	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 * @return A new {@link Emitter} instance. Guaranteed to be non-null.
 	 */
 	@SafeVarargs
 	public static <T> Emitter<T> combine(Emitter<? extends T>... emitters) {
@@ -105,7 +105,7 @@ public abstract class Emitter<T> {
 	/**
 	 * Creates an empty emitter that emits no items.
 	 *
-	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 * @return A new {@link Emitter} instance. Guaranteed to be non-null.
 	 */
 	public static <T> Emitter<T> empty() {
 		return new Emitter<T>() {
@@ -118,7 +118,7 @@ public abstract class Emitter<T> {
 	 *
 	 * @param emitters The sources for the combined emitter. Must not be null nor contain null-values.
 	 *
-	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 * @return A new {@link Emitter} instance. Guaranteed to be non-null.
 	 */
 	public static <T> Emitter<T> combine(Collection<Emitter<? extends T>> emitters) {
 		return new AggregateEmitter<T>(emitters);
@@ -127,7 +127,7 @@ public abstract class Emitter<T> {
 	/**
 	 * Creates an emitter that only relays the first object emitted by its source
 	 *
-	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 * @return A new {@link Emitter} instance. Guaranteed to be non-null.
 	 */
 	public Emitter<T> first() {
 		return first(1);
@@ -138,7 +138,7 @@ public abstract class Emitter<T> {
 	 *
 	 * @param count How many objects emitted by the source should be emitted by the new emitter.
 	 *
-	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 * @return A new {@link Emitter} instance. Guaranteed to be non-null.
 	 */
 	public Emitter<T> first(int count) {
 		return new HeadEmitter<T>(this, count);
@@ -149,7 +149,7 @@ public abstract class Emitter<T> {
 	 *
 	 * @param conversion A function that is applied to objects emitted by this instance before they are re-emitted. Must not be null.
 	 *
-	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 * @return A new {@link Emitter} instance. Guaranteed to be non-null.
 	 */
 	public <R> Emitter<R> map(Function<T,R> conversion) {
 		return new MapEmitter<T,R>(this, conversion);
@@ -160,7 +160,7 @@ public abstract class Emitter<T> {
 	 *
 	 * @param conversion This method is executed whenever this emitter emits an object.
 	 *
-	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 * @return A new {@link Emitter} instance. Guaranteed to be non-null.
 	 */
 	public <R> Emitter<R> flatMap(Function<T, Emitter<R>> conversion) {
 		AggregateEmitter<R> aggregate = new AggregateEmitter<R>();
@@ -180,7 +180,7 @@ public abstract class Emitter<T> {
 	 *
 	 * @param filter The condition results have to meet to be relayed
 	 *
-	 * @return A new @see Emitter instance. Guaranteed to be non-null.
+	 * @return A new {@link Emitter} instance. Guaranteed to be non-null.
 	 */
 	public Emitter<T> filter(Predicate<T> filter) {
 		return new FilterEmitter<T>(this, filter);
@@ -194,7 +194,7 @@ public abstract class Emitter<T> {
 	}
 
 	/**
-	 * The opposite of @see filter: only returns results that do NOT meet the given predicate.
+	 * The opposite of {@link #filter(Predicate)}: only returns results that do NOT meet the given predicate.
 	 */
 	public Emitter<T> reject(Predicate<T> predicate) {
 		return filter(predicate.negate());

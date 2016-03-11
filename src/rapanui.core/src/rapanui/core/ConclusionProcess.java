@@ -78,7 +78,8 @@ public class ConclusionProcess {
 	/**
 	 * Computes the type of the conclusion, i.e. equality or inclusion.
 	 *
-	 * @return @see BINARY_RELATION.INCLUSION if any transformation is an inclusion, @see BINARY_RELATION.EQUATION otherwise. Guaranteed to be non-null.
+	 * @return {@link rapanui.dsl.BINARY_RELATION.INCLUSION} if any transformation is an inclusion,
+	 * 	{@link rapanui.dsl.BINARY_RELATION.EQUATION} otherwise. Guaranteed to be non-null.
 	 */
 	public BINARY_RELATION getFormulaType() {
 		return getFormulaType(0, transformations.size());
@@ -90,9 +91,10 @@ public class ConclusionProcess {
 	 * @param startRange The index of the first term (not transformation!) to include in the range
 	 * @param endRange The index of the last term (not transformation!) to include in the range
 	 *
-	 * @return @see BINARY_RELATION.INCLUSION if any transformation in the range is an inclusion, @see BINARY_RELATION.EQUATION otherwise.
-	 * 	If startIndex == endIndex, there is no transformation in the range and @see BINARY_RELATION.EQUATION is returned.
-	 * 	Guaranteed to be non-null.
+	 * @return {@link rapanui.dsl.BINARY_RELATION.INCLUSION} if any transformation in the range is
+	 * an inclusion, {@link rapanui.dsl.BINARY_RELATION.EQUATION} otherwise. If {@code startIndex ==
+	 * endIndex}, there is no transformation in the range and {@link rapanui.dsl.BINARY_RELATION.EQUATION}
+	 * is returned. Guaranteed to be non-null.
 	 *
 	 * @throws IllegalArgumentException if the arguments do not specify a valid range
 	 */
@@ -167,16 +169,16 @@ public class ConclusionProcess {
 
 	public interface Observer {
 		/**
-		 * Called when a new @see Transformation is appended to the @see ConclusionProcess
+		 * Called when a new {@link Transformation} is appended to the {@link ConclusionProcess}
 		 *
-		 * @param transformation The newly appended @see Transformation. Guaranteed to be non-null.
+		 * @param transformation The newly appended {@link Transformation}. Guaranteed to be non-null.
 		 */
 		default void transformationAdded(Transformation transformation) {}
 
 		/**
-		 * Called when a @see Transformation is removed from the conclusion.
+		 * Called when a {@link Transformation} is removed from the conclusion.
 		 *
-		 * @param transformation The removed @see Transformation. Guaranteed to be non-null.
+		 * @param transformation The removed {@link Transformation}. Guaranteed to be non-null.
 		 */
 		default void transformationRemoved(Transformation transformation) {}
 	}

@@ -3,7 +3,7 @@ package rapanui.core;
 import rapanui.dsl.Formula;
 
 /**
- * Finds justifications for formulas matching given @see FormulaTemplate instances.
+ * Finds justifications for formulas matching given {@link rapanui.dsl.Formula} instances.
  */
 public interface JustificationFinder {
 	/**

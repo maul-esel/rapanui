@@ -3,8 +3,8 @@ package rapanui.core;
 import rapanui.dsl.Formula;
 
 /**
- * Base class for all justification classes. A justification states why a certain conclusion (@see ConclusionProcess)
- * may be drawn or why a rule may be applied (@see RuleApplication).
+ * Base class for all justification classes. A justification states why a certain conclusion (see {@link ConclusionProcess})
+ * may be drawn or why a rule may be applied (see {@link RuleApplication}).
  */
 public abstract class Justification {
 	private final Formula justifiedFormula;

@@ -10,7 +10,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import rapanui.dsl.*;
 
 /**
- * A @see JustificationFinder that searches for subterms which are known to equal something else.
+ * A {@link JustificationFinder} that searches for subterms which are known to equal something else.
  * If it finds one, it replaces the subterm with the equal term and creates a justification
  * for the equality of the original and the modified term.
  */
@@ -18,7 +18,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 	private final JustificationFinder delegateFinder;
 
 	/**
-	 * @param delegateFinder The @see JustificationFinder to use when looking for terms equal to a subterm
+	 * @param delegateFinder The {@link JustificationFinder} to use when looking for terms equal to a subterm
 	 */
 	public SubtermEqualityJustificationFinder(JustificationFinder delegateFinder) {
 		assert delegateFinder != null;
@@ -75,7 +75,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 		}
 	}
 
-	/*
+	/**
 	 * 1. Walk down the AST to the minimal incomplete subterm so that the rest term is incomplete
 	 * 2. In each step, find 2 equal terms s = r, where s matches the current subterm t
 	 * 3. Replace t in the input by s, r respectively and emit the results as equal

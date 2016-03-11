@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 import rapanui.dsl.*;
 
 /**
- * A @see JustificationFinder implementation that searches the environment's premises.
+ * A {@link JustificationFinder} implementation that searches the environment's premises.
  */
 public class PremiseJustificationFinder implements JustificationFinder {
 	@Override

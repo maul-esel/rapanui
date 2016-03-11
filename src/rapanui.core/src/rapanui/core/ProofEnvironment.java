@@ -67,7 +67,7 @@ public class ProofEnvironment {
 	}
 
 	/**
-	 * @return An array of resolved premises (contains only @see Equation and @see Inclusion instances). Guaranteed to be non-null.
+	 * @return An array of resolved premises. Guaranteed to be non-null.
 	 */
 	public Formula[] getResolvedPremises() {
 		return listToArray(
