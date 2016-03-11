@@ -117,7 +117,7 @@ public class ProofFormatter {
 			referenceList += "[" + referenceCounter + "], ";
 		}
 
-		formatting("Nach der Regel %s:\n\n%m\nmit %t ",
+		formatting("Nach der Regel %s:\n\n%m\nmit %t",
 				justification.getAppliedRule().getName(),
 				justification.getAppliedRule(),
 				justification.getVariableTranslation());
@@ -125,7 +125,7 @@ public class ProofFormatter {
 		if (!referenceList.isEmpty())
 			text(" und ", referenceList.substring(0, referenceList.length() - 2));
 
-		formatting("folgt dann %m [%d].\n\n", justification.getJustifiedFormula(), ++referenceCounter);
+		formatting(" folgt dann %m [%d].\n\n", justification.getJustifiedFormula(), ++referenceCounter);
 		return referenceCounter;
 	}
 
@@ -146,6 +146,8 @@ public class ProofFormatter {
 					math(((Formula)objects[i]).serialize());
 				else if (objects[i] instanceof Term)
 					math(((Term)objects[i]).serialize());
+				else if (objects[i] instanceof String)
+					math(objects[i].toString());
 				else
 					throw new IllegalArgumentException();
 				break;
