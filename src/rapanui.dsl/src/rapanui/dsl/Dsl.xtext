@@ -53,7 +53,7 @@ SimpleTerm returns Term hidden(WS):
 	| '(' Term ')'
 ;
 UnaryOperation returns Term hidden():
-	SimpleTerm ({UnaryOperation.operand=current} operator=POSTFIX_UNARY_OPERATOR)?
+	SimpleTerm ({UnaryOperation.operand=current} operator=POSTFIX_UNARY_OPERATOR)*
 ;
 
 // Implement operator precedence
