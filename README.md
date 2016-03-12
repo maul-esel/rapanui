@@ -1,33 +1,32 @@
+# rapanui – Relational Algebra Proof Assistant N' User Interface
 
-# rapanui – Relational Algebra Proof Assistant
+rapanui is an interactive proof assistant for relational algebra. It was developed by Dominik Klumpp in 2015/2016 in the course of a practical project (Praxismodul), supervised by Dr. Martin Müller, at the Chair for Programming Methodology and Multimedia Information Systems as part of the Bachelor Course in Informatics at the University of Augsburg.
 
-rapanui dient zur Unterstützung beim Führen von relationenalgebraischen Beweisen. Dir Grundidde besteht darin, dass der Nutzer nach der Eingabevon festen Voraussetzungen interaktiv Beweise führt. Dazu wird dem Nutzer jeweils eine Liste mit mögliche nächsten Schritten angeboten, aus der er einen Vorschlag auswählt und anwendet. Dies wird wiederholt, bis die zu zeigende Aussage bewiesen wurde.
+## Concept
+rapanui assists the user in conducting proofs in relational algebra. To this end, the user inputs a set of premises and chooses a start term. The application then suggests possible transformations of that term. Once the user applies one of them to the term, new suggestions for the resulting term are offered. This process is repeated until the user has proven the proposition he wishes to proof.
 
-## Features
+rapanui offers an intuitive graphical user interface. During each step, the suggested transformations are explained thoroughly, which helps the user – specifically first-semester students – improve his or her understanding of relational algebra.
 
-rapanui bietet eine übersichtliche graphische Benutzeroberfläche. Die Grundlagen für die Beweisführung sind nicht statisch verankert, sondern werden dynamisch geladen und sin leicht anpassbar. Dazu kann der Nutzer eine Menge von als wahr angenommenen Sätzen und Axiomen durch eine intuitive mathematische Syntax angeben. Während der Beweisführung sollen dem Nutzer die Grundlagen der gemachten Vorschläge ersichtlich und nachvollziehbar sein und so für die Hauptzielgruppe – auf dem Gebiet der relationalen Algebra eher unerfahrene Nutzer – auch als Übung dienen.
+The basis for the suggested transformations is a library of known axioms and theorems of relational algebra, which is specified in an easily understandable textual syntax and can thus easily be modified.
 
-## Installation
+## Quick Start
 
-Für Entwicklungszwecke muss das git-Repository geklont werden. Danach ist noch die Installation der Abhängigkeiten via [gradle](http://gradle.org) notwendig. Mit
+```
+git clone https://github.com/maul-esel/rapanui.git
+cd rapanui
+gradle eclipse run
+```
 
-    gradle build
+rapanui requires Java 8 to be installed (Eclipse is not required).
 
-werden die nötigen Abhängigkeiten geladen und der Code kompiliert.
+## Repository Structure
 
-Mit
+The `doc/` folder contains documentation on both usage and internal aspects of rapanui.
 
-    gradle shadowJar
+In `src/` there are 4 primary components, each in its own subdirectory:
+* `rapanui.dsl`, a parser for formulas, terms and the theorem library DSL
+* `rapanui.core`, the primary logic
+* `rapanui.ui`, the user interface and actual application
+* `rapanui.library`, the default library of theorems and definitions
 
-kann die Anwendung kompiliert und in eine einzelen `jar`-Datei gepackt werden. Diese enthält alle Abhängigkeiten und kann auf jedem Desktop-System mit einer aktuellen Java-Umgebung gestartet werden.
-
-## Entwicklung
-
-Der Code ist größtenteils in Java geschrieben, an einzelnen Stellen kommen domänen-spezifische Sprachen wie Xtext, Xcore und Xtend zum Einsatz.
-
-Die Anwendung besteht aus 4 Hauptkomponenten:
-
-* Das Projekt `rapanui.dsl` enthält die Spezifikation der Syntax für Terme, Formeln und das dynamische Regelwerk, sowie Komponenten zur Unterstützung im Umgang damit. Für die Generierung des Parsers wird das [Xtext Framework](http://eclipse.org/Xtext/) genutzt.
-* In `rapanui.core` werden die zentralen Komponenten der Logikschicht verwaltet. Hier werden auch die Vorschläge generiert.
-* `rapanui.library` enthält das Standard-Regelwerk für die Anwendung.
-* `rapanui.ui` hingegen enthält die graphische Benutzeroberfläche und die ausführbare Anwendung.
+In the first three of these subfolders, `build/` contains the gradle build artefacts including generated javadoc and packaged JAR files. After running `gradle shadowJar`, `src/rapanui.ui/build/libs/` contains a runnable JAR that includes all dependencies.
