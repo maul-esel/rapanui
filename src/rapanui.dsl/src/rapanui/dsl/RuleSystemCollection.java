@@ -26,6 +26,7 @@ public class RuleSystemCollection implements Iterable<RuleSystem> {
 		.injectMembers(this);
 
 		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
+		resourceSet.addLoadOption(XtextResource.OPTION_ENCODING, "utf-8");
 	}
 
 	public void load(String path) {
