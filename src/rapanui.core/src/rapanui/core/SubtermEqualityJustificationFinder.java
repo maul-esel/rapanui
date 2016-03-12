@@ -164,7 +164,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 			// for the current pair of subterms: try to justify their equality.
 			// If successful, use this as justification.
 
-			Formula subTemplate = Builder.createFormula(currentLeft, BINARY_RELATION.EQUATION, currentRight);
+			Formula subTemplate = Builder.createEquation(currentLeft, currentRight);
 			delegate.apply(subTemplate)
 			.reject(SubtermEqualityJustification.class)
 			.first()
