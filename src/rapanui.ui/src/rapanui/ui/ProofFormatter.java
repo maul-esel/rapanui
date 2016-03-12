@@ -75,7 +75,7 @@ public class ProofFormatter {
 	public ProofFormatter(Justification justification) {
 		this();
 
-		formatting("Es gilt %m, nach %j.", justification.getJustifiedFormula(), justification);
+		formatting("Es gilt %m, %j.", justification.getJustifiedFormula(), justification);
 		if (justification instanceof EnvironmentPremiseJustification
 			|| justification instanceof ProofJustification)
 			return;
