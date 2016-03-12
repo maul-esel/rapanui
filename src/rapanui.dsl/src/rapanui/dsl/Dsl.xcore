@@ -95,7 +95,7 @@ abstract class Predicate {
 class Formula extends Predicate {
 	contains Term left
 	contains Term right
-	BINARY_RELATION formulaType
+	BINARY_RELATION formulaType // defaults to BINARY_RELATION.UNSPECIFIED
 
 	op void accept(Visitor v) {
 		left?.accept(v)
@@ -309,6 +309,7 @@ enum BINARY_OPERATOR {
 	COMPOSITION as ';'
 }
 enum BINARY_RELATION {
+	UNSPECIFIED
 	EQUATION as '='
 	INCLUSION as '⊆'
 }

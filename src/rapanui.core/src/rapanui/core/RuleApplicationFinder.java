@@ -30,7 +30,8 @@ public class RuleApplicationFinder implements JustificationFinder {
 			for (Rule rule : ruleSystem.getRules())
 				for (Formula conclusion : rule.getResolvedConclusions()) {
 					BINARY_RELATION conclusionType = conclusion.getFormulaType();
-					if (formulaTemplate.getFormulaType() == null || formulaTemplate.getFormulaType() == conclusionType
+					if (formulaTemplate.getFormulaType() == BINARY_RELATION.UNSPECIFIED
+							|| formulaTemplate.getFormulaType() == conclusionType
 							|| (conclusionType == BINARY_RELATION.EQUATION && formulaTemplate.getFormulaType() == BINARY_RELATION.INCLUSION))
 						searchApplications(rule, conclusion, formulaTemplate, acceptor, environment, recursionDepth);
 
@@ -71,7 +72,7 @@ public class RuleApplicationFinder implements JustificationFinder {
 
 	private void emitRuleApplication(Consumer<Justification> acceptor, Formula formulaTemplate, Rule rule,
 			Formula conclusion, TranslationFinder translationFinder, Justification[] premiseJustifications) {
-		BINARY_RELATION type = formulaTemplate.getFormulaType() != null ? formulaTemplate.getFormulaType() : conclusion.getFormulaType();
+		BINARY_RELATION type = formulaTemplate.getFormulaType() != BINARY_RELATION.UNSPECIFIED ? formulaTemplate.getFormulaType() : conclusion.getFormulaType();
 		Term left = null, right = null;
 		try {
 			left = translationFinder.translate(conclusion.getLeft());
@@ -91,6 +92,7 @@ public class RuleApplicationFinder implements JustificationFinder {
 
 	private Emitter<SearchResult> justifyPremise(Formula premise, TranslationFinder translationFinder, ProofEnvironment environment, int recursionDepth) {
 		Formula premiseTemplate = createTemplate(premise, translationFinder);
+		System.out.println("Premise template: " + premiseTemplate);
 		return delegateFinder.justifyAsync(environment, premiseTemplate, recursionDepth - 1) // justify premise
 			.map( premiseJustification -> new SearchResult(premiseJustification, translationFinder.clone()) ) // wrap it in a SearchResult
 			.filter( result -> { // only emit it if it does not conflict with the current translation

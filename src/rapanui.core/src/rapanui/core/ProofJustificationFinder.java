@@ -32,7 +32,7 @@ public class ProofJustificationFinder implements JustificationFinder {
 			int start = Math.min(leftIndex, rightIndex), end = Math.max(leftIndex, rightIndex);
 			BINARY_RELATION type = conclusion.getFormulaType(start, end);
 
-			if (formulaTemplate.getFormulaType() != null && type != formulaTemplate.getFormulaType()) {
+			if (formulaTemplate.getFormulaType() != BINARY_RELATION.UNSPECIFIED && type != formulaTemplate.getFormulaType()) {
 				if (formulaTemplate.getFormulaType() == BINARY_RELATION.EQUATION)
 					return; // equation needed, but only has inclusion ~> invalid result
 				type = BINARY_RELATION.INCLUSION; // inclusion needed, even has equation ~> works

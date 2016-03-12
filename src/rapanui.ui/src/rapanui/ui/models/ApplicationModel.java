@@ -18,6 +18,7 @@ import rapanui.core.Emitter;
 import rapanui.core.Justification;
 import rapanui.core.ProofEnvironment;
 import rapanui.core.Transformation;
+import rapanui.dsl.BINARY_RELATION;
 import rapanui.dsl.RuleSystemCollection;
 import rapanui.ui.commands.CreateEnvironmentCommand;
 import rapanui.ui.commands.DeleteEnvironmentCommand;
@@ -97,7 +98,7 @@ public class ApplicationModel implements Application.Observer {
 		if (activeSuggestionSource != null)
 			clearSuggestions();
 
-		activeSuggestionSource = app.loadSuggestions(conclusion, null); // TODO: make suggestionType configurable via UI
+		activeSuggestionSource = app.loadSuggestions(conclusion, BINARY_RELATION.UNSPECIFIED); // TODO: make suggestionType configurable via UI
 		activeSuggestionSource.onEmit(this::displaySuggestion);
 	}
 
