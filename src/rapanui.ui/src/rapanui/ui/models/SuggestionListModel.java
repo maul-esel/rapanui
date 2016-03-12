@@ -47,7 +47,8 @@ public class SuggestionListModel extends AbstractListModel<Transformation> {
 		while (low < high) {
 			int mid = (low + high) / 2;
 			String midTerm = elements.get(mid).getOutput().serialize();
-			if (suggestedTerm.length() > midTerm.length() || suggestedTerm.compareTo(midTerm) > 0)
+			if (suggestedTerm.length() > midTerm.length()
+					|| (suggestedTerm.length() == midTerm.length() && suggestedTerm.compareTo(midTerm) > 0))
 				low = mid + 1;
 			else
 				high = mid;
