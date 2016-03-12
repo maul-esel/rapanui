@@ -17,7 +17,11 @@ public class SuggestionListModel extends AbstractListModel<Transformation> {
 	private List<Transformation> elements = new ArrayList<Transformation>();
 	private Map<String, Transformation> termMap = new HashMap<String, Transformation>();
 
-	public synchronized void addSuggestion(Transformation suggestion) {
+	public void addSuggestion(Transformation suggestion) {
+		SwingUtilities.invokeLater(() -> addSuggestionInternal(suggestion));
+	}
+
+	protected synchronized void addSuggestionInternal(Transformation suggestion) {
 		String term = suggestion.getOutput().serialize();
 		if (!termMap.containsKey(term)) {
 			termMap.put(term, suggestion);
@@ -29,7 +33,11 @@ public class SuggestionListModel extends AbstractListModel<Transformation> {
 		}
 	}
 
-	public synchronized void clear() {
+	public void clear() {
+		SwingUtilities.invokeLater(this::clearInternal);
+	}
+
+	protected synchronized void clearInternal() {
 		int size = elements.size();
 		if (size > 0) {
 			elements.clear();
@@ -82,20 +90,5 @@ public class SuggestionListModel extends AbstractListModel<Transformation> {
 	@Override
 	public synchronized int getSize() {
 		return elements.size();
-	}
-
-	@Override
-	protected void fireIntervalAdded(Object source, int index0, int index1) {
-		SwingUtilities.invokeLater(() -> super.fireIntervalAdded(source, index0, index1));
-	}
-
-	@Override
-	protected void fireIntervalRemoved(Object source, int index0, int index1) {
-		SwingUtilities.invokeLater(() -> super.fireIntervalRemoved(source, index0, index1));
-	}
-
-	@Override
-	protected void fireContentsChanged(Object source, int index0, int index1) {
-		SwingUtilities.invokeLater(() -> super.fireContentsChanged(source, index0, index1));
 	}
 }
