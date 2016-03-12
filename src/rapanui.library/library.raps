@@ -28,7 +28,7 @@ axiom "Neutralelement der Vereinigung"
   always M ∪ ∅ = M
   and ∅ ∪ M = M
 
-axiom "Vereinigung ist Obermenge der Argumente"
+axiom "Expansionseigenschaft der Vereinigung"
   always M ⊆ M ∪ N
   and N ⊆ M ∪ N
 
@@ -42,6 +42,14 @@ theorem "Vereinigung mit einer Obermenge (1)"
 theorem "Vereinigung mit einer Obermenge (2)"
   if M ∪ N = N
   then M ⊆ N
+
+theorem "Isotonie der Vereinigung (I)"
+  if L ⊆ M
+  then L ∪ N ⊆ M ∪ N
+
+theorem "Isotonie der Vereinigung (II)"
+  if M ⊆ N
+  then L ∪ M ⊆ L ∪ N
 
 # Vereinigung von Relationen
 
@@ -61,7 +69,7 @@ axiom "Nullelement des Schnittes"
   always M ∩ ∅ = ∅
   and ∅ ∩ M = ∅
 
-axiom "Schnitt ist Teilmenge der Argumente"
+axiom "Kontraktionseigenschaft des Schnitts"
   always M ∩ N ⊆ M
   and M ∩ N ⊆ N
 
@@ -75,6 +83,14 @@ theorem "Schnitt mit einer Teilmenge (1)"
 theorem "Schnitt mit einer Teilmenge (2)"
   if M ∩ N = M
   then M ⊆ N
+
+theorem "Isotonie des Schnittes (I)"
+  if L ⊆ M
+  then L ∩ N ⊆ M ∩ N
+
+theorem "Isotonie des Schnittes (II)"
+  if M ⊆ N
+  then L ∩ M ⊆ L ∩ N
 
 # Schnitt von Relationen
 
@@ -150,6 +166,112 @@ theorem "Mengendifferenz mit einer Obermenge"
 axiom "Mengendifferenz mit der Allrelation"
   always R \ Π = ∅
 
+# Konverse
+
+axiom "Involutionsgesetz der Konversen"
+  always (R˘)˘ = R
+
+theorem "Isotonie der Konversen"
+  if S ⊆ R
+  then S˘ ⊆ R˘
+
+axiom "Striktheit der Konversen"
+  always ∅ = ∅˘
+
+axiom "Symmetrie der Identität"
+  always I = I˘
+
+axiom "Symmetrie der Allrelation"
+  always Π = Π˘
+
+# Konverse und Mengenoperationen
+
+axiom "Konverse und Komplement"
+  always (R˘)ᶜ = (Rᶜ)˘
+
+axiom "Konverse und Vereinigung"
+  always (R ∪ S)˘ ⊆ R˘ ∪ S˘
+
+axiom "Konverse und Schnitt"
+  always (R ∩ S)˘ ⊆ R˘ ∩ S˘
+
+# Komposition
+
+theorem "Isotonie der Komposition (I)"
+  if S ⊆ T
+  then R ; S ⊆ R ; T
+
+theorem "Isotonie der Komposition (II)"
+  if R ⊆ S
+  then R ; T ⊆ S ; T
+
+axiom "Distributivität der Komposition"
+  always R ; (S ∪ T) = (R ; S) ∪ (R ; T)
+  and (R ∪ S) ; T = (R ; T) ∪ (S ; T)
+
+axiom "Striktheit der Komposition"
+  always ∅ ; R = ∅
+  and R ; ∅ = ∅
+
+axiom "Subdistributivität der Komposition"
+  always R ; (S ∩ T) ⊆ (R ; S) ∩ (R ; T)
+  and (R ∩ S) ; T ⊆ (R ; T) ∩ (S ; T)
+
+axiom "Assoziativität der Komposition"
+  always R ; (S ; T) = (R ; S) ; T
+
+axiom "Neutralelement der Komposition"
+  always I ; R = R
+  and R ; I = R
+
+axiom "Komposition und Konverse"
+  always (R ; S)˘ = S˘ ; R˘
+
+# Hüllenbildung
+
+axiom "Definition der reflexiv-transitiven Hülle"
+  always R* = R⁺ ∪ I
+
+axiom "Transitivität der transitiven Hülle"
+  always R⁺ is "transitiv"
+  and R ⊆ R⁺
+  and R ; R ⊆ R⁺
+  and R ; R ; R  ⊆ R⁺
+  and R ; R ; R ; R  ⊆ R⁺
+  # etc.
+
+axiom "Transitive und reflexiv-transitive Hülle"
+  always R* ; R = R⁺
+  and R ; R* = R⁺
+
+axiom "Hüllenbildung und Konverse"
+  always (R*)˘ = (R˘)*
+  and (R⁺)˘ = (R˘)⁺
+
+axiom "Eigenschaften der reflexiv-transitiven Hülle"
+  always R* is "reflexiv"
+  and R* is "transitiv"
+  and (R ; S)* ; R = R ; (S ; R)*
+  and (R ∪ S)* = R* ; (S ; R*)*
+  and I* = I
+  and ∅* = I
+  and (R*)* = R*
+  and R* ; R* = R*
+
+theorem "Isotonie der Hüllenbildung"
+  if R ⊆ S
+  then R* ⊆ S*
+  and R⁺ ⊆ S⁺
+
+theorem "Transitive Hülle einer transitiven Relation"
+  if R is "transitiv"
+  then R = R⁺
+
+theorem "Reflexiv-transitive Hülle einer reflexiv-transitiven Relation"
+  if R is "transitiv"
+  and R is "reflexiv"
+  then R = R*
+
 # ˘ ⁺ ᶜ Π ∩ ∪ ∅ ⊆
 
 # Relationseigenschaften:
@@ -181,6 +303,21 @@ define R as "total"
 define R as "euklidisch"
   iff R˘;R ⊆ R
 
+define R as "linkstotal"
+  iff I ⊆ R ; R˘
+
+define R as "injektiv"
+  iff R ; R˘ ⊆ I
+
+define R as "surjektiv"
+  iff I ⊆ R˘ ; R
+
+define R as "partielle Funktion"
+  iff R˘ ; R ⊆ I
+
+define R as "azyklisch"
+  iff R⁺ is "irreflexiv"
+
 # Relationsklassen:
 
 define R as "Äquivalenzrelation"
@@ -199,3 +336,12 @@ define R as "Ordnung"
 define R as "Striktordnung"
   iff R is "irreflexiv"
   and R is "transitiv"
+
+define R as "totale Funktion"
+  iff R is "partielle Funktion"
+  and R is "linkstotal"
+
+define R as "Bijektion"
+  iff R is "totale Funktion"
+  and R is "surjektiv"
+  and R is "injektiv"
