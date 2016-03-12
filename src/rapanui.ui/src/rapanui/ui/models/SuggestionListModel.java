@@ -38,10 +38,23 @@ public class SuggestionListModel extends AbstractListModel<Transformation> {
 		}
 	}
 
+	// sort terms first by length, then lexicographically
 	protected void insertElement(Transformation suggestion) {
-		// TODO: maintain ordered list
-		elements.add(suggestion);
-		fireIntervalAdded(this, elements.size() - 1, elements.size() - 1);
+		String suggestedTerm = suggestion.getOutput().serialize();
+
+		// binary search for position
+		int low = 0, high = elements.size();
+		while (low < high) {
+			int mid = (low + high) / 2;
+			String midTerm = elements.get(mid).getOutput().serialize();
+			if (suggestedTerm.length() > midTerm.length() || suggestedTerm.compareTo(midTerm) > 0)
+				low = mid + 1;
+			else
+				high = mid;
+		}
+
+		elements.add(low, suggestion);
+		fireIntervalAdded(this, low, low);
 	}
 
 	protected void removeElement(Transformation suggestion) {
