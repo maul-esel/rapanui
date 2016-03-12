@@ -27,14 +27,17 @@ public class SuggestionView extends JPanel {
 		setBorder(new CompoundBorder(new LineBorder(Color.DARK_GRAY), new EmptyBorder(3,0,3,0)));
 		setLayout(new BorderLayout());
 
-		String shortForm = String.format("<html><pre>\t%s %s\t\t(%s)</pre></html>",
+		String shortForm = String.format(
+			"<html><pre style='font-family:%s'>\t<code style='font-family:%s'>%s %s</code>\t\t(%s)</pre></html>",
+			FontManager.getDefaultFont().getFamily(),
+			FontManager.getMathFontFamily(),
 			model.getFormulaType().getLiteral(),
 			model.getOutput().serialize(),
 			ProofFormatter.shortDescription(model.getJustification())
 		);
 
 		JLabel shortFormLabel = new JLabel(shortForm);
-		shortFormLabel.setFont(FontManager.getDefaultFont()); // TODO: use math font for math part
+		shortFormLabel.setFont(FontManager.getDefaultFont());
 		add(shortFormLabel, BorderLayout.NORTH);
 	}
 
