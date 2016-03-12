@@ -92,7 +92,6 @@ public class RuleApplicationFinder implements JustificationFinder {
 
 	private Emitter<SearchResult> justifyPremise(Formula premise, TranslationFinder translationFinder, ProofEnvironment environment, int recursionDepth) {
 		Formula premiseTemplate = createTemplate(premise, translationFinder);
-		System.out.println("Premise template: " + premiseTemplate);
 		return delegateFinder.justifyAsync(environment, premiseTemplate, recursionDepth - 1) // justify premise
 			.map( premiseJustification -> new SearchResult(premiseJustification, translationFinder.clone()) ) // wrap it in a SearchResult
 			.filter( result -> { // only emit it if it does not conflict with the current translation
