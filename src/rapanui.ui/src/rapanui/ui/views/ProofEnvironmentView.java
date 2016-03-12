@@ -127,13 +127,14 @@ class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Obser
 		newConclusionPanel.add(new SimpleLink(model.createConclusionCommand));
 
 		/* complete panel layout */
-		add(premiseHeader, (Integer)0);
-		add(premisePanel, (Integer)1);
-		add(newPremisePanel, (Integer)2);
-		add(Box.createVerticalStrut(30), (Integer)3);
-		add(conclusionHeader, (Integer)4);
-		add(Box.createVerticalStrut(10), (Integer)5);
-		add(newConclusionPanel, (Integer)6);
+		add(Box.createVerticalStrut(10), (Integer)0);
+		add(premiseHeader, (Integer)1);
+		add(premisePanel, (Integer)2);
+		add(newPremisePanel, (Integer)3);
+		add(Box.createVerticalStrut(30), (Integer)4);
+		add(conclusionHeader, (Integer)5);
+		add(Box.createVerticalStrut(10), (Integer)6);
+		add(newConclusionPanel, (Integer)7);
 	}
 
 	private void displayPremise(Predicate premise) {
