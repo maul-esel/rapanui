@@ -100,6 +100,7 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		c.weightx = 0;
 
 		JLabel justificationLabel = new JLabel("(" + ProofFormatter.shortDescription(transformation.getJustification()) + ")");
+		justificationLabel.setFont(FontManager.getDefaultFont());
 		justificationLabel.setToolTipText("display details");
 		justificationLabel.addMouseListener(new MouseAdapter() {
 			@Override public void mouseClicked(MouseEvent e) {

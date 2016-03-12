@@ -20,7 +20,7 @@ public class CollapseButton extends SimpleLink implements ActionListener {
 
 	@Override
 	public String getText() {
-		return isCollapsed ? "\uD83D\uDF82" : "\uD83D\uDF83";
+		return isCollapsed ? "\u25b7" : "\u25bc";
 	}
 
 	@Override

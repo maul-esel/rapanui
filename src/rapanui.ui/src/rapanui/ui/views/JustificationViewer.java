@@ -23,6 +23,7 @@ class JustificationViewer extends JTextPane {
 	public JustificationViewer() {
 		setEditable(false);
 		setMargin(new Insets(10,10,10,10));
+		setFont(FontManager.getDefaultFont());
 		setContentType("text/html");
 		initializeHelpText();
 	}
@@ -39,12 +40,11 @@ class JustificationViewer extends JTextPane {
 		setStyledDocument(helpTextDocument);
 
 		Style mathStyle = helpTextDocument.addStyle(null, null);
-		setFontSize(mathStyle, 14);
+		setFontSize(mathStyle, FontManager.getMathFont().getSize());
 		setAlignment(mathStyle, ALIGN_CENTER);
 		setFontFamily(mathStyle, FontManager.getMathFontFamily());
 
 		Style helpStyle = helpTextDocument.addStyle(null, null);
-		setFontSize(helpStyle, 14);
 		setLeftIndent(helpStyle, 30);
 		setRightIndent(helpStyle, 30);
 		setAlignment(helpStyle, ALIGN_JUSTIFIED);

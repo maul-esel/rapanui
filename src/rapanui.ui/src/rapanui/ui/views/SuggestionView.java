@@ -32,8 +32,10 @@ public class SuggestionView extends JPanel {
 			model.getOutput().serialize(),
 			ProofFormatter.shortDescription(model.getJustification())
 		);
-		// TODO: use math font
-		add(new JLabel(shortForm), BorderLayout.NORTH);
+
+		JLabel shortFormLabel = new JLabel(shortForm);
+		shortFormLabel.setFont(FontManager.getDefaultFont()); // TODO: use math font for math part
+		add(shortFormLabel, BorderLayout.NORTH);
 	}
 
 	public void setSelected(boolean isSelected) {

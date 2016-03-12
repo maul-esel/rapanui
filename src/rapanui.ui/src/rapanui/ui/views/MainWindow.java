@@ -58,7 +58,7 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 		rootPane.getContentPane().setLayout(new BorderLayout());	
 
 		JLabel title = new JLabel(TITLE);
-		title.setFont(new Font(title.getFont().getFamily(), Font.BOLD, 26));
+		title.setFont(FontManager.getTitleFont().deriveFont(26f));
 		title.setBorder(new EmptyBorder(15,15,15,15));
 		rootPane.getContentPane().add(title, BorderLayout.NORTH);
 
@@ -69,7 +69,10 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 		proofSelectionPanel.setOpaque(false);
 		proofSelectionPanel.setLayout(new BoxLayout(proofSelectionPanel, BoxLayout.X_AXIS));
 
-		proofSelectionPanel.add(new JLabel("Aktueller Beweis:"));
+		JLabel currentProofLabel = new JLabel("Aktueller Beweis:");
+		currentProofLabel.setFont(FontManager.getDefaultFont());
+
+		proofSelectionPanel.add(currentProofLabel);
 		proofSelectionPanel.add(Box.createHorizontalStrut(5));
 		proofSelectionPanel.add(proofList);
 		proofSelectionPanel.add(new SimpleLink(appModel.createEnvironmentCommand));
@@ -78,6 +81,7 @@ public class MainWindow extends JFrame implements PropertyChangeListener, Applic
 
 		proofContainer.setOpaque(false);
 		proofList.setModel(appModel.environmentNameModel);
+		proofList.setFont(FontManager.getDefaultFont());
 
 		JScrollPane scrollContainer = new JScrollPane(proofContainer);
 		scrollContainer.setBorder(null);

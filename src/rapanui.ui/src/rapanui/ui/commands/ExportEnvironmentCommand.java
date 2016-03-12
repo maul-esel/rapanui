@@ -9,7 +9,7 @@ public class ExportEnvironmentCommand extends AbstractCommand implements Applica
 	private final ApplicationModel model;
 
 	public ExportEnvironmentCommand(ApplicationModel model) {
-		super("\u2b8b", "Beweis exportieren");
+		super("\u23e3", "Beweis exportieren");
 		this.model = model;
 		model.addObserver(this);
 		updateEnabled();

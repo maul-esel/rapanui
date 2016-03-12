@@ -10,6 +10,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.Action;
 import javax.swing.JButton;
 
+import rapanui.ui.views.FontManager;
+
 public class SimpleLink extends JButton {
 	private static final long serialVersionUID = 1L;
 
@@ -38,7 +40,7 @@ public class SimpleLink extends JButton {
 		setBorderPainted(false);
 		setOpaque(false);
 		setContentAreaFilled(false);
-		setFont(getFont().deriveFont(20f));
+		setFont(FontManager.getButtonFont());
 		setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		setForeground(defaultColor);
 	}

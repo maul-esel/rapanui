@@ -48,7 +48,8 @@ class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Obser
 		setOpaque(false);
 		setLayout(new MultilineLayout());
 
-		Font titleFont = new Font(getFont().getFamily(), Font.BOLD, 20);
+		Font defaultFont = FontManager.getDefaultFont();
+		Font titleFont = FontManager.getTitleFont();
 
 		/* premises */
 		premisePanel.setOpaque(false);
@@ -62,19 +63,25 @@ class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Obser
 		termInput.setMaximumSize(new Dimension(MAX_WIDTH, termInput.getMaximumSize().height));
 
 		JComboBox<String> definitionSelection = new JComboBox<String>(model.definitionSelectionModel);
+		definitionSelection.setFont(defaultFont);
 		definitionSelection.setMaximumSize(new Dimension(MAX_WIDTH, definitionSelection.getMaximumSize().height));
 
 		JLabel newPremiseLabel = new JLabel("Neue Voraussetzung:");
 		newPremiseLabel.setAlignmentX(RIGHT_ALIGNMENT);
+		newPremiseLabel.setFont(defaultFont);
 
 		newPremisePanel.add(newPremiseLabel, (Integer)0);
 		newPremisePanel.add(new JSeparator(), (Integer)1);
 
-		newPremisePanel.add(new JLabel("Sei "), (Integer)2);
+		JLabel formulaPremiseLabel = new JLabel("Sei ");
+		formulaPremiseLabel.setFont(defaultFont);
+		newPremisePanel.add(formulaPremiseLabel, (Integer)2);
 		newPremisePanel.add(new SyntaxTextField(SyntaxTextField.ParsingMode.Formula, model.formulaPremiseInputModel));
 		newPremisePanel.add(new SimpleLink(model.createFormulaPremiseCommand));
 
-		newPremisePanel.add(new JLabel("Sei "), (Integer)3);
+		JLabel definitionReferencePremiseLabel = new JLabel("Sei ");
+		definitionReferencePremiseLabel.setFont(defaultFont);
+		newPremisePanel.add(definitionReferencePremiseLabel, (Integer)3);
 		newPremisePanel.add(termInput);
 		newPremisePanel.add(definitionSelection);
 		newPremisePanel.add(new SimpleLink(model.createDefinitionReferencePremiseCommand));
@@ -108,9 +115,14 @@ class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Obser
 		newConclusionPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(5,5,5,5)));
 		newConclusionPanel.setOpaque(false);
 
-		newConclusionPanel.add(new JLabel("Neue Folgerung:"), (Integer)0);
+		JLabel newConclusionLabel = new JLabel("Neue Folgerung:");
+		JLabel startTermLabel = new JLabel("Startterm: ");
+		newConclusionLabel.setFont(defaultFont);
+		startTermLabel.setFont(defaultFont);
+
+		newConclusionPanel.add(newConclusionLabel, (Integer)0);
 		newConclusionPanel.add(new JSeparator(), (Integer)1);
-		newConclusionPanel.add(new JLabel("Startterm: "), (Integer)2);
+		newConclusionPanel.add(startTermLabel, (Integer)2);
 		newConclusionPanel.add(new SyntaxTextField(SyntaxTextField.ParsingMode.Term, model.conclusionTermInputModel));
 		newConclusionPanel.add(new SimpleLink(model.createConclusionCommand));
 
@@ -131,9 +143,13 @@ class ProofEnvironmentView extends JPanel implements ProofEnvironmentModel.Obser
 
 		if (premise instanceof DefinitionReference) {
 			DefinitionReference ref = (DefinitionReference)premise;
+
+			JLabel definitionNameLabel = new JLabel(ref.getDefinition().getName());
+			definitionNameLabel.setFont(FontManager.getDefaultFont());
+
 			panel.add(createMathematicalLabel(ref.getTarget().serialize()));
 			panel.add(Box.createHorizontalStrut(3));
-			panel.add(new JLabel(ref.getDefinition().getName()));
+			panel.add(definitionNameLabel);
 		} else
 			panel.add(createMathematicalLabel(premise.serialize()));
 

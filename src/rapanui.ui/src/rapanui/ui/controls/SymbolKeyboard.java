@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+import rapanui.ui.views.FontManager;
+
 public class SymbolKeyboard extends JPanel {
 	private static final long serialVersionUID = 1L;
 
@@ -24,6 +26,7 @@ public class SymbolKeyboard extends JPanel {
 		setLayout(new GridLayout(keyboardLines, keyboardSymbols.length / keyboardLines));
 		for (char symbol : keyboardSymbols) {
 			JButton key = new JButton(Character.toString(symbol));
+			key.setFont(FontManager.getMathFont());
 			add(key);
 
 			key.addActionListener(new ActionListener() {
