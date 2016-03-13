@@ -31,7 +31,7 @@ sourceSets {
     resources {
       srcDir 'resources'
       srcDir '../rapanui.library'
-      includes = ['*.raps', '*.ttf']
+      includes = ['*.raps', '*.ttf', 'DejaVuSans_Font_LICENSE']
     }
   }
 }
