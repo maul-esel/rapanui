@@ -68,7 +68,7 @@ public class SuggestionListModel extends AbstractListModel<Transformation> {
 
 	protected void removeElement(Transformation suggestion) {
 		int oldIndex = elements.indexOf(suggestion);
-		if (oldIndex > 0) {
+		if (oldIndex >= 0) {
 			elements.remove(oldIndex);
 			fireIntervalRemoved(this, oldIndex, oldIndex);
 		}
