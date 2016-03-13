@@ -22,10 +22,6 @@ sourceSets {
     java {
       srcDir 'src'
     }
-    resources {
-      srcDir '../rapanui.library'
-      includes = ['*.raps']
-    }
   }
 }
 

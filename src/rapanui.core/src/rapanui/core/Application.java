@@ -10,16 +10,7 @@ import rapanui.dsl.RuleSystemCollection;
 public class Application {
 	private final List<Observer> observers = new ArrayList<Observer>();
 	private final List<ProofEnvironment> environments = new ArrayList<ProofEnvironment>();
-
 	private final RuleSystemCollection ruleSystems = new RuleSystemCollection();
-
-	public Application() {
-		try {
-			ruleSystems.load(Application.class.getResourceAsStream("/library.raps"));
-		} catch (Exception e) {
-			throw new IllegalStateException("Failed to load rule system.", e);
-		}
-	}
 
 	public ProofEnvironment[] getEnvironments() {
 		return environments.toArray(new ProofEnvironment[environments.size()]);

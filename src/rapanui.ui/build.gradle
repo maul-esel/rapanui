@@ -30,6 +30,8 @@ sourceSets {
     }
     resources {
       srcDir 'resources'
+      srcDir '../rapanui.library'
+      includes = ['*.raps', '*.ttf']
     }
   }
 }
@@ -37,4 +39,9 @@ sourceSets {
 eclipse.project {
   natures 'org.eclipse.buildship.core.gradleprojectnature'
   buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
+}
+
+run {
+  if (project.hasProperty('args'))
+    args project.getProperty('args').split(' ')
 }
