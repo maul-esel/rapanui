@@ -19,7 +19,6 @@ public class Application {
 		} catch (Exception e) {
 			throw new IllegalStateException("Failed to load rule system.", e);
 		}
-		createEnvironment(); // always create initial environment
 	}
 
 	public ProofEnvironment[] getEnvironments() {

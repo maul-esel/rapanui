@@ -65,6 +65,7 @@ public class ApplicationModel implements Application.Observer {
 
 		suggestionListModel = new SuggestionListModel();
 
+		app.createEnvironment(); // always create initial environment
 		for (ProofEnvironment env : app.getEnvironments())
 			addEnvironment(env);
 		app.addObserver(this);
