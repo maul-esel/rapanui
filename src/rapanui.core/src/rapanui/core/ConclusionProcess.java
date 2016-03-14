@@ -1,7 +1,7 @@
 package rapanui.core;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -17,8 +17,8 @@ import static rapanui.core.Patterns.*;
 public class ConclusionProcess {
 	private final ProofEnvironment environment;
 	private final Term startTerm;
-	private final List<Transformation> transformations;
-	private final List<Observer> observers;
+	private final List<Transformation> transformations = new LinkedList<Transformation>();
+	private final List<Observer> observers = new LinkedList<Observer>();
 
 	/**
 	 * Creates a new conclusion process
@@ -32,8 +32,6 @@ public class ConclusionProcess {
 
 		this.environment = environment;
 		this.startTerm = startTerm;
-		this.transformations = new ArrayList<Transformation>();
-		this.observers = new ArrayList<Observer>();
 	}
 
 	/**
