@@ -35,8 +35,13 @@ public class SuggestionFinder {
 		return defaultInstance;
 	}
 
-	public Emitter<Transformation> makeSuggestionsAsync(ConclusionProcess target, BINARY_RELATION suggestionType) {
-		Formula formulaTemplate = Builder.createFormula(target.getLastTerm(), suggestionType, null);
+	public Emitter<Transformation> makeSuggestionsAsync(ConclusionProcess target, BINARY_RELATION suggestionType,
+			boolean prependSuggestion) {
+		Formula formulaTemplate;
+		if (prependSuggestion)
+			formulaTemplate = Builder.createFormula(null, suggestionType, target.getFirstTerm());
+		else
+			formulaTemplate = Builder.createFormula(target.getLastTerm(), suggestionType, null);
 		return justificationFinder.justifyAsync(target.getEnvironment(), formulaTemplate, MAX_RECURSION)
 			.map(justification -> createTransformation(target, justification));
 	}

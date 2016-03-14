@@ -95,10 +95,10 @@ public class ApplicationModel implements Application.Observer {
 		app.removeEnvironment(environmentModel.getUnderlyingModel());
 	}
 
-	void loadSuggestions(ProofEnvironment environment, ConclusionProcess conclusion) {
+	void loadSuggestions(ProofEnvironment environment, ConclusionProcess conclusion, boolean prependSuggestion) {
 		clearSuggestions();
 
-		activeSuggestionSource = app.loadSuggestions(conclusion, BINARY_RELATION.UNSPECIFIED); // TODO: make suggestionType configurable via UI
+		activeSuggestionSource = app.loadSuggestions(conclusion, BINARY_RELATION.UNSPECIFIED, prependSuggestion); // TODO: make suggestionType configurable via UI
 		activeSuggestionSource.onEmit(this::displaySuggestion);
 	}
 

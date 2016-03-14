@@ -31,8 +31,9 @@ public class Application {
 			notifyObservers(o -> o.environmentRemoved(environment));
 	}
 
-	public Emitter<Transformation> loadSuggestions(ConclusionProcess target, BINARY_RELATION suggestionType) {
-		return SuggestionFinder.getDefaultInstance().makeSuggestionsAsync(target, suggestionType);
+	public Emitter<Transformation> loadSuggestions(ConclusionProcess target, BINARY_RELATION suggestionType,
+			boolean prependSuggestion) {
+		return SuggestionFinder.getDefaultInstance().makeSuggestionsAsync(target, suggestionType, prependSuggestion);
 	}
 
 	public void applySuggestion(ConclusionProcess target, Transformation suggestion) {

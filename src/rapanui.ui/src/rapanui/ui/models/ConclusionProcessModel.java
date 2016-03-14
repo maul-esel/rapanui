@@ -20,6 +20,8 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 
 	private final List<Observer> observers = new LinkedList<Observer>();
 
+	private boolean prependSuggestion = false;
+
 	ConclusionProcessModel(ProofEnvironmentModel container, ConclusionProcess conclusion) {
 		this.container = container;
 		this.conclusion = conclusion;
@@ -68,11 +70,17 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 	}
 
 	void loadSuggestions() {
-		container.loadSuggestions(conclusion);
+		container.loadSuggestions(conclusion, prependSuggestion);
 	}
 
 	void clearSuggestions() {
 		container.clearSuggestions();
+	}
+
+	public void toggleTransformationDirection() {
+		prependSuggestion = !prependSuggestion;
+		if (isActive())
+			loadSuggestions(); // reload
 	}
 
 	public void displayJustification(Justification justification) {

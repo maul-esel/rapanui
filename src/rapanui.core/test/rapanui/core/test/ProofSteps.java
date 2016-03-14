@@ -56,7 +56,7 @@ public class ProofSteps {
 			suggestionType = BINARY_RELATION.INCLUSION;
 
 		List<Transformation> suggestions = Collections.synchronizedList(new LinkedList<Transformation>());
-		SuggestionFinder.getDefaultInstance().makeSuggestionsAsync(currentConclusion, suggestionType)
+		SuggestionFinder.getDefaultInstance().makeSuggestionsAsync(currentConclusion, suggestionType, false)
 			.onEmit(suggestions::add);
 
 		try {

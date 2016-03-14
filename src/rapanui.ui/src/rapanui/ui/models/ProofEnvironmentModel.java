@@ -98,9 +98,9 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 		return activeConclusion;
 	}
 
-	void loadSuggestions(ConclusionProcess conclusion) {
+	void loadSuggestions(ConclusionProcess conclusion, boolean prependSuggestion) {
 		if (isActive())
-			container.loadSuggestions(env, conclusion);
+			container.loadSuggestions(env, conclusion, prependSuggestion);
 	}
 
 	void clearSuggestions() {
