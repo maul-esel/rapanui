@@ -82,12 +82,14 @@ public class ProofEnvironment {
 	 * Starts a new conclusion process in the environment.
 	 *
 	 * @param startTerm The initial term of the conclusion. Must not be null.
+	 * @return The newly created conclusion process.
 	 */
-	public void addConclusion(Term startTerm) {
+	public ConclusionProcess addConclusion(Term startTerm) {
 		assert startTerm != null;
 		ConclusionProcess conclusion = new ConclusionProcess(this, startTerm);
 		conclusions.add(conclusion);
 		notifyObservers(observers, Observer::conclusionStarted, conclusion);
+		return conclusion;
 	}
 
 	public ConclusionProcess[] getConclusions() {
