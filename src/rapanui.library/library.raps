@@ -87,6 +87,11 @@ theorem "Isotonie des Schnittes (II)"
   if M ⊆ N
   then L ∩ M ⊆ L ∩ N
 
+theorem "Gemeinsame Teilmenge"
+  if L ⊆ M
+  and L ⊆ N
+  then L ⊆ M ∩ N
+
 # Schnitt von Relationen
 
 axiom "Neutralelement des Schnittes"
