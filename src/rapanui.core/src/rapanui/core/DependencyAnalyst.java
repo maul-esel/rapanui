@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import rapanui.dsl.Formula;
 import rapanui.dsl.Predicate;
 
 /**
@@ -225,8 +226,8 @@ public class DependencyAnalyst {
 	public boolean dependsOn(Predicate premise, Justification derivative) {
 		if (derivative instanceof EnvironmentPremiseJustification)
 			return !Arrays.stream(environment.getPremises())
-				.anyMatch(otherPremise -> otherPremise != premise
-					&& otherPremise.resolve().indexOf(derivative.getJustifiedFormula()) != -1);
+				.filter(otherPremise -> otherPremise != premise)
+				.anyMatch(otherPremise -> resolvesToFormula(otherPremise, derivative.getJustifiedFormula()));
 
 		else if (derivative instanceof ProofJustification) {
 			ProofJustification proof = (ProofJustification)derivative;
@@ -244,6 +245,12 @@ public class DependencyAnalyst {
 			return dependsOn(premise, ((SubtermEqualityJustification) derivative).getJustification());
 
 		throw new IllegalStateException("Unsupported justification type: " + derivative.getClass());
+	}
+
+	private boolean resolvesToFormula(Predicate predicate, Formula formula) {
+		return predicate.resolve()
+			.stream()
+			.anyMatch(formula::structurallyEquals);
 	}
 
 	/**
