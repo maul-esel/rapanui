@@ -185,10 +185,10 @@ axiom "Konverse und Komplement"
   always (R˘)ᶜ = (Rᶜ)˘
 
 axiom "Konverse und Vereinigung"
-  always (R ∪ S)˘ ⊆ R˘ ∪ S˘
+  always (R ∪ S)˘ = R˘ ∪ S˘
 
 axiom "Konverse und Schnitt"
-  always (R ∩ S)˘ ⊆ R˘ ∩ S˘
+  always (R ∩ S)˘ = R˘ ∩ S˘
 
 # Komposition
 
