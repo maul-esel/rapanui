@@ -71,8 +71,10 @@ public class ProofEnvironment {
 	 */
 	public Formula[] getResolvedPremises() {
 		return listToArray(
-			premises.stream().flatMap(premise -> premise.resolve().stream())
-				.collect(Collectors.toMap(Formula::serialize, x -> x)).values(), // remove syntactic duplicates
+			premises.stream()
+				.flatMap(premise -> premise.resolve().stream())
+				.collect(Collectors.toMap(Formula::serialize, x -> x, (x, y) -> x))
+				.values(), // remove syntactic duplicates
 			Formula[]::new);
 	}
 
