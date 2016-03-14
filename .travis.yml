@@ -2,7 +2,7 @@ language: java
 
 jdk: oraclejdk8
 
-script: cd src && gradle eclipse build
+script: cd src && gradle eclipse build cucumber
 
 before_cache:
   - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock

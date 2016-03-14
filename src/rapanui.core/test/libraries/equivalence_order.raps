@@ -1,0 +1,39 @@
+define R as "an equivalence relation"
+  iff R is "reflexive"
+  and R is "transitive"
+  and R is "symmetric"
+
+define R as "a partial order"
+  iff R is "reflexive"
+  and R is "transitive"
+  and R is "antisymmetric"
+
+define R as "reflexive"
+  iff I ⊆ R
+
+define R as "symmetric"
+  iff R˘ ⊆ R
+
+define R as "antisymmetric"
+  iff R ∩ R˘ ⊆ I
+
+define R as "transitive"
+  iff R;R ⊆ R
+
+###################################
+
+axiom "converse is involuntory"
+  always (R˘)˘ = R
+
+theorem "converse is isotone"
+  if S ⊆ R
+  then S˘ ⊆ R˘
+
+theorem "intersection with a subset"
+  if M ⊆ N
+  then M ∩ N = M
+
+theorem "inclusion is antisymmetric"
+  if M ⊆ N
+  and N ⊆ M
+  then M = N

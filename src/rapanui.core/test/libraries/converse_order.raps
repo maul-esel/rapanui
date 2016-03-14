@@ -1,0 +1,37 @@
+define R as "a partial order"
+  iff R is "reflexive"
+  and R is "transitive"
+  and R is "antisymmetric"
+
+define R as "reflexive"
+  iff I ⊆ R
+
+define R as "antisymmetric"
+  iff R ∩ R˘ ⊆ I
+
+define R as "transitive"
+  iff R;R ⊆ R
+
+define R as "linear"
+  iff R ∪ R˘ = Π
+
+###########################################
+
+axiom "identity is symmetric"
+  always I = I˘
+
+theorem "converse is isotone"
+  if S ⊆ R
+  then S˘ ⊆ R˘
+
+axiom "composition and converse"
+  always (R ; S)˘ = S˘ ; R˘
+
+axiom "converse is involuntory"
+  always (R˘)˘ = R
+
+axiom "intersection is commutative"
+  always M ∩ N = N ∩ M
+
+axiom "union is commutative"
+  always M ∪ N = N ∪ M

@@ -1,0 +1,15 @@
+
+define R as "symmetric"
+  iff R˘ ⊆ R
+
+axiom "converse is involuntory"
+  always (R˘)˘ = R
+
+theorem "converse is isotone"
+  if S ⊆ R
+  then S˘ ⊆ R˘
+
+theorem "inclusion is antisymmetric"
+  if M ⊆ N
+  and N ⊆ M
+  then M = N

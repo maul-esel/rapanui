@@ -1,6 +1,7 @@
 plugins {
   id "java"
   id "eclipse"
+  id "com.github.samueltbrown.cucumber" version "0.9"
 }
 
 group 'rapanui'
@@ -15,6 +16,11 @@ repositories {
 
 dependencies {
   compile project(':rapanui.dsl')
+
+  testCompile 'info.cukes:cucumber-java:1.2+'
+  cucumberRuntime 'info.cukes:cucumber-java:1.2+'
+  cucumberRuntime sourceSets.test.output
+  cucumberRuntime sourceSets.main.output
 }
 
 sourceSets {
@@ -23,9 +29,22 @@ sourceSets {
       srcDir 'src'
     }
   }
+  test {
+    java {
+      srcDir 'test'
+    }
+  }
 }
 
 eclipse.project {
   natures 'org.eclipse.buildship.core.gradleprojectnature'
   buildCommand 'org.eclipse.buildship.core.gradleprojectbuilder'
+}
+
+cucumber {
+  glueDirs = ['classpath:rapanui.core.test']
+  featureDirs = ['test/features']
+  jvmOptions {
+    enableAssertions = true
+  }
 }
