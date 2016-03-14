@@ -206,6 +206,9 @@ public class ProofFormatter {
 				break;
 			case 'j': text(shortDescription((Justification)objects[i]));
 				break;
+			case '%': text("%");
+				break;
+			default: throw new IllegalArgumentException("Invalid format specifier " + typeSpecifier);
 			}
 			text(matcher.group(3));
 		}
