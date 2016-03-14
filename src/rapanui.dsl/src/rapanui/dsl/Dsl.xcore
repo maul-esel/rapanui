@@ -108,7 +108,7 @@ class Formula extends Predicate {
 	}
 
 	op boolean isTemplateFor(Formula instance) {
-		(formulaType == null || formulaType == instance.formulaType || instance.formulaType == BINARY_RELATION.EQUATION)
+		(formulaType == BINARY_RELATION.UNSPECIFIED || formulaType == instance.formulaType || instance.formulaType == BINARY_RELATION.EQUATION)
 		&& (left == null || left.isTemplateFor(instance.left))
 		&& (right == null || right.isTemplateFor(instance.right))
 	}
