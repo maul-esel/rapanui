@@ -159,7 +159,7 @@ public class SubtermEqualityJustificationFinder implements JustificationFinder {
 					currentRight = right.getLeft();
 				}
 			} else // should not happen unless new Term classes are introduced
-				throw new IllegalStateException("Unsupported term class: " + currentLeft.getClass()); // TODO: or just break? or log warning?
+				throw new IllegalStateException("Unsupported term class: " + currentLeft.eClass());
 
 			// for the current pair of subterms: try to justify their equality.
 			// If successful, use this as justification.

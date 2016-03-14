@@ -199,7 +199,7 @@ public class ProofFormatter {
 				else if (objects[i] instanceof String)
 					math(objects[i].toString());
 				else
-					throw new IllegalArgumentException();
+					throw new IllegalArgumentException("Object " + objects[i] + " cannot be formatted as math");
 				break;
 			case 'j': text(shortDescription((Justification)objects[i]));
 				break;

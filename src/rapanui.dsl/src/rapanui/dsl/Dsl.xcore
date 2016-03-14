@@ -181,7 +181,7 @@ class VariableReference extends Term {
 	op Term mergeTemplate(Term other) throws IncompatibleTemplateException {
 		if (other == null || other.structurallyEquals(this))
 			return EcoreUtil.copy(this)
-		throw new IncompatibleTemplateException()
+		throw new IncompatibleTemplateException("Variable "+variable+" is not a template for "+other);
 	}
 
 	op StringSet getFreeVariables() {
@@ -206,7 +206,7 @@ class ConstantReference extends Term {
 	op Term mergeTemplate(Term other) throws IncompatibleTemplateException {
 		if (other == null || other.structurallyEquals(this))
 			return EcoreUtil.copy(this)
-		throw new IncompatibleTemplateException()
+		throw new IncompatibleTemplateException("Constant "+constant+" is not a template for "+other)
 	}
 
 	op StringSet getFreeVariables() {
@@ -240,7 +240,7 @@ class UnaryOperation extends Term {
 			val mergedOperand = operand?.mergeTemplate(otherOperand) ?: otherOperand?.mergeTemplate(operand)
 			return Builder.createUnaryOperation(mergedOperand, operator)
 		}
-		throw new IncompatibleTemplateException()
+		throw new IncompatibleTemplateException("UnaryOperation "+operator.literal+" is not a template for "+other)
 	}
 
 	op StringSet getFreeVariables() {
@@ -283,7 +283,7 @@ class BinaryOperation extends Term {
 			val mergedRight = right?.mergeTemplate(binary.right) ?: binary.right?.mergeTemplate(right)
 			return Builder.createBinaryOperation(mergedLeft, operator, mergedRight)
 		}
-		throw new IncompatibleTemplateException()
+		throw new IncompatibleTemplateException("BinaryOperation "+operator.literal+" is not a template for "+other)
 	}
 
 	op StringSet getFreeVariables() {

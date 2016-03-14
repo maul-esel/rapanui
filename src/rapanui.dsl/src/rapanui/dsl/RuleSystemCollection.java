@@ -32,7 +32,7 @@ public class RuleSystemCollection implements Iterable<RuleSystem> {
 	public void load(String path) {
 		Resource resource = resourceSet.getResource(URI.createFileURI(path), true);
 		if (!resource.getErrors().isEmpty())
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Can't load resource: "+resource.getErrors().get(0).getMessage());
 		ruleSystems.add((RuleSystem)resource.getContents().get(0));
 	}
 
@@ -41,7 +41,7 @@ public class RuleSystemCollection implements Iterable<RuleSystem> {
 				URI.createURI("memory://inputstream/" + data.hashCode() + ".raps"));
 		resource.load(data, resourceSet.getLoadOptions());
 		if (!resource.getErrors().isEmpty())
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Can't load resource: "+resource.getErrors().get(0).getMessage());
 		ruleSystems.add((RuleSystem)resource.getContents().get(0));
 	}
 

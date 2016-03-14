@@ -41,11 +41,8 @@ public class Parser {
 
 	private EObject parse(String input, ParserRule rule) {
 		IParseResult result = internalParser.parse(rule, new StringReader(input));
-		if (result.hasSyntaxErrors()) {
-			for (INode node : result.getSyntaxErrors())
-				throw new IllegalArgumentException("Parsing error: "
-					+ node.getSyntaxErrorMessage().getMessage());
-		}
+		for (INode node : result.getSyntaxErrors())
+			throw new IllegalArgumentException("Parsing error: " + node.getSyntaxErrorMessage().getMessage());
 		return result.getRootASTElement();
 	}
 

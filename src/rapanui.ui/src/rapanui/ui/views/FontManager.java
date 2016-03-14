@@ -3,6 +3,7 @@ package rapanui.ui.views;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
+import java.io.IOException;
 
 public class FontManager {
 	private FontManager() {}
@@ -22,12 +23,12 @@ public class FontManager {
 			loadFont("/DejaVuSansMono-Bold.ttf");
 
 			fontsLoaded = true;
-		} catch (Exception e) {
+		} catch (IOException|FontFormatException e) {
 			throw new IllegalStateException("Couldn't load fonts", e);
 		}
 	}
 
-	private static Font loadFont(String resourceName) throws java.io.IOException, FontFormatException {
+	private static Font loadFont(String resourceName) throws IOException, FontFormatException {
 		Font font = Font.createFont(
 				Font.TRUETYPE_FONT,
 				FontManager.class.getResourceAsStream(resourceName)

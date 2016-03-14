@@ -156,7 +156,8 @@ public class ConclusionProcess {
 		assert transformation.getContainer() == this;
 
 		if (!getLastTerm().structurallyEquals(transformation.getInput()))
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("The transformation's input term " + transformation.getInput().serialize()
+					+ " must be equal to the conclusion's last term " + getLastTerm().serialize());
 		transformations.add(transformation);
 		notifyObservers(observers, Observer::transformationAdded, transformation);
 	}
