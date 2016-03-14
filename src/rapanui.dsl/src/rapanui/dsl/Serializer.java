@@ -69,9 +69,9 @@ public class Serializer implements Visitor {
 	@Override public void visit(BinaryOperation operation) {
 		String right = result.pop(), left = result.pop();
 
-		if (operation.getLeft() instanceof BinaryOperation || operation.getLeft() instanceof UnaryOperation)
+		if (operation.getLeft() instanceof BinaryOperation)
 			left = "(" + left + ")";
-		if (operation.getRight() instanceof BinaryOperation || operation.getRight() instanceof UnaryOperation)
+		if (operation.getRight() instanceof BinaryOperation)
 			right = "(" + right + ")";
 
 		result.push(left + " " + operation.getOperator().getLiteral() + " " + right);
