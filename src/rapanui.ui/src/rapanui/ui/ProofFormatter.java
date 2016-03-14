@@ -167,11 +167,14 @@ public class ProofFormatter {
 			referenceList += "[" + referenceCounter + "], ";
 		}
 
-		formatting("Nach der Regel %s:\n\n%m\nmit %t",
+		formatting("Nach der Regel %s:\n\n%m\n",
 				justification.getAppliedRule().getName(),
-				justification.getAppliedRule(),
-				justification.getVariableTranslation());
+				justification.getAppliedRule());
 
+		if (!justification.getVariableTranslation().isEmpty()) {
+			text(" mit ");
+			formatVariableTranslation(justification.getVariableTranslation());
+		}
 		if (!referenceList.isEmpty())
 			text(" und ", referenceList.substring(0, referenceList.length() - 2));
 
@@ -202,8 +205,6 @@ public class ProofFormatter {
 					throw new IllegalArgumentException("Object " + objects[i] + " cannot be formatted as math");
 				break;
 			case 'j': text(shortDescription((Justification)objects[i]));
-				break;
-			case 't': formatVariableTranslation((Map<String, Term>)objects[i]);
 				break;
 			}
 			text(matcher.group(3));
