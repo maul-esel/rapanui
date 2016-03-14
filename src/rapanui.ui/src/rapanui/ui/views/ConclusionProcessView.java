@@ -109,6 +109,8 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		});
 		longForm.add(justificationLabel, c);
 		displayedTransformations++;
+
+		revalidate();
 	}
 
 	@Override
@@ -123,6 +125,8 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		longForm.remove(longForm.getComponent(componentCount - 1));
 		longForm.remove(longForm.getComponent(componentCount - 2));
 		displayedTransformations--;
+
+		revalidate();
 	}
 
 	@Override
