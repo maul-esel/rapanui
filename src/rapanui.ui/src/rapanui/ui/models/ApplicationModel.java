@@ -96,8 +96,7 @@ public class ApplicationModel implements Application.Observer {
 	}
 
 	void loadSuggestions(ProofEnvironment environment, ConclusionProcess conclusion) {
-		if (activeSuggestionSource != null)
-			clearSuggestions();
+		clearSuggestions();
 
 		activeSuggestionSource = app.loadSuggestions(conclusion, BINARY_RELATION.UNSPECIFIED); // TODO: make suggestionType configurable via UI
 		activeSuggestionSource.onEmit(this::displaySuggestion);
@@ -125,8 +124,6 @@ public class ApplicationModel implements Application.Observer {
 
 		clearSuggestions();
 		app.applySuggestion(suggestion.getContainer(), suggestion);
-
-		loadSuggestions(suggestion.getContainer().getEnvironment(), suggestion.getContainer());
 	}
 
 	void requestConfirmation(String message, Consumer<Boolean> handler) {

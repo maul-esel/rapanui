@@ -87,16 +87,13 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 			container.requestConfirmation(
 				"Diese Aktion würde auch die markierten Daten entfernen. Fortfahren?",
 				result -> {
-					if (result) {
+					if (result)
 						conclusion.undoTransformation();
-						container.clearSuggestions();
-					} else
+					else
 						container.unhighlight();
 			});
-		} else {
+		} else
 			conclusion.undoTransformation();
-			container.clearSuggestions();
-		}
 	}
 
 	public void remove() {
@@ -139,6 +136,8 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 
 	@Override
 	public void transformationAdded(Transformation transformation) {
+		if (isActive())
+			loadSuggestions();
 		for (Observer observer : observers)
 			observer.transformationAdded(transformation);
 		for (Observer observer : observers)
@@ -147,6 +146,8 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 
 	@Override
 	public void transformationRemoved(Transformation transformation) {
+		if (isActive())
+			loadSuggestions();
 		for (Observer observer : observers)
 			observer.transformationRemoved(transformation);
 		for (Observer observer : observers)

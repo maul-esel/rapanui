@@ -64,6 +64,10 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 			activeConclusion.onActivate();
 	}
 
+	boolean isActive() {
+		return container.getActiveEnvironment() == this;
+	}
+
 	public void export() {
 		container.requestFilePath(true, new String[]{ "txt" }, path -> {
 			HTMLDocument document = new ProofFormatter(env).getDocument();
@@ -95,7 +99,8 @@ public class ProofEnvironmentModel implements ProofEnvironment.Observer {
 	}
 
 	void loadSuggestions(ConclusionProcess conclusion) {
-		container.loadSuggestions(env, conclusion);
+		if (isActive())
+			container.loadSuggestions(env, conclusion);
 	}
 
 	void clearSuggestions() {
