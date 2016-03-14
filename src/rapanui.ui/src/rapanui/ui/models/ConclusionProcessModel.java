@@ -34,7 +34,7 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 
 	public String getTitle() {
 		return String.format("%s %s %s",
-				conclusion.getStartTerm().serialize(),
+				conclusion.getFirstTerm().serialize(),
 				conclusion.getFormulaType().getLiteral(),
 				conclusion.getLastTerm().serialize());
 	}
@@ -43,8 +43,8 @@ public class ConclusionProcessModel implements ConclusionProcess.Observer {
 		return conclusion.getTransformations();
 	}
 
-	public Term getStartTerm() {
-		return conclusion.getStartTerm();
+	public Term getFirstTerm() {
+		return conclusion.getFirstTerm();
 	}
 
 	public void activate() {

@@ -129,9 +129,9 @@ public class ProofFormatter {
 		}
 
 		text("Somit gilt:\n");
-		math(conclusion.getStartTerm().serialize());
+		math(conclusion.getFirstTerm().serialize());
 
-		int padLength = conclusion.getStartTerm().serialize().length();
+		int padLength = conclusion.getFirstTerm().serialize().length();
 		String pad = CharBuffer.allocate( padLength ).toString().replace('\0', ' ');
 
 		Term[] terms = conclusion.getTerms();

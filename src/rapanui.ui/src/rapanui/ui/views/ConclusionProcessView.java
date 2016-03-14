@@ -69,7 +69,7 @@ class ConclusionProcessView extends JPanel implements ConclusionProcessModel.Obs
 		c.ipadx = 5;
 		c.anchor = GridBagConstraints.EAST;
 		c.weightx = 0.3;
-		longForm.add(ProofEnvironmentView.createMathematicalLabel(model.getStartTerm().serialize()), c);
+		longForm.add(ProofEnvironmentView.createMathematicalLabel(model.getFirstTerm().serialize()), c);
 
 		add(header);
 		add(separator);

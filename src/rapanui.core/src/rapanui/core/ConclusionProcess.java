@@ -16,7 +16,7 @@ import static rapanui.core.Patterns.*;
  */
 public class ConclusionProcess {
 	private final ProofEnvironment environment;
-	private final Term startTerm;
+	private final Term initialTerm;
 	private final List<Transformation> transformations = new LinkedList<Transformation>();
 	private final List<Observer> observers = new LinkedList<Observer>();
 
@@ -24,14 +24,14 @@ public class ConclusionProcess {
 	 * Creates a new conclusion process
 	 *
 	 * @param environment The environment containing the process. Must not be null.
-	 * @param startTerm The initial term of the process. Must not be null.
+	 * @param initialTerm The initial term of the process. Must not be null.
 	 */
-	ConclusionProcess(ProofEnvironment environment, Term startTerm) {
+	ConclusionProcess(ProofEnvironment environment, Term initialTerm) {
 		assert environment != null;
-		assert startTerm != null;
+		assert initialTerm != null;
 
 		this.environment = environment;
-		this.startTerm = startTerm;
+		this.initialTerm = initialTerm;
 	}
 
 	/**
@@ -42,10 +42,13 @@ public class ConclusionProcess {
 	}
 
 	/**
-	 * @return The conclusion's start term. Guaranteed to be non-null.
+	 * Retrieves the (current) first term in the transformation chain.
+	 * @return The input term of the first transformation, or if there are none, the initial term. Guaranteed to be non-null.
 	 */
-	public Term getStartTerm() {
-		return startTerm;
+	public Term getFirstTerm() {
+		if (transformations.isEmpty())
+			return initialTerm;
+		return transformations.get(0).getInput();
 	}
 
 	/**
@@ -53,8 +56,8 @@ public class ConclusionProcess {
 	 * @return The output term of the last transformation, or if there are none, the initial term. Guaranteed to be non-null.
 	 */
 	public Term getLastTerm() {
-		if (transformations.size() == 0)
-			return startTerm;
+		if (transformations.isEmpty())
+			return initialTerm;
 		return transformations.get(transformations.size() - 1).getOutput();
 	}
 
@@ -66,7 +69,7 @@ public class ConclusionProcess {
 		Transformation[] transformations = getTransformations();
 		Term[] terms = new Term[1+transformations.length];
 
-		terms[0] = getStartTerm();
+		terms[0] = getFirstTerm();
 		for (int i = 0; i < transformations.length; ++i)
 			terms[i+1] = transformations[i].getOutput();
 
