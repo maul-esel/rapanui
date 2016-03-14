@@ -1,0 +1,9 @@
+define R as "dense"
+  iff R ⊆ R;R
+
+theorem "converse is isotone"
+  if S ⊆ R
+  then S˘ ⊆ R˘
+
+axiom "composition and converse"
+  always (R ; S)˘ = S˘ ; R˘

@@ -1,0 +1,10 @@
+define R as "reflexive"
+  iff I ⊆ R
+
+axiom "identity and composition"
+  always I ; R = R
+  and R ; I = R
+
+theorem "composition is isotone (II)"
+  if R ⊆ S
+  then R ; T ⊆ S ; T

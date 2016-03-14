@@ -71,3 +71,21 @@ Feature: Simple proofs
     When I apply this suggestion
     And I start a new conclusion with start term R
     Then the equal term I is suggested
+
+  Scenario: Prove the inverse of a dense relation is also dense
+    Given I have a proof environment with the rule system "dense_converse.raps"
+    And I add the premise that R is dense
+
+    When I start a new conclusion with start term R˘
+    Then the greater term (R;R)˘ is suggested
+    When I apply this suggestion
+    Then the equal term R˘;R˘ is suggested
+
+  Scenario: Prove a reflexive relation is dense
+    Given I have a proof environment with the rule system "dense_reflexive.raps"
+    And I add the premise that R is reflexive
+
+    When I start a new conclusion with start term R
+    Then the equal term I;R is suggested
+    When I apply this suggestion
+    Then the greater term R;R is suggested
