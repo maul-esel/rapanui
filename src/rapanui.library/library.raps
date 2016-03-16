@@ -181,6 +181,10 @@ axiom "Striktheit der Konversen"
 axiom "Symmetrie der Identität"
   always I = I˘
 
+theorem "Symmetrie der Identität (2)"
+  if S ⊆ I
+  then S = S˘
+
 axiom "Symmetrie der Allrelation"
   always Π = Π˘
 
