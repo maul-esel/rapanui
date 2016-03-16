@@ -1,0 +1,27 @@
+define R as "asymmetric"
+  iff R ∩ R˘ = ∅
+
+axiom "identity is symmetric"
+  always I = I˘
+
+theorem "identity is symmetric (2)"
+  if S ⊆ I
+  then S = S˘
+
+axiom "intersection is subset of arguments"
+  always M ∩ N ⊆ M
+
+axiom "converse and intersection"
+  always (R ∩ S)˘ = R˘ ∩ S˘
+
+axiom "intersection is idempotent"
+  always M ∩ M = M
+
+axiom "intersection is associative"
+  always M ∩ (N ∩ L) = (M ∩ N) ∩ L
+
+axiom "intersection is commutative"
+  always M ∩ N = N ∩ M
+
+axiom "intersection with empty set"
+  always M ∩ ∅ = ∅

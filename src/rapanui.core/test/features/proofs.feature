@@ -89,3 +89,50 @@ Feature: Simple proofs
     Then the equal term I;R is suggested
     When I apply this suggestion
     Then the greater term R;R is suggested
+
+  Scenario: Prove the only symmetric and asymmetric relation is the empty relation
+    Given I have a proof environment with the rule system "symmetric_asymmetric.raps"
+    And I add the premise that R is symmetric
+    And I add the premise that R is asymmetric
+
+    When I start a new conclusion with start term R˘
+    Then the equal term R˘ ∩ R is suggested
+    When I apply this suggestion
+    Then the equal term R ∩ R˘ is suggested
+    When I apply this suggestion
+    Then the equal term ∅ is suggested
+
+    When I apply this suggestion
+    And I start a new conclusion with start term R
+    Then the equal term R˘˘ is suggested
+    When I apply this suggestion
+    Then the equal term ∅˘ is suggested
+    When I apply this suggestion
+    Then the equal term ∅ is suggested
+
+  Scenario: Prove asymmetric relations are irreflexive
+    Given I have a proof environment with the rule system "asymmetric_irreflexive.raps"
+    And I add the premise that R is asymmetric
+
+    When I start a new conclusion with start term I ∩ R
+    Then the equal term (I ∩ R)˘ is suggested
+    When I apply this suggestion
+    Then the equal term I˘ ∩ R˘ is suggested
+    When I apply this suggestion
+    Then the equal term I ∩ R˘ is suggested
+
+    When I apply this suggestion
+    And I start a new conclusion with start term I ∩ R
+    Then the equal term I ∩ (R ∩ R) is suggested
+    When I apply this suggestion
+    Then the equal term (I ∩ R) ∩ R is suggested
+    When I apply this suggestion
+    Then the equal term (I ∩ R˘) ∩ R is suggested
+    When I apply this suggestion
+    Then the equal term I ∩ (R˘ ∩ R) is suggested
+    When I apply this suggestion
+    Then the equal term I ∩ (R ∩ R˘) is suggested
+    When I apply this suggestion
+    Then the equal term I ∩ ∅ is suggested
+    When I apply this suggestion
+    Then the equal term ∅ is suggested

@@ -1,0 +1,18 @@
+define R as "symmetric"
+  iff R˘ ⊆ R
+
+define R as "asymmetric"
+  iff R ∩ R˘ = ∅
+
+theorem "intersection with a subset"
+  if M ⊆ N
+  then M ∩ N = M
+
+axiom "intersection is commutative"
+  always M ∩ N = N ∩ M
+
+axiom "converse is involuntory"
+  always (R˘)˘ = R
+
+axiom "converse is strict"
+  always ∅ = ∅˘
