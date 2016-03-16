@@ -161,15 +161,16 @@ public class DependencyAnalyst {
 	protected Set<Transformation> findTransitiveDerivatives(Set<Transformation> directDerivatives) {
 		Set<Transformation> derivatives = directDerivatives;
 
-		Stream<Transformation> newDerivatives = directDerivatives.stream();
+		Set<Transformation> newDerivatives = directDerivatives;
 		int oldSize = 0, newSize = derivatives.size();
 
 		// transitive dependencies via fixed-point iteration for relation has_direct_derivative⁺
 		while (oldSize < newSize) {
 			oldSize = newSize;
-			newDerivatives = newDerivatives
-				.flatMap(derivative -> findDirectDerivatives(derivative).stream());
-			derivatives.addAll(newDerivatives.collect(Collectors.toSet()));
+			newDerivatives = newDerivatives.stream()
+				.flatMap(derivative -> findDirectDerivatives(derivative).stream())
+				.collect(Collectors.toSet());
+			derivatives.addAll(newDerivatives);
 			newSize = derivatives.size();
 		}
 
