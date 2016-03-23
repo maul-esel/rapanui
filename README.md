@@ -2,6 +2,8 @@
 
 rapanui is an interactive proof assistant for relational algebra. It was developed by Dominik Klumpp in 2015/2016 in the course of a practical project (Praxismodul), supervised by Dr. Martin Müller, at the Chair for Programming Methodology and Multimedia Information Systems as part of the Bachelor Course in Informatics at the University of Augsburg.
 
+rapanui is licensed under the MIT license (see [LICENSE](https://github.com/maul-esel/rapanui/blob/master/LICENSE)).
+
 ## Concept
 rapanui assists the user in conducting proofs in relational algebra. To this end, the user inputs a set of premises and chooses a start term. The application then suggests possible transformations of that term. Once the user applies one of them to the term, new suggestions for the resulting term are offered. This process is repeated until the user has proven the proposition he wishes to proof.
 
