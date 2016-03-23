@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'rapanui'
-version '0.1.0-alpha.1'
+version '1.0.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
