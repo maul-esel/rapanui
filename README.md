@@ -16,7 +16,7 @@ The basis for the suggested transformations is a library of known axioms and the
 ```
 git clone https://github.com/maul-esel/rapanui.git
 cd rapanui
-gradle eclipse run
+./gradlew eclipse run
 ```
 
 rapanui requires Java 8 to be installed (Eclipse is not required).
@@ -31,4 +31,4 @@ In `src/` there are 4 primary components, each in its own subdirectory:
 * `rapanui.ui`, the user interface and actual application
 * `rapanui.library`, the default library of theorems and definitions
 
-In the first three of these subfolders, `build/` contains the gradle build artefacts including generated javadoc and packaged JAR files. After running `gradle shadowJar`, `src/rapanui.ui/build/libs/` contains a runnable JAR that includes all dependencies.
+In the first three of these subfolders, `build/` contains the gradle build artefacts including generated javadoc and packaged JAR files. After running `./gradlew shadowJar`, `src/rapanui.ui/build/libs/` contains a runnable JAR that includes all dependencies.
