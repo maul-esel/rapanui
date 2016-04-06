@@ -27,6 +27,4 @@ Export-Package: rapanui.dsl,
  rapanui.dsl.services,
  rapanui.dsl.serializer,
  rapanui.dsl.parser.antlr,
- rapanui.dsl.parser.antlr.internal,
- rapanui.dsl.validation,
- rapanui.dsl.scoping
+ rapanui.dsl.parser.antlr.internal
