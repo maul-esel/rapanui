@@ -1,6 +1,5 @@
 plugins {
   id "org.xtext.xtext" version "0.3.27" // used to build Xcore model
-  id "org.xtend.xtend" version "0.4.14"
   id "java"
   id "eclipse"
 }
@@ -54,7 +53,6 @@ sourceSets {
       srcDir 'src'
       srcDir 'src-gen'
     }
-    xtendOutputDir = 'xtend-gen'
 
     resources {
       // include generated *.xtextbin file in JAR
@@ -94,7 +92,6 @@ dependencies {
 /* delete generated code */
 clean {
   delete 'xcore-gen'
-  delete 'xtend-gen'
   delete 'src-gen'
 }
 
@@ -112,10 +109,8 @@ task(generateLang, type: JavaExec) {
   args "src/rapanui/dsl/GenerateDsl.mwe2"
 }
 
-/* Language is generated before Xtend is compiled.
-Since Xtend is integrated into the build task, this also integrates
-generateLang and thus generateModel into the build task. */
-compileXtend.dependsOn generateLang
+/* Workflow must be run before java compilation. */
+compileJava.dependsOn generateLang
 
 eclipse {
   project {
@@ -135,7 +130,6 @@ eclipse {
     file.whenMerged { cp ->
       cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('xcore-gen', null) )
       cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('src-gen', null) )
-      cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('xtend-gen', null) )
     }
   }
 }
