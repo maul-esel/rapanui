@@ -14,6 +14,8 @@ import rapanui.dsl.*;
 public class ProofSteps {
 	private static final long SUGGESTION_TIMEOUT = 100;
 
+	private final Parser parser = new Parser();
+
 	private ProofEnvironment currentEnvironment;
 	private ConclusionProcess currentConclusion;
 	private Transformation currentSuggestion;
@@ -27,7 +29,7 @@ public class ProofSteps {
 
 	@Given("I add the premise that (.*) is (.*)")
 	public void addPremise(String termSyntax, String definitionName) {
-		Term term = Parser.getInstance().parseTerm(termSyntax);
+		Term term = parser.parseTerm(termSyntax);
 		Definition definition = currentEnvironment.getRuleSystems().resolveDefinition(definitionName);
 		DefinitionReference reference = Builder.createDefinitionReference(term, definition);
 		currentEnvironment.addPremise(reference);
@@ -35,19 +37,19 @@ public class ProofSteps {
 
 	@Given("I add the formula (.*) as premise")
 	public void addPremise(String formulaSyntax) {
-		Formula premise = Parser.getInstance().parseFormula(formulaSyntax);
+		Formula premise = parser.parseFormula(formulaSyntax);
 		currentEnvironment.addPremise(premise);
 	}
 
 	@When("I start a new conclusion with start term (.*)")
 	public void startConclusion(String termSyntax) {
-		Term term = Parser.getInstance().parseTerm(termSyntax);
+		Term term = parser.parseTerm(termSyntax);
 		currentConclusion = currentEnvironment.addConclusion(term);
 	}
 
 	@Then("the (greater|equal)? term (.*) is suggested")
 	public void findSuggestion(String greaterOrEqual, String termSyntax) {
-		final Term term = Parser.getInstance().parseTerm(termSyntax);
+		final Term term = parser.parseTerm(termSyntax);
 
 		BINARY_RELATION suggestionType = BINARY_RELATION.UNSPECIFIED;
 		if (Objects.equal(greaterOrEqual, "equal"))

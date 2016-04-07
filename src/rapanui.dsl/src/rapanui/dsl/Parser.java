@@ -13,19 +13,13 @@ import org.eclipse.xtext.parser.IParser;
 import rapanui.dsl.services.DslGrammarAccess;
 
 public class Parser {
-	private static final Parser instance = new Parser();
-
-	public static Parser getInstance() {
-		return instance;
-	}
-
 	@Inject
 	private IParser internalParser;
 
 	@Inject
 	private DslGrammarAccess grammar;
 
-	private Parser() {
+	public Parser() {
 		new DslStandaloneSetup()
 		.createInjectorAndDoEMFRegistration()
 		.injectMembers(this);

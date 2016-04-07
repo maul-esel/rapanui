@@ -13,6 +13,8 @@ public class CreateFormulaPremiseCommand extends AbstractCommand {
 	private final ProofEnvironment env;
 	private final Document inputModel;
 
+	private final Parser parser = new Parser();
+
 	public CreateFormulaPremiseCommand(ProofEnvironment env, Document inputModel) {
 		super("\u2714", "Neue Voraussetzung erstellen");
 
@@ -26,7 +28,7 @@ public class CreateFormulaPremiseCommand extends AbstractCommand {
 	@Override
 	protected boolean canExecute() {
 		try {
-			return Parser.getInstance().canParseFormula(inputModel.getText(0, inputModel.getLength()));
+			return parser.canParseFormula(inputModel.getText(0, inputModel.getLength()));
 		} catch (BadLocationException e) {
 			return false;
 		}
@@ -36,7 +38,7 @@ public class CreateFormulaPremiseCommand extends AbstractCommand {
 	public void execute() {
 		try {
 			String input = inputModel.getText(0, inputModel.getLength());
-			Formula premise = Parser.getInstance().parseFormula(input);
+			Formula premise = parser.parseFormula(input);
 			env.addPremise(premise);
 
 			inputModel.remove(0, inputModel.getLength());

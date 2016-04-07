@@ -20,6 +20,7 @@ public class SyntaxTextField extends JTextField implements DocumentListener {
 
 	private boolean isValid = false;
 	private final ParsingMode parsingMode;
+	private final Parser parser = new Parser();
 
 	private final Border defaultBorder;
 
@@ -43,10 +44,10 @@ public class SyntaxTextField extends JTextField implements DocumentListener {
 	protected void verify() {
 		switch (parsingMode) {
 			case Term:
-				isValid = Parser.getInstance().canParseTerm(getText());
+				isValid = parser.canParseTerm(getText());
 				break;
 			case Formula:
-				isValid = Parser.getInstance().canParseFormula(getText());
+				isValid = parser.canParseFormula(getText());
 				break;
 			default:
 				isValid = false;

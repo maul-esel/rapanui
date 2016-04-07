@@ -13,6 +13,8 @@ public class CreateConclusionCommand extends AbstractCommand {
 	private final ProofEnvironment env;
 	private final Document inputModel;
 
+	private final Parser parser = new Parser();
+
 	public CreateConclusionCommand(ProofEnvironment env, Document inputModel) {
 		super("\u2714", "Neue Folgerung erstellen");
 
@@ -26,7 +28,7 @@ public class CreateConclusionCommand extends AbstractCommand {
 	@Override
 	protected boolean canExecute() {
 		try {
-			return Parser.getInstance().canParseTerm(inputModel.getText(0, inputModel.getLength()));
+			return parser.canParseTerm(inputModel.getText(0, inputModel.getLength()));
 		} catch (BadLocationException e) {
 			return false;
 		}
@@ -36,7 +38,7 @@ public class CreateConclusionCommand extends AbstractCommand {
 	public void execute() {
 		try {
 			String input = inputModel.getText(0, inputModel.getLength());
-			Term startTerm = Parser.getInstance().parseTerm(input);
+			Term startTerm = parser.parseTerm(input);
 			env.addConclusion(startTerm);
 
 			inputModel.remove(0, inputModel.getLength());

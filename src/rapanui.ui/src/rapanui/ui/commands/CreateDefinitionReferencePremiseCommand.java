@@ -18,6 +18,8 @@ public class CreateDefinitionReferencePremiseCommand extends AbstractCommand {
 	private final Document inputModel;
 	private final ComboBoxModel<String> definitionModel;
 
+	private final Parser parser = new Parser();
+
 	public CreateDefinitionReferencePremiseCommand(ProofEnvironment env, ApplicationModel app, Document inputModel, ComboBoxModel<String> definitionModel) {
 		super("\u2714", "Neue Voraussetzung erstellen");
 
@@ -33,7 +35,7 @@ public class CreateDefinitionReferencePremiseCommand extends AbstractCommand {
 	@Override
 	protected boolean canExecute() {
 		try {
-			return Parser.getInstance().canParseTerm(inputModel.getText(0, inputModel.getLength()));
+			return parser.canParseTerm(inputModel.getText(0, inputModel.getLength()));
 		} catch (BadLocationException e) {
 			return false;
 		}
@@ -43,7 +45,7 @@ public class CreateDefinitionReferencePremiseCommand extends AbstractCommand {
 	public void execute() {
 		try {
 			String input = inputModel.getText(0, inputModel.getLength());
-			Term target = Parser.getInstance().parseTerm(input);
+			Term target = parser.parseTerm(input);
 			String definitionName = definitionModel.getSelectedItem().toString();
 
 			env.addPremise(Builder.createDefinitionReference(target, app.getRuleSystems().resolveDefinition(definitionName)));
