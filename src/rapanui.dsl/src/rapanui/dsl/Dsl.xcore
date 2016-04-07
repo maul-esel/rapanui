@@ -63,7 +63,7 @@ class Rule extends PremiseContainer {
 	}
 
 	op String serialize() {
-		Serializer.getInstance().serialize(this)
+		Serializer.serialize(this)
 	}
 }
 class Definition extends PremiseContainer {
@@ -82,7 +82,7 @@ abstract class Predicate {
 	}
 
 	op String serialize() {
-		Serializer.getInstance().serialize(this);
+		Serializer.serialize(this);
 	}
 
 	op void accept(Visitor v) {
@@ -151,7 +151,7 @@ abstract class Term {
 	}
 
 	op String serialize() {
-		Serializer.getInstance().serialize(this);
+		Serializer.serialize(this);
 	}
 
 	op void accept(Visitor v) {
