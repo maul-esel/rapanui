@@ -26,8 +26,6 @@ Build management is handled with gradle. The three projects `rapanui.dsl`, `rapa
 
 After cloning the repository, you first have to build the eclipse files with `./gradlew eclipse`. This is also required for building the projects (an eclipse installation is not required).
 
-**Note:** Running `./gradlew eclipse` again may result in a build path problem in `rapanui.dsl` because there are duplicate entries for the source folders. To fix this, remove the source folder entries from the project file and add them again in Eclipse.
-
 #### Build
 
 To build the projects, simply run `./gradlew build`, or to do a clean build, `./gradlew clean build`. The entire application can also be packaged into a so-called "fat jar" that contains all necessary dependencies by running `./gradlew shadowJar`. `./gradlew javadoc` generates the javadoc documentation and places it in the `build/docs/javadoc` subfolder of each project.

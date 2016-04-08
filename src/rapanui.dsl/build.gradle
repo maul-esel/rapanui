@@ -44,6 +44,7 @@ sourceSets {
     java {
       srcDir 'src'
       srcDir 'src-gen'
+      srcDir 'xcore-gen'
     }
 
     resources {
@@ -84,6 +85,12 @@ clean {
   delete 'src-gen'
 }
 
+task createGenDirs {
+  mkdir 'xcore-gen'
+  mkdir 'src-gen'
+}
+tasks.eclipse.dependsOn createGenDirs
+
 /* language artifact generation by workflow execution */
 task(generateLang, type: JavaExec) {
   inputs.files "src/rapanui/dsl/GenerateDsl.mwe2", "src/rapanui/dsl/Dsl.xtext"
@@ -110,12 +117,7 @@ eclipse {
     buildCommand 'org.eclipse.pde.ManifestBuilder'
   }
 
-  // adapted from https://stackoverflow.com/questions/26750869/how-to-add-gradle-generated-source-folder-to-eclipse-project
   classpath {
     containers 'org.eclipse.pde.core.requiredPlugins'
-    file.whenMerged { cp ->
-      cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('xcore-gen', null) )
-      cp.entries.add( new org.gradle.plugins.ide.eclipse.model.SourceFolder('src-gen', null) )
-    }
   }
 }
