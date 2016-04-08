@@ -53,6 +53,8 @@ public class Parser {
 	}
 
 	private boolean canParse(String input, ParserRule rule) {
+		if (input == null)
+			return false;
 		IParseResult result = internalParser.parse(rule, new StringReader(input));
 		return !result.hasSyntaxErrors();
 	}
