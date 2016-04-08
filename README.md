@@ -16,10 +16,10 @@ The basis for the suggested transformations is a library of known axioms and the
 ```
 git clone https://github.com/maul-esel/rapanui.git
 cd rapanui
-./gradlew eclipse run
+./gradlew run
 ```
 
-rapanui requires Java 8 to be installed (Eclipse is not required).
+rapanui requires Java 8 to be installed.
 
 ## Repository Structure
 

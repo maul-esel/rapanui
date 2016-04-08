@@ -97,6 +97,8 @@ task(generateLang, type: JavaExec) {
   outputs.dir "src-gen"
 
   dependsOn generateXtext // xcore model needs to be generated first
+  dependsOn tasks.eclipse // apparently the eclipse files are needed
+
   classpath configurations.xtextWorkflow
   main = "org.eclipse.emf.mwe2.launch.runtime.Mwe2Launcher"
   args "src/rapanui/dsl/GenerateDsl.mwe2"
