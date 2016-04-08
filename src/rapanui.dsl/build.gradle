@@ -85,7 +85,7 @@ clean {
   delete 'src-gen'
 }
 
-task createGenDirs {
+task createGenDirs << {
   mkdir 'xcore-gen'
   mkdir 'src-gen'
 }
