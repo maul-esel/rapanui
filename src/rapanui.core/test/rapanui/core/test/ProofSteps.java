@@ -3,9 +3,8 @@ package rapanui.core.test;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
-
-import com.google.common.base.Objects;
 
 import cucumber.api.java.en.*;
 import rapanui.core.*;
@@ -52,9 +51,9 @@ public class ProofSteps {
 		final Term term = parser.parseTerm(termSyntax);
 
 		BINARY_RELATION suggestionType = BINARY_RELATION.UNSPECIFIED;
-		if (Objects.equal(greaterOrEqual, "equal"))
+		if (Objects.equals(greaterOrEqual, "equal"))
 			suggestionType = BINARY_RELATION.EQUATION;
-		else if (Objects.equal(greaterOrEqual, "greater"))
+		else if (Objects.equals(greaterOrEqual, "greater"))
 			suggestionType = BINARY_RELATION.INCLUSION;
 
 		List<Transformation> suggestions = Collections.synchronizedList(new LinkedList<Transformation>());
