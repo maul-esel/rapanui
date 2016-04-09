@@ -45,3 +45,13 @@ run {
   if (project.hasProperty('args'))
     args project.getProperty('args').split(' ')
 }
+
+shadowJar {
+  ['model/*', 'schema/*', 'NOTICE', '.api_description', 'LICENSE', 'about.html', 'about.ini',
+   'about.mappings', 'about.properties', 'about_org.eclipse.xtend.lib.html',
+   'about_org.eclipse.xtend.lib.macro.html', 'about_org.eclipse.xtext.xbase.lib.html',
+   'modeling32.png', 'plugin.properties', 'plugin.xml', 'log4j.properties', 'META-INF/DEPENDENCIES',
+   'META-INF/LICENSE', 'META-INF/NOTICE', 'META-INF/MANIFEST.MF_gen', 'META-INF/maven/**'].each {
+    f -> exclude f
+  }
+}
