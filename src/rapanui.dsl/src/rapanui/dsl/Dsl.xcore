@@ -35,8 +35,9 @@ interface PremiseContainer {
 	// results in NullPointerExceptions.
 	// See also https://www.eclipse.org/forums/index.php?t=msg&th=552590&goto=1140023&#msg_1140023
 	op Formula[] getResolvedPremises() {
-		premises.map[ resolve ].flatten
-			.toMap [ serialize ].values // should be unique (not by equals(), but by structure/syntax)
+		premises.stream
+			.flatMap[ resolve.stream ]
+			.collect(Collectors.toMap([ serialize ], [ it ])).values // should be unique (not by equals(), but by structure/syntax)
 			.toEList
 	}
 }
@@ -53,13 +54,16 @@ class Rule extends PremiseContainer {
 
 	// see comments in PremiseContainer.getResolvedPremises()
 	op Formula[] getResolvedConclusions() {
-		conclusions.map[ resolve ].flatten
-			.toMap [ serialize ].values // should be unique (not by equals(), but by structure/syntax)
+		conclusions.stream
+			.flatMap[ resolve.stream ]
+			.collect(Collectors.toMap([ serialize ], [ it ])).values // should be unique (not by equals(), but by structure/syntax)
 			.toEList
 	}
 
 	op StringSet getFreeVariables() {
-		(premises + conclusions).map[ freeVariables.toList ].flatten.toSet
+		(premises + conclusions).toList.stream
+			.flatMap[ freeVariables.stream ]
+			.collect(Collectors.toSet)
 	}
 
 	op String serialize() {
@@ -133,7 +137,9 @@ class DefinitionReference extends Predicate {
 
 	op Formula[] resolve() {
 		val translator = new Translator(#{ definition.target -> target})
-		return definition.resolvedPremises.map[ p | translator.translate(p) ]
+		return definition.resolvedPremises.stream
+			.map[ p | translator.translate(p) ]
+			.collect(Collectors.toList).toEList
 	}
 
 	op StringSet getFreeVariables() {
